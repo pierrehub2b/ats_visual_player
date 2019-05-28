@@ -84,7 +84,11 @@ export function updateProgressDisplay() {
 
  
 export function deserialize(data) {
-  var encodedData = AMF.deserialize(data.buffer);
+  var encodedData = new AMF.Deserializer(data.buffer);
+  while(encodedData.pos < encodedData.buf.byteLength) {
+    encodedData.deserialize();
+  }
+
   var actions = encodedData.objectReferences.filter(_ => _.type == "startVisualReport" || (_.type ? _.type.indexOf("com.ats") > -1 : false));
 
   for (let index = 0; index < actions.length; index++) {
