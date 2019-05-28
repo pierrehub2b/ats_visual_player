@@ -4,6 +4,25 @@
     <title>Player HTML</title>
   </head>
   <body>
-    <input type="file" id="uploader" />
-    <div id="slideshow" class="w3-content w3-section" style="max-width:800px"></div>
+    <div id="frame">
+      <div id="player">
+        <div id="slideshow"></div>
+        <div class="nav">
+            <button id="playLabel"><img src="https://img.icons8.com/metro/26/000000/play.png"></button>
+            <button id="pauseLabel"><img src="https://img.icons8.com/metro/26/000000/pause.png"></button>
+            <button id="restart"><img src="https://img.icons8.com/metro/26/000000/skip-to-start.png"></button>
+          <input id="progressSlider" type="range" min="0" max="100" value="0" step="1" />
+          <span id="progressDisplay"></span>
+        </div>
+      </div>
+
+      <div id="upload">
+        <div>
+          Ajouter un fichier à lire:
+        </div>
+        <input type="file" id="uploader" />
+        <div id="output"></div>
+      </div>
+    </div>
+  </body>
 </html>

@@ -1,11 +1,36 @@
 import AMF from 'amf-js';
+import { TweenMax, TimelineMax } from "gsap/TweenMax";
 
-export var myIndex = 0;
-export var duration = 2000;
+export var tl;
+export var progressSlider = document.getElementById("progressSlider");
+export var slideShow = document.getElementById("slideshow");
+export var progressDisplay = document.getElementById("progressDisplay");
+export var playLabelBtn = document.getElementById("playLabel");
+export var pauseLabelBtn = document.getElementById("pauseLabel");
+export var restartBtn = document.getElementById("restart");
+export var output = document.getElementById("output");
+export var images = [];
+
+export function setupScreen() {
+  tl = new TimelineMax({ paused: true, repeat: 0, onUpdate:adjustUI});
+  progressSlider.addEventListener("input", update);
+
+  playLabelBtn.onclick = function() {
+    tl.play();
+  }
+  
+  restartBtn.onclick = function() {
+    tl.restart();
+  }
+
+  pauseLabelBtn.onclick = function() {
+    tl.pause();
+  }
+}
 
 export function openfile() {
   var input = document.getElementById("uploader");
-  document.getElementById("slideshow").innerHTML = "";
+  slideShow.innerHTML = "";
   var file = input.files[0];
   var reader = new FileReader();
   reader.onload = function() { 
@@ -42,15 +67,25 @@ export function encode (input) {
     }
     return output;
 }
+
+export function adjustUI() {
+  progressSlider.value = tl.progress();
+  updateProgressDisplay();
+}
+
+export function update(){
+  tl.progress(progressSlider.value).pause();
+  updateProgressDisplay();
+}
+
+export function updateProgressDisplay() {
+  progressDisplay.innerHTML = progressSlider.value;
+}
+
  
 export function deserialize(data) {
   var encodedData = AMF.deserialize(data.buffer);
   var actions = encodedData.objectReferences.filter(_ => _.type == "startVisualReport" || (_.type ? _.type.indexOf("com.ats") > -1 : false));
-  var slideShow = document.getElementById("slideshow");
-
-  console.log(actions);
-
-  var images = [];
 
   for (let index = 0; index < actions.length; index++) {
     var element = actions[index];
@@ -58,43 +93,43 @@ export function deserialize(data) {
       for (let i = 0; i < element.images.length; i++) {
         const img = element.images[i];
         var bytes = new Uint8Array(img);
-
         var imgPreview = document.createElement('img');
+        imgPreview.style.height = "100%";
         imgPreview.src = "data:image/"+ element.imageType +";base64,"+ encode(bytes);
-        imgPreview.className = "mySlides";
-        imgPreview.style.width = "100%";
+
+        // var svgimg = document.createElementNS("http://www.w3.org/2000/svg", "image");
+        // svgimg.setAttribute( 'width', '100%' );
+        // svgimg.setAttribute( 'height', '100%' );
+        // svgimg.classList.add("myslides");
+        // svgimg.setAttributeNS("http://www.w3.org/1999/xlink", 'xlink:href', "data:image/"+ element.imageType +";base64,"+ encode(bytes));
 
         images.push({timeLine: element.timeLine, img: imgPreview});
       }
     }
   }
 
+  tl.progress.max = images.length;
+
   images.sort(function(a, b) {
     return a.timeLine - b.timeLine;
   });
 
+  output.innerHTML = actions;
+
   for (let img = 0; img < images.length; img++) {
     const imgs = images[img];
+    //tl.add( TweenLite.to(imgs.img, 2, {left:100}) );
     slideShow.appendChild(imgs.img);
   }
 
-  carousel();
+  animate();
+}
+
+export function animate() {
+  var img = slideShow.getElementsByTagName('img');
+  tl.append(TweenMax.staggerTo(img, 1, {css:{autoAlpha:2}, repeatDelay:0}, 1))
 }
 
 export function compareNombres(a, b) {
   return a - b;
-}
-
-export function carousel() {
-  var i;
-  var x = document.getElementsByClassName("mySlides");
-  if(x) {
-    for (i = 0; i < x.length; i++) {
-      x[i].style.display = "none";  
-    }
-    myIndex++;
-    if (myIndex > x.length) {myIndex = 1}    
-    x[myIndex-1].style.display = "block";  
-    setTimeout(carousel, duration); // Change image every 2 seconds
-  }
 }
