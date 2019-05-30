@@ -1,37 +1,87 @@
 import AMF from 'amf-js';
-import { TweenMax, TimelineMax } from "gsap/TweenMax";
+var $ = require('jQuery');
+import { TimelineMax, Power1 } from "gsap/TweenMax";
 
 export var tl;
-export var progressSlider = document.getElementById("progressSlider");
-export var slideShow = document.getElementById("slideshow");
-export var progressDisplay = document.getElementById("progressDisplay");
-export var playLabelBtn = document.getElementById("playLabel");
-export var pauseLabelBtn = document.getElementById("pauseLabel");
-export var restartBtn = document.getElementById("restart");
-export var output = document.getElementById("output");
+export var progressSlider = $("#progressSlider");
+export var slideShow = $("#slideshow");
+export var progressDisplay = $("#progressDisplay");
+export var playLabelBtn = $("#playLabel");
+export var pauseLabelBtn = $("#pauseLabel");
+export var restartBtn = $("#restart");
+export var fullScreen = $("#fullScreen");
+export var output = $("#output");
+export var spinner = $("#spinner");
+export var checkmark = $("#checkmark");
+export var player = $("#player");
+export var input = $("#uploader");
 export var images = [];
+export var quotient = 0.8;
+export var fullScreenState = false;
+export var ratio = 1;
 
 export function setupScreen() {
   tl = new TimelineMax({ paused: true, repeat: 0, onUpdate:adjustUI});
-  progressSlider.addEventListener("input", update);
-
-  playLabelBtn.onclick = function() {
-    tl.play();
-  }
   
-  restartBtn.onclick = function() {
-    tl.restart();
-  }
+  progressSlider.on("change", update);
 
-  pauseLabelBtn.onclick = function() {
+  playLabelBtn.on("click", function() {
+    tl.play();
+  });
+
+  restartBtn.on("click", function() {
+    tl.restart();
+  });
+
+  pauseLabelBtn.on("click", function() {
     tl.pause();
-  }
+  });
+
+  fullScreen.on("click", function() {
+    if(fullScreenState) {
+      player.css({
+        top: "unset",
+        right: "unset",
+        bottom: "unset",
+        left: "unset",
+        zIndex: "unset"
+      });
+      $(".fa-compress").addClass('fa-expand').removeClass('fa-compress');
+      //setup the default screen size
+      slideShow.css( "height", "80vh");
+      slideShow.css( "width",  40 * ratio + "vw");
+      player.css( "width",  40 * ratio + "vw");
+      progressSlider.css("width", ((40 * ratio)-15) + "vw");
+    } else {
+      player.css({
+        position: 'fixed',
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+        zIndex: 999
+      });
+      $(".fa-expand").addClass('fa-compress').removeClass('fa-expand');
+      //setup the default screen size
+      slideShow.css( "height", "95vh");
+      slideShow.css( "width",  "100vw");
+      player.css( "width",  "100vw");
+      progressSlider.css("width", "85vw");
+    }
+    fullScreenState = !fullScreenState;
+  });
 }
 
 export function openfile() {
-  var input = document.getElementById("uploader");
-  slideShow.innerHTML = "";
-  var file = input.files[0];
+  tl = new TimelineMax({ paused: true, repeat: 0, onUpdate:adjustUI});
+  slideShow.html("");
+  images = [];
+  spinner.removeClass("load-complete");
+  checkmark.css("display", "none");
+  output.css("display", "inline-block");
+  tl.progress(0).pause();
+  updateProgressDisplay();
+  var file = input.prop('files')[0];
   var reader = new FileReader();
   reader.onload = function() { 
     var uintArray = new Uint8Array(this.result);
@@ -69,20 +119,30 @@ export function encode (input) {
 }
 
 export function adjustUI() {
-  progressSlider.value = tl.progress();
+  progressSlider.val(tl.progress());
   updateProgressDisplay();
 }
 
 export function update(){
-  tl.progress(progressSlider.value).pause();
+  tl.progress(parseFloat(progressSlider.val())).pause();
   updateProgressDisplay();
 }
 
 export function updateProgressDisplay() {
-  progressDisplay.innerHTML = progressSlider.value;
+  var v = parseFloat(progressSlider.val()) * 100;
+  progressDisplay.html(v.toFixed());
+  var val = (parseFloat(progressSlider.val()) - progressSlider.attr("min") / (progressSlider.attr("max") - progressSlider.attr("min")));
+  var percent = val * 100;
+
+  progressSlider.css('background-image',
+        '-webkit-gradient(linear, left top, right top, ' +
+        'color-stop(' + percent + '%, #FABA00), ' +
+        'color-stop(' + percent + '%, #FCFCFC)' +
+        ')');
+
+  progressSlider.css('background-image','-moz-linear-gradient(left center, #FABA00 0%, #FABA00 ' + percent + '%, #FCFCFC ' + percent + '%, #FCFCFC 100%)');
 }
 
- 
 export function deserialize(data) {
   var encodedData = new AMF.Deserializer(data.buffer);
   while(encodedData.pos < encodedData.buf.byteLength) {
@@ -91,6 +151,9 @@ export function deserialize(data) {
 
   var actions = encodedData.objectReferences.filter(_ => _.type == "startVisualReport" || (_.type ? _.type.indexOf("com.ats") > -1 : false));
 
+  var biggerWidth = 0;
+  var biggerHeight = 0;
+
   for (let index = 0; index < actions.length; index++) {
     var element = actions[index];
     if(element.images) {
@@ -98,40 +161,54 @@ export function deserialize(data) {
         const img = element.images[i];
         var bytes = new Uint8Array(img);
         var imgPreview = document.createElement('img');
-        imgPreview.style.height = "100%";
         imgPreview.src = "data:image/"+ element.imageType +";base64,"+ encode(bytes);
 
-        // var svgimg = document.createElementNS("http://www.w3.org/2000/svg", "image");
-        // svgimg.setAttribute( 'width', '100%' );
-        // svgimg.setAttribute( 'height', '100%' );
-        // svgimg.classList.add("myslides");
-        // svgimg.setAttributeNS("http://www.w3.org/1999/xlink", 'xlink:href', "data:image/"+ element.imageType +";base64,"+ encode(bytes));
+        if(biggerWidth < element.channelBound.width * quotient) {
+          biggerWidth = element.channelBound.width * quotient;
+          biggerHeight = element.channelBound.height * quotient;
+        }
 
-        images.push({timeLine: element.timeLine, img: imgPreview});
+        var previousValues = images.filter(_ => _.timeLine == element.timeLine);
+        if(previousValues.length == 0) {
+          var currentElement = {timeLine: element.timeLine, img: imgPreview, element: element};
+          images.push(currentElement);
+          slideShow.append(currentElement.img);
+          // Create the animation
+          animate({timeLine: element.timeLine, img: imgPreview, element: element});
+        } 
       }
     }
   }
 
-  tl.progress.max = images.length;
+  ratio = biggerWidth / biggerHeight;
+  var virtualSize = 40 * ratio;
 
-  images.sort(function(a, b) {
-    return a.timeLine - b.timeLine;
-  });
+  //setup the default screen size
+  slideShow.css( "height", "80vh");
+  slideShow.css( "width",  virtualSize + "vw");
 
-  output.innerHTML = actions;
+  //player style 
+  player.css( "height", "auto");
+  player.css( "width",  virtualSize + "vw");
 
-  for (let img = 0; img < images.length; img++) {
-    const imgs = images[img];
-    //tl.add( TweenLite.to(imgs.img, 2, {left:100}) );
-    slideShow.appendChild(imgs.img);
-  }
+  //progressBar Width
+  progressSlider.css("width", (virtualSize-15) + "vw");
 
-  animate();
+  // change spinner state
+  spinner.addClass("load-complete");
+  checkmark.css("display", "block");
 }
 
-export function animate() {
-  var img = slideShow.getElementsByTagName('img');
-  tl.append(TweenMax.staggerTo(img, 1, {css:{autoAlpha:2}, repeatDelay:0}, 1))
+export function animate(currentElement) {
+    //first element of the liste
+    tl.to(currentElement.img, 1, {
+      opacity: 1,
+      display: "inline-block"
+    }); 
+    tl.to(currentElement.img, 0, {
+      display: "none",
+      delay: 3
+    }); 
 }
 
 export function compareNombres(a, b) {
