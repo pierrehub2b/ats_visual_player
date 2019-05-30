@@ -2,6 +2,32 @@ $agilitestOrange: #FABA00;
 $agilitestBlack: #11171B;
 $agilitestWhite: #FCFCFC;
 
+// //font
+// .icon-play {
+//   @extend .fas;
+//   @extend .fa-play;
+// }
+
+// .icon-pause {
+//   @extend .fas;
+//   @extend .fa-pause;
+// }
+
+// .icon-restart {
+//   @extend .fas;
+//   @extend .fa-backward;
+// }
+
+// .icon-full {
+//   @extend .fas;
+//   @extend .fa-expand;
+// }
+
+// .icon-compress {
+//   @extend .fas;
+//   @extend .fa-compress;
+// }
+
 //head
 #head {
   display: block;
@@ -32,14 +58,22 @@ $agilitestWhite: #FCFCFC;
   background-color: black;
   vertical-align: middle;
   text-align: center;
+  position: relative;
+  
 }
 
 #slideshow img {
-  position: relative;
+  position: absolute;
   max-width: 100%;
   max-height: 100%;
   opacity: 0;
   display: none;
+  left:0;
+  right:0;
+  top: 0;
+  bottom: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 // output

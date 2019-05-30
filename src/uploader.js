@@ -168,16 +168,20 @@ export function deserialize(data) {
           biggerHeight = element.channelBound.height * quotient;
         }
 
+
         var previousValues = images.filter(_ => _.timeLine == element.timeLine);
         if(previousValues.length == 0) {
           var currentElement = {timeLine: element.timeLine, img: imgPreview, element: element};
           images.push(currentElement);
           slideShow.append(currentElement.img);
-          // Create the animation
-          animate({timeLine: element.timeLine, img: imgPreview, element: element});
         } 
       }
     }
+  }
+
+  for (let currentImgIndex = 0; currentImgIndex < images.length; currentImgIndex++) {
+    const element = images[currentImgIndex];
+    animate(element, currentImgIndex);
   }
 
   ratio = biggerWidth / biggerHeight;
@@ -199,16 +203,20 @@ export function deserialize(data) {
   checkmark.css("display", "block");
 }
 
-export function animate(currentElement) {
-    //first element of the liste
-    tl.to(currentElement.img, 1, {
-      opacity: 1,
-      display: "inline-block"
-    }); 
-    tl.to(currentElement.img, 0, {
-      display: "none",
-      delay: 3
-    }); 
+export function animate(currentElement, index) {
+      //first element of the liste
+      tl.to(currentElement.img, 2, {
+        opacity: 1,
+        display: "inline-block"
+      });
+    if(index > 0) {
+      //remove the previous img
+      tl.to(images[index-1].img, 0, {
+        display: "none"
+      }); 
+    }
+
+    
 }
 
 export function compareNombres(a, b) {
