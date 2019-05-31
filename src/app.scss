@@ -2,64 +2,48 @@ $agilitestOrange: #FABA00;
 $agilitestBlack: #11171B;
 $agilitestWhite: #FCFCFC;
 
-// //font
-// .icon-play {
-//   @extend .fas;
-//   @extend .fa-play;
-// }
-
-// .icon-pause {
-//   @extend .fas;
-//   @extend .fa-pause;
-// }
-
-// .icon-restart {
-//   @extend .fas;
-//   @extend .fa-backward;
-// }
-
-// .icon-full {
-//   @extend .fas;
-//   @extend .fa-expand;
-// }
-
-// .icon-compress {
-//   @extend .fas;
-//   @extend .fa-compress;
-// }
-
 //head
-#head {
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#flashReport {
+  margin: 10px 20px;
+  position: absolute;
   display: block;
-  height: 80px;
-  background-color: #FCFCFC;
-  margin: 5px 20px 0px 20px;
-  border-radius: 5px;
+  top: 0;
+  left: 0;
+  z-index: 2;
 }
 
-#logo {
-  width: 20%;
-    height: 100%;
-    display: inline-block;
-    vertical-align: top;
+#flashReport div {
+  margin: 10px 10px;
 }
 
-#logo img {
-  height: 80%;
-  vertical-align: middle;
-  margin: 10px;
+#flashReport img {
+  position: fixed;
+  left: 0;
+  right: 0;
+  margin: auto;
+  /* vertical-align: middle; */
+  width: 20vw;
+  top: 0;
+  bottom: 0;
 }
 
 //slideShow
 #slideshow {
-  display: table-cell;
+  display: flex;
   padding: 0;
   margin: 0;
   background-color: black;
-  vertical-align: middle;
+  justify-content: center;
   text-align: center;
   position: relative;
-  
+  width: 100vw;
+  height: 93vh;
 }
 
 #slideshow img {
@@ -68,72 +52,65 @@ $agilitestWhite: #FCFCFC;
   max-height: 100%;
   opacity: 0;
   display: none;
-  left:0;
-  right:0;
-  top: 0;
-  bottom: 0;
+  left: 0;
+  right: 0;
   margin-left: auto;
   margin-right: auto;
+  /* vertical-align: middle; */
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
 }
-
-// output
-#output {
-  display: none;
-  margin: 0 30px;
-}
-
 
 //nav panel
 .nav {
   display: inline-block;
   position: relative;
-  margin: 7px 20px;
+  padding: 7px 0 0 20px;
+  width: 100vw;
+  text-align: center;
+}
+
+#navButtons, #navSlider, #navDisplay {
+  display: inline-block;
+}
+
+#navDisplay{
+  vertical-align: sub;
+  margin-left: 20px;
+}
+
+#navSlider {
+  width: 70%;
+  height: 4vh;
+  vertical-align: sub;
+}
+
+#slidertitle {
+  display: none;
+  background-color: $agilitestWhite;
+  position: absolute;
+  border: $agilitestBlack 1px solid;
+  cursor: default;
+  width: 150px;
+  height: 100px;
+  top: -90px;
+  left: 0;
+  z-index: 4;
+}
+
+//slider
+#progressSlider {
+  vertical-align: super;
+  width: 100%;
 }
 
 //player
 #playLabel, #pauseLabel, #restart, #fullScreen {
   display: inline-block;
   color: $agilitestWhite;
-  font-size: 25px;
-  margin: 0 3px;
-}
-
-#frame {
-  background-color: $agilitestWhite;
-  padding: 20px;
-  border-radius: 10px;
-  margin: 20px;
-}
-
-#player {
-  background-color: $agilitestBlack;
-  border-radius: 5px;
-  padding: 0;
-  display: inline-block;
-}
-
-
-//upload panel
-#upload {
-  padding: 5px;
-  display: inline-block;
-  color: $agilitestBlack;
-  font-family: Arial, Helvetica, sans-serif;
-  vertical-align: top;
   font-size: 15px;
-  width: 15%;
-}
-
-//slider
-#progressSlider {
-  vertical-align: super;
-}
-
-input[type=range] {
-  -webkit-appearance: none;
-  -moz-apperance: none;
-  border-radius: 6px;
-  height: 6px;
+  margin: 0 3px;
 }
 
 #progressDisplay {
@@ -142,6 +119,207 @@ input[type=range] {
   font-size: 15px;
   display: inline-block;
   vertical-align: super;
+}
+
+#player {
+  background-color: $agilitestBlack;
+  padding: 0;
+  margin: 0;
+  // display: inline-block;
+  position: 'absolute';
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  overflow: hidden;
+}
+
+#logo {
+  width: 50px;
+  height: auto;
+  position: absolute;
+  top: 75px;
+  left: 35px;
+}
+
+#logo img {
+  width: 100%;
+  height: auto;
+}
+
+//burger menu
+body
+ {
+   margin: 0;
+   padding: 0;
+   
+   /* make it look decent enough */
+   background: #232323;
+   color: #cdcdcd;
+   font-family: "Avenir Next", "Avenir", sans-serif;
+   
+   overflow-x: hidden; /* needed because hiding the menu on the right side is not perfect,  */
+ }
+ 
+ a
+ {
+   text-decoration: none;
+   color: #232323;
+   
+   transition: color 0.3s ease;
+ }
+ 
+ #menu li:hover
+ {
+   color: $agilitestOrange;
+   cursor: pointer;
+   font-weight: bold;
+ }
+
+ #menu h3 {
+   color: $agilitestBlack;
+   margin: 10px 0;
+   display: none;
+ }
+ 
+ #menuToggle
+ {
+   display: block;
+   position: absolute;
+   top: 50px;
+   right: 50px;
+   
+   z-index: 1;
+   
+   -webkit-user-select: none;
+   user-select: none;
+ }
+ 
+ #menuToggle > .checkbox
+ {
+   display: block;
+   width: 40px;
+   height: 32px;
+   position: absolute;
+   top: -7px;
+   left: -5px;
+   
+   cursor: pointer;
+   
+   opacity: 0; /* hide this */
+   z-index: 2; /* and place it over the hamburger */
+   
+   -webkit-touch-callout: none;
+ }
+ 
+ /*
+  * Just a quick hamburger
+  */
+ #menuToggle span
+ {
+   display: block;
+   width: 24px;
+   height: 2px;
+   margin-bottom: 5px;
+   position: relative;
+   background: #cdcdcd;
+   border-radius: 3px;
+   z-index: 1;
+   transform-origin: 2px 0px;
+   transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
+               background 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
+               opacity 0.55s ease;
+ }
+ 
+ #menuToggle span:first-child
+ {
+   transform-origin: 0% 0%;
+ }
+ 
+ #menuToggle span:nth-last-child(2)
+ {
+   transform-origin: 0% 100%;
+ }
+ 
+ /* 
+  * Transform all the slices of hamburger
+  * into a crossmark.
+  */
+ #menuToggle > .checkbox:checked ~ span
+ {
+   opacity: 1;
+   transform: rotate(45deg) translate(-2px, -1px);
+   background: #232323;
+ }
+ 
+ /*
+  * But let's hide the middle one.
+  */
+ #menuToggle > .checkbox:checked ~ span:nth-last-child(3)
+ {
+   opacity: 0;
+   transform: rotate(0deg) scale(0.2, 0.2);
+ }
+ 
+ /*
+  * Ohyeah and the last one should go the other direction
+  */
+ #menuToggle > .checkbox:checked ~ span:nth-last-child(2)
+ {
+   opacity: 1;
+   transform: rotate(-45deg) translate(0, -1px);
+ }
+ 
+ /*
+  * Make this absolute positioned
+  * at the top left of the screen
+  */
+ #menu
+ {
+  position: absolute;
+  width: 400px;
+  margin: -100px 0 0 0;
+  padding: 50px 0 0 20px;
+  padding-top: 125px;
+  right: -100px;
+  background: #ededed;
+  list-style-type: none;
+  -webkit-font-smoothing: antialiased;
+  transform-origin: 0% 0%;
+  transform: translate(100%, 0);
+  transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1);
+  height: 100vh;
+ }
+ 
+ #menu li, #menu input
+ {
+   padding: 5px 0;
+   font-size: 15px;
+   color: $agilitestBlack;
+ }
+ 
+ /*
+  * And let's fade it in from the left
+  */
+ #menuToggle > .checkbox:checked ~ ul
+ {
+   transform: scale(1.0, 1.0);
+   opacity: 1;
+ }
+
+ #output {
+  display: none;
+  vertical-align: top;
+}
+
+input[type=range] {
+  -webkit-appearance: none;
+  -moz-apperance: none;
+  border-radius: 6px;
+  height: 6px;
 }
 
 input[type="range"]::-moz-range-track {
@@ -174,7 +352,7 @@ input[type=range]::-moz-range-thumb {
 
 // loader
 $brand-success: $agilitestOrange;
-$loader-size: 4em;
+$loader-size: 20px;
 $check-height: $loader-size/2;
 $check-width: $check-height/2;
 $check-left: ($loader-size/6 + $loader-size/12);
