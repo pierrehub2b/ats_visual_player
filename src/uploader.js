@@ -6,12 +6,11 @@ export var tl;
 export var progressSlider = $("#progressSlider");
 export var slideShow = $("#slideshow");
 export var slidertitle = $("#slidertitle");
-export var flashReport = $("#flashReport");
+export var flashReport = $("#flashReportData");
 export var progressDisplay = $("#progressDisplay");
 export var playLabelBtn = $("#playLabel");
 export var pauseLabelBtn = $("#pauseLabel");
 export var restartBtn = $("#restart");
-// export var fullScreen = $("#fullScreen");
 export var output = $("#output");
 export var spinner = $("#spinner");
 export var checkmark = $("#checkmark");
@@ -19,10 +18,14 @@ export var player = $("#player");
 export var input = $("#uploader");
 export var chapterTitle = $("#chapterTitle");
 export var menu = $("#menu");
+export var allData = [];
 export var images = [];
-// export var quotient = 0.8;
-// export var fullScreenState = true;
-// export var ratio = 1;
+
+export const types = {
+  FLASHREPORT: 'flashReport',
+  CHAPTER: 'chapter',
+  IMAGE: 'image'
+}
 
 export function setupScreen() {
   tl = new TimelineMax({ paused: true, repeat: 0, onUpdate:adjustUI});
@@ -56,8 +59,10 @@ export function updateTooltipImg(event) {
     var intvalue = Math.round((images.length / 100) * calcSliderPos(event)*100);
     var objCopy = $("#sliderImg" + intvalue).clone();
     objCopy.attr("id", "toolTipImg");
-    objCopy.css("max-width", "150px")
-    objCopy.css("max-height", "100px")
+    objCopy.css("max-width", "150px");
+    objCopy.css("max-height", "100px");
+    objCopy.css("opacity", 1);
+    objCopy.css("display", "block");
     slidertitle.html(objCopy);
     slidertitle.css("left", currentMouseXPos + 'px');
   }
@@ -71,11 +76,14 @@ export function calcSliderPos(e) {
 export function openfile() {
   tl = new TimelineMax({ paused: true, repeat: 0, onUpdate:adjustUI});
   slideShow.html("");
+  allData = [];
   images = [];
   spinner.removeClass("load-complete");
+  flashReport.html("");
   checkmark.css("display", "none");
   chapterTitle.css("display", "none");
   output.css("display", "inline-block");
+  $( "div" ).remove( ".chapterLine" );
   $("#menu > li").remove();
   tl.progress(0).pause();
   updateProgressDisplay();
@@ -164,6 +172,15 @@ export function format(str, col) {
   });
 };
 
+export function stripHtml(html){
+  // Create a new div element
+  var temporalDivElement = document.createElement("div");
+  // Set the HTML content with the providen
+  temporalDivElement.innerHTML = html;
+  // Retrieve the text property of the element (cross-browser support)
+  return temporalDivElement.textContent || temporalDivElement.innerText || "";
+}
+
 export function deserialize(data) {
   var encodedData = new AMF.Deserializer(data.buffer);
   while(encodedData.pos < encodedData.buf.byteLength) {
@@ -195,48 +212,55 @@ export function deserialize(data) {
   "<div>Groups: {groups}</div>",frData);
 
   flashReport.append(output);
-  //$(".checkbox").prop("checked", false);
-
-  var comments = [];
-  var imgIndex = 0;
+  allData.push({timeLine: flashReportObject.timeLine, element: flashReportObject.element, type: types.FLASHREPORT, img: null});
 
   for (let index = 0; index < actions.length; index++) {
     var element = actions[index];
     if(element.type.indexOf("ActionComment") > -1) {
       //commentaire fonctionnel
-      comments.push({index: index, element: element.data});
+      allData.push({timeLine: element.timeLine, element: element, type: types.CHAPTER, img: null});
     }
     if(element.images) {
       for (let i = 0; i < element.images.length; i++) {
-        var previousValues = images.filter(_ => _.timeLine == element.timeLine);
+        var previousValues = allData.filter(_ => _.timeLine == element.timeLine && _.type === types.IMAGE);
         if(previousValues.length == 0) {
           const img = element.images[i];
           var bytes = new Uint8Array(img);
           var imgPreview = document.createElement('img');
           imgPreview.src = "data:image/"+ element.imageType +";base64,"+ encode(bytes);
-          imgPreview.id = "sliderImg"+ imgIndex;
-          var currentElement = {timeLine: element.timeLine, img: imgPreview, element: element};
-          images.push(currentElement);
-          slideShow.append(currentElement.img);
-          imgIndex++;
+          imgPreview.id = "sliderImg"+ index;
+          allData.push({timeLine: element.timeLine, element: element, type: types.IMAGE, img: imgPreview });
+          slideShow.append(imgPreview);
         } 
       }
     }
   }
 
+  allData.sort(function(a,b) {
+    return a.timeLine - b.timeLine;
+  })
+
+  var comments = allData.filter(_ => _.type === types.CHAPTER);
+  images = allData.filter(_ => _.type === types.IMAGE);
+  images.shift();
+  
   if(comments.length > 0) {
     chapterTitle.css("display", "block");
   }
   for (let comm = 0; comm < comments.length; comm++) {
     const commentaire = comments[comm];
 
-    $("#menu").append('<li id="chapter'+ commentaire.index +'">' + commentaire.element + '</li>');
-    $("#chapter" + commentaire.index).click(function() {
-      updateByVal((actions.length / 100) * commentaire.index);
+    //create line in timeline
+    var left = 100 * getChapterPosition(commentaire.timeLine);
+    $('<div class="chapterline" id="chapterLine'+commentaire.timeLine+'"></div>').appendTo('#navSlider');
+    $("#chapterLine"+commentaire.timeLine).css("left", left + "%")
+
+    $("#menu").append('<li id="chapter'+ commentaire.timeLine +'">' + stripHtml(commentaire.element.data) + '</li>');
+    $("#chapter" + commentaire.timeLine).click(function() {
+      updateByVal(getChapterPosition(commentaire.timeLine));
     });
   }
 
-  images.shift();
   for (let currentImgIndex = 0; currentImgIndex < images.length; currentImgIndex++) {
     const element = images[currentImgIndex];
     animate(element, currentImgIndex);
@@ -244,6 +268,10 @@ export function deserialize(data) {
 
   spinner.addClass("load-complete");
   checkmark.css("display", "block");
+}
+
+export function getChapterPosition(timeline) {
+  return parseFloat((((100 / images.length) * images.filter(_ => _.timeLine <= timeline).length)/100).toFixed(2));
 }
 
 export function animate(currentElement, index) {
