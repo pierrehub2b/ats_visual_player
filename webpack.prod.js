@@ -2,13 +2,23 @@ const merge = require('webpack-merge')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const common = require('./webpack.common.js')
 
+const appCSS = new ExtractTextPlugin('style.css');
+const customCSS = new ExtractTextPlugin('custom.css');
+
 module.exports = merge(common, {
   mode: 'production',
   module: {
     rules: [
       {
-        test: /\.scss$/,
-        use: ExtractTextPlugin.extract({
+        test: /app\.scss$/,
+        use: appCSS.extract({
+          fallback: 'style-loader',
+          use: ['css-loader', 'sass-loader']
+        })
+      },
+      {
+        test: /custom\.scss$/,
+        use: customCSS.extract({
           fallback: 'style-loader',
           use: ['css-loader', 'sass-loader']
         })
@@ -16,6 +26,6 @@ module.exports = merge(common, {
     ]
   },
   plugins: [
-    new ExtractTextPlugin('style.css')
+    appCSS, customCSS
   ]
 })

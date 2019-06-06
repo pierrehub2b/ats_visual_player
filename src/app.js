@@ -3,6 +3,7 @@ if (module.hot) {
 }
 
 import './app.scss';
+import './custom.scss';
 var $ = require('jQuery');
 import { setupScreen } from './uploader';
 

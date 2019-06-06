@@ -1,0 +1,61 @@
+body {
+  font-family: Arial, Helvetica, sans-serif; }
+
+#loadingPercent {
+  color: #FABA00; }
+
+#slideshow {
+  background-color: black; }
+
+#slidertitle {
+  background-color: #FCFCFC;
+  border: #11171B 1px solid; }
+
+#playLabel, #pauseLabel, #restart, #fullScreen {
+  color: #FCFCFC; }
+
+#progressDisplay {
+  color: #FABA00; }
+
+#player {
+  background-color: #11171B; }
+
+.chapterline {
+  border-left: 2px solid #FABA00; }
+
+input[type=range]::-webkit-slider-thumb {
+  background-color: #FABA00; }
+
+input[type=range]::-moz-range-thumb {
+  background-color: #FABA00; }
+
+.circle-loader {
+  border: 1px solid #FCFCFC;
+  border-left-color: #FABA00; }
+
+.load-complete {
+  border-color: #FABA00; }
+
+.checkmark:after {
+  border-right: 3px solid #FABA00;
+  border-top: 3px solid #FABA00; }
+
+.sidenav {
+  color: #11171B;
+  background-color: #FCFCFC;
+  border-right: #11171B 1px solid; }
+
+.sidenav li {
+  color: #11171B; }
+
+.sidenav li:hover {
+  color: #FABA00; }
+
+.sidenav h2 {
+  color: #FABA00; }
+
+.sidenav h4 {
+  color: #11171B; }
+
+.openbtn {
+  color: #FCFCFC; }

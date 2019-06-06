@@ -28,40 +28,20 @@
         </div>
       </div>
 
-      <nav role='navigation'>
-        <div id="menuToggle">
-          <!--
-          A fake / hidden checkbox is used as click reciever,
-          so you can use the :checked selector on it.
-          -->
-          
-          <input class="checkbox" type="checkbox" checked/>
-          
-          <!--
-          Some spans to act as a hamburger.
-          
-          They are acting like a real hamburger,
-          not that McDonalds stuff.
-          -->
-          <span></span>
-          <span></span>
-          <span></span>
-          
-          <!--
-          Too bad the menu has to be inside of the button
-          but hey, it's pure CSS magic.
-          -->
-          <ul id="menu">
-            <div id="logo"></div>
-            <input type="file" id="uploader" />
-            <div id="output">
-                <div id="spinner" class="circle-loader">
-                    <div id="checkmark" class="checkmark draw"></div>
-                </div>
+      <div id="mySidenav" class="sidenav">
+        <a class="closebtn">&times;</a>
+        <div id="logo"></div>
+        <input type="file" id="uploader" />
+        <div id="output">
+            <div id="spinner" class="circle-loader">
+                <div id="checkmark" class="checkmark draw"></div>
             </div>
-            <h3 id="chapterTitle">Chapitres: </h3>
-          </ul>
         </div>
-      </nav>
+        <p id="loadingPercent"></p>
+        <h2 id="scriptName"></h2>
+        <h4 id="chapterTitle">Chapitres: </h4>
+      </div>
+
+      <span class="openbtn" style="font-size:30px;cursor:pointer">&#9776;</span>
   </body>
 </html>

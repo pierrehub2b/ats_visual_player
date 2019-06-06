@@ -1,0 +1,86 @@
+$agilitestOrange: #FABA00;
+$agilitestBlack: #11171B;
+$agilitestWhite: #FCFCFC;
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#loadingPercent {
+    color: $agilitestOrange;
+}
+
+#slideshow {
+    background-color: black;
+}
+
+#slidertitle {
+    background-color: $agilitestWhite;
+    border: $agilitestBlack 1px solid;
+}
+
+#playLabel, #pauseLabel, #restart, #fullScreen {
+    color: $agilitestWhite;
+}
+
+#progressDisplay {
+    color: $agilitestOrange;
+}
+
+#player {
+    background-color: $agilitestBlack;
+}
+
+.chapterline {
+    border-left: 2px solid $agilitestOrange;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    background-color: $agilitestOrange;
+}
+
+input[type=range]::-moz-range-thumb {
+    background-color: $agilitestOrange;
+}
+
+.circle-loader {
+    border: 1px solid $agilitestWhite;
+    border-left-color: $agilitestOrange;
+}
+
+.load-complete {
+    border-color: $agilitestOrange;
+}
+
+.checkmark {    
+    &:after {
+        border-right: 3px solid $agilitestOrange;
+        border-top: 3px solid $agilitestOrange;
+    }
+}
+
+.sidenav {
+    color: $agilitestBlack;
+    background-color: $agilitestWhite;
+    border-right: $agilitestBlack 1px solid;
+}
+
+.sidenav li {
+    color: $agilitestBlack;
+}
+
+.sidenav li:hover {
+    color: $agilitestOrange;
+}
+
+.sidenav h2 {
+    color: $agilitestOrange;
+}
+
+.sidenav h4 {
+    color: $agilitestBlack;
+}
+
+.openbtn {
+    color: $agilitestWhite;
+}

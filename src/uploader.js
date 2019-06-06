@@ -1,6 +1,8 @@
 import AMF from 'amf-js';
+import 'babel-polyfill';
 var $ = require('jQuery');
 import { TimelineMax } from "gsap/TweenMax";
+import { DH_CHECK_P_NOT_PRIME } from 'constants';
 
 export var timelLineLite;
 
@@ -21,11 +23,14 @@ export var player = $("#player");
 export var input = $("#uploader");
 export var chapterTitle = $("#chapterTitle");
 export var menu = $("#menu");
+export var loadingPercent = $("#loadingPercent");
+export var scriptName = $("#scriptName");
 //#endregion
 
 // tableaux des données
 export var allData = [];
 export var images = [];
+export var deferred = $.Deferred();
 
 // enum sur les différents types d'objets dans allData
 export const elementType = {
@@ -58,17 +63,76 @@ export function setupScreen() {
   progressSlider.on("mouseleave", function() {
     slidertitle.css("display", "none");
   });
+
+  $(".closebtn").on("click", function() {
+    closeNav();
+  });
+
+  $(".openbtn").on("click", function() {
+    openNav();
+  });
 }
 
-export function toAMFObjects(buffer) {
-  var dfd = $.Deferred();
-  var encodedData = new AMF.Deserializer(buffer);
-  while(encodedData.pos < encodedData.buf.byteLength) {
-    encodedData.deserialize();
-  } 
-  dfd.resolve(encodedData);
-  // Return the Promise so caller can't change the Deferred
-  return dfd.promise();
+export function toAMFObjects(data) {
+  // deferred = $.Deferred();
+  // var promise = deferred.promise();
+  var encodedData = new AMF.Deserializer(data.buffer);
+  
+  // promise.done(() => {
+    
+  // })
+  // promise.fail(() => {
+  //   console.log("Erreur lors de la génération de la vidéo.")
+  // });
+  // promise.progress((r, p) => {
+  //   loadingPercent.html(p + "%");
+  //   resultSetup(r);
+  // });
+
+  repeat(encodedData);
+}
+
+export function traitmentDone() {
+  spinner.addClass("load-complete");
+  checkmark.css("display", "block");
+  var duration = 0;
+  images = allData.filter(_ => _.type === elementType.IMAGE);
+  images.shift();
+  for (let currentImgIndex = 0; currentImgIndex < images.length; currentImgIndex++) {
+    const element = images[currentImgIndex];
+    duration += element.element.duration;
+    animate(element, currentImgIndex);
+  }
+  var dt = new Date();
+  dt.setHours(0,0,0,duration);
+  $("#duration").html("Duration: " + getDuration(dt));
+  loadingPercent.html("");
+}
+
+export function getDuration(date) {
+  var str = (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + 
+  ":" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) + 
+  ":" + (date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds());
+  return str;
+} 
+
+export function repeat(encodedData) {
+  var results = [];
+  if (encodedData.pos >= encodedData.buf.byteLength) { 
+    traitmentDone();
+    return 
+  };
+  encodedData.deserialize();
+  results = encodedData.objectReferences.filter(_ => _ != undefined && _.type);
+  encodedData.objectReferences = [];
+  resultSetup(results);
+  loadingPercent.html(Math.round(encodedData.pos/encodedData.buf.byteLength * 100) + "%");
+  setTimeout(function() {
+    repeat(encodedData);
+  },1);
+  
+  //deferred.notify(results, Math.round(encodedData.pos/encodedData.buf.byteLength * 100)); 
+  
 }
 
 // calcul et mise en place du tooltip au survol de la progress bar
@@ -95,7 +159,6 @@ export function calcSliderPos(e) {
 }
 
 export function openfile() {
-  // remise à "zéro" des différents éléments de la page
   timelLineLite = new TimelineMax({ paused: true, repeat: 0, onUpdate:adjustUI});
   slideShow.html("");
   allData = [];
@@ -110,13 +173,12 @@ export function openfile() {
   timelLineLite.progress(0).pause();
   updateProgressDisplay();
 
-
   var file = input.prop('files')[0];
   if(file != undefined) {
     var reader = new FileReader();
     reader.onload = function() { 
       var uintArray = new Uint8Array(this.result);
-      deserialize(uintArray);
+      toAMFObjects(uintArray);
     }
   
     reader.readAsArrayBuffer(file);
@@ -210,98 +272,102 @@ export function stripHtml(html){
   return temporalDivElement.textContent || temporalDivElement.innerText || "";
 }
 
+export function openNav() {
+  $("#mySidenav").css("width","18vw");
+  $(".sidenav").css("padding-left","20px");
+}
+
+export function closeNav() {
+  $("#mySidenav").css("width","0");
+  $(".sidenav").css("padding-left","0");
+}
+
 export function getChapterPosition(timeline) {
   return parseFloat((((100 / images.length) * images.filter(_ => _.timeLine <= timeline).length)/100).toFixed(2));
 }
 
-export function deserialize(data) {
-  $.when(toAMFObjects(data.buffer)).then(
-    function(encodedData) {
-        //#region traitment
-        var actions = encodedData.objectReferences.filter(_ => _.type ? _.type.indexOf("com.ats") > -1 : false);
-        var flashReportObject = encodedData.objectReferences.filter(_ => _.type == "startVisualReport")[0];
-    
-        var frData = {
-          name: flashReportObject.name,
-          id:flashReportObject.id,
-          author:flashReportObject.author,
-          started:new Date(parseInt(flashReportObject.started)),
-          duration:flashReportObject.duration,
-          description:flashReportObject.description,
-          prerequisite:flashReportObject.prerequisite,
-          groups:flashReportObject.groups
-        }
-    
-        var output = format("<h3>ATS Visual Report</h3>" +
-        "<div>Script name: {name}</div>"+
-        "<div>Script id: {id}</div>" +
-        "<div>Author: {author}</div>" +
-        "<div>Started: {started}</div>" +
-        "<div>Duration: {duration}</div>" +
-        "<div>description: {description}</div>" +
-        "<div>Prerequisite: {prerequisite}</div>" +
-        "<div>Groups: {groups}</div>",frData);
-    
-        flashReport.append(output);
-        allData.push({timeLine: flashReportObject.timeLine, element: flashReportObject.element, type: elementType.FLASHREPORT, img: null});
-    
-        for (let index = 0; index < actions.length; index++) {
-          var element = actions[index];
-          if(element.type.indexOf("ActionComment") > -1) {
-            //commentaire fonctionnel
-            allData.push({timeLine: element.timeLine, element: element, type: elementType.CHAPTER, img: null});
-          }
-          if(element.images) {
-            for (let i = 0; i < element.images.length; i++) {
-              var previousValues = allData.filter(_ => _.timeLine == element.timeLine && _.type === elementType.IMAGE);
-              if(previousValues.length == 0) {
-                const img = element.images[i];
-                var bytes = new Uint8Array(img);
-                var imgPreview = document.createElement('img');
-                imgPreview.src = "data:image/"+ element.imageType +";base64,"+ encode(bytes);
-                imgPreview.id = "sliderImg"+ index;
-                allData.push({timeLine: element.timeLine, element: element, type: elementType.IMAGE, img: imgPreview });
-                slideShow.append(imgPreview);
-              } 
-            }
-          }
-        }
-    
-        allData.sort(function(a,b) {
-          return a.timeLine - b.timeLine;
-        })
-    
-        var comments = allData.filter(_ => _.type === elementType.CHAPTER);
-        images = allData.filter(_ => _.type === elementType.IMAGE);
-        images.shift();
-        
-        if(comments.length > 0) {
-          chapterTitle.css("display", "block");
-        }
-        for (let comm = 0; comm < comments.length; comm++) {
-          const commentaire = comments[comm];
-    
-          //create line in timeline
-          var left = 100 * getChapterPosition(commentaire.timeLine);
-          $('<div class="chapterLine" id="chapterLine'+commentaire.timeLine+'"></div>').appendTo('#navSlider');
-          $("#chapterLine"+commentaire.timeLine).css("left", left + "%")
-    
-          $("#menu").append('<li id="chapter'+ commentaire.timeLine +'">' + stripHtml(commentaire.element.data) + '</li>');
-          $("#chapter" + commentaire.timeLine).click(function() {
-            updateByVal(getChapterPosition(commentaire.timeLine));
-          });
-        }
-    
-        for (let currentImgIndex = 0; currentImgIndex < images.length; currentImgIndex++) {
-          const element = images[currentImgIndex];
-          animate(element, currentImgIndex);
-        }
-    
-        spinner.addClass("load-complete");
-        checkmark.css("display", "block");
-        //#endregion   
+export function resultSetup(result) {
+  //#region traitment
+  var actions = result.filter(_ => _.type ? _.type.indexOf("com.ats") > -1 : false);
+  var flashReportObject = result.filter(_ => _.type == "startVisualReport")[0];
+
+  if(flashReportObject) {
+    scriptName.html(flashReportObject.name);
+    scriptName.css("display", "block");
+    var frData = {
+      name: flashReportObject.name,
+      id:flashReportObject.id,
+      author:flashReportObject.author,
+      started:new Date(parseInt(flashReportObject.started)),
+      duration:flashReportObject.duration,
+      description:flashReportObject.description,
+      prerequisite:flashReportObject.prerequisite,
+      groups:flashReportObject.groups
     }
-  );
+
+    var output = format("<h3>ATS Visual Report</h3>" +
+    "<div>Script name: {name}</div>"+
+    "<div>Script id: {id}</div>" +
+    "<div>Author: {author}</div>" +
+    "<div>Started: {started}</div>" +
+    "<div id='duration'>Duration: {duration}</div>" +
+    "<div>description: {description}</div>" +
+    "<div>Prerequisite: {prerequisite}</div>" +
+    "<div>Groups: {groups}</div>",frData);
+
+    flashReport.append(output);
+    allData.push({timeLine: flashReportObject.timeLine, element: flashReportObject.element, type: elementType.FLASHREPORT, img: null});
+  } 
+
+  for (let index = 0; index < actions.length; index++) {
+    var element = actions[index];
+    if(element.type.indexOf("ActionComment") > -1) {
+      //commentaire fonctionnel
+      allData.push({timeLine: element.timeLine, element: element, type: elementType.CHAPTER, img: null});
+    }
+    if(element.images) {
+      for (let i = 0; i < element.images.length; i++) {
+        var previousValues = allData.filter(_ => _.timeLine == element.timeLine && _.type === elementType.IMAGE);
+        if(previousValues.length == 0) {
+          const img = element.images[i];
+          var bytes = new Uint8Array(img);
+          var imgPreview = document.createElement('img');
+          imgPreview.src = "data:image/"+ element.imageType +";base64,"+ encode(bytes);
+          imgPreview.id = "sliderImg"+ index;
+          allData.push({timeLine: element.timeLine, element: element, type: elementType.IMAGE, img: imgPreview });
+          slideShow.append(imgPreview);
+        } 
+      }
+    }
+  }
+
+  allData.sort(function(a,b) {
+    return a.timeLine - b.timeLine;
+  })
+
+  var comments = allData.filter(_ => _.type === elementType.CHAPTER);
+
+  if(comments.length > 0) {
+    chapterTitle.css("display", "block");
+  }
+
+  $(".chapterLine").remove();
+  $(".sidenav > li").remove();
+
+  for (let comm = 0; comm < comments.length; comm++) {
+    const commentaire = comments[comm];
+
+    //create line in timeline
+    var left = 100 * getChapterPosition(commentaire.timeLine);
+    $('<div class="chapterLine" id="chapterLine'+commentaire.timeLine+'"></div>').appendTo('#navSlider');
+    $("#chapterLine"+commentaire.timeLine).css("left", left + "%")
+
+    $(".sidenav").append('<li id="chapter'+ commentaire.timeLine +'">' + stripHtml(commentaire.element.data) + '</li>');
+    $("#chapter" + commentaire.timeLine).click(function() {
+      updateByVal(getChapterPosition(commentaire.timeLine));
+    });
+  }
+  //#endregion   
 }
 
 export function animate(currentElement, index) {

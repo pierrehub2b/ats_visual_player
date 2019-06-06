@@ -19,7 +19,6 @@ body {
   left: 0;
   right: 0;
   margin: auto;
-  /* vertical-align: middle; */
   width: 20vw;
   top: 0;
   bottom: 0; }
@@ -28,7 +27,6 @@ body {
   display: flex;
   padding: 0;
   margin: 0;
-  background-color: black;
   justify-content: center;
   text-align: center;
   position: relative;
@@ -36,7 +34,6 @@ body {
   height: 93vh; }
 
 .chapterline {
-  border-left: 2px solid #FABA00;
   height: 7px;
   position: relative;
   /* display: block; */
@@ -53,7 +50,6 @@ body {
   right: 0;
   margin-left: auto;
   margin-right: auto;
-  /* vertical-align: middle; */
   top: 50%;
   transform: translateY(-50%);
   z-index: 2; }
@@ -79,9 +75,7 @@ body {
 
 #slidertitle {
   display: none;
-  background-color: #FCFCFC;
   position: absolute;
-  border: #11171B 1px solid;
   cursor: default;
   width: 150px;
   height: 100px;
@@ -93,21 +87,20 @@ body {
   vertical-align: super;
   width: 100%; }
 
+#progressSlider:hover, #navButtons div, .sidenav a {
+  cursor: pointer; }
+
 #playLabel, #pauseLabel, #restart, #fullScreen {
   display: inline-block;
-  color: #FCFCFC;
   font-size: 15px;
   margin: 0 3px; }
 
 #progressDisplay {
-  color: #FABA00;
-  font-family: Arial, Helvetica, sans-serif;
   font-size: 15px;
   display: inline-block;
   vertical-align: super; }
 
 #player {
-  background-color: #11171B;
   padding: 0;
   margin: 0;
   position: 'absolute';
@@ -131,129 +124,6 @@ body {
   width: 100%;
   height: auto; }
 
-body {
-  margin: 0;
-  padding: 0;
-  /* make it look decent enough */
-  background: #232323;
-  color: #cdcdcd;
-  font-family: "Avenir Next", "Avenir", sans-serif;
-  overflow-x: hidden;
-  /* needed because hiding the menu on the right side is not perfect,  */ }
-
-a {
-  text-decoration: none;
-  color: #232323;
-  transition: color 0.3s ease; }
-
-#menu li:hover {
-  color: #FABA00;
-  cursor: pointer;
-  font-weight: bold; }
-
-#menu h3 {
-  color: #11171B;
-  margin: 10px 0;
-  display: none; }
-
-#menuToggle {
-  display: block;
-  position: absolute;
-  top: 50px;
-  right: 50px;
-  z-index: 5;
-  -webkit-user-select: none;
-  user-select: none; }
-
-#menuToggle > .checkbox {
-  display: block;
-  width: 40px;
-  height: 32px;
-  position: absolute;
-  top: -7px;
-  left: -5px;
-  cursor: pointer;
-  opacity: 0;
-  /* hide this */
-  z-index: 5;
-  /* and place it over the hamburger */
-  -webkit-touch-callout: none; }
-
-/*
-  * Just a quick hamburger
-  */
-#menuToggle span {
-  display: block;
-  width: 24px;
-  height: 2px;
-  margin-bottom: 5px;
-  position: relative;
-  background: #cdcdcd;
-  border-radius: 3px;
-  z-index: 5;
-  transform-origin: 2px 0px;
-  transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1), background 0.5s cubic-bezier(0.77, 0.2, 0.05, 1), opacity 0.55s ease; }
-
-#menuToggle span:first-child {
-  transform-origin: 0% 0%; }
-
-#menuToggle span:nth-last-child(2) {
-  transform-origin: 0% 100%; }
-
-/* 
-  * Transform all the slices of hamburger
-  * into a crossmark.
-  */
-#menuToggle > .checkbox:checked ~ span {
-  opacity: 1;
-  transform: rotate(45deg) translate(-2px, -1px);
-  background: #232323; }
-
-/*
-  * But let's hide the middle one.
-  */
-#menuToggle > .checkbox:checked ~ span:nth-last-child(3) {
-  opacity: 0;
-  transform: rotate(0deg) scale(0.2, 0.2); }
-
-/*
-  * Ohyeah and the last one should go the other direction
-  */
-#menuToggle > .checkbox:checked ~ span:nth-last-child(2) {
-  opacity: 1;
-  transform: rotate(-45deg) translate(0, -1px); }
-
-/*
-  * Make this absolute positioned
-  * at the top left of the screen
-  */
-#menu {
-  position: absolute;
-  width: 400px;
-  margin: -100px 0 0 0;
-  padding: 50px 0 0 20px;
-  padding-top: 125px;
-  right: -100px;
-  background: #ededed;
-  list-style-type: none;
-  -webkit-font-smoothing: antialiased;
-  transform-origin: 0% 0%;
-  transform: translate(100%, 0);
-  transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1);
-  height: 100vh; }
-
-#menu li, #menu input {
-  padding: 5px 0;
-  font-size: 15px;
-  color: #11171B; }
-
-/*
-  * And let's fade it in from the left
-  */
-#menuToggle > .checkbox:checked ~ ul {
-  transform: scale(1, 1);
-  opacity: 1; }
-
 #output {
   display: none;
   vertical-align: top; }
@@ -264,7 +134,7 @@ input[type=range] {
   border-radius: 6px;
   height: 6px; }
 
-input[type="range"]::-moz-range-track {
+input[type=range]::-moz-range-track {
   border: none;
   background: none;
   outline: none; }
@@ -275,14 +145,12 @@ input[type=range]:focus {
 
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none !important;
-  background-color: #FABA00;
   height: 13px;
   width: 13px;
   border-radius: 50%; }
 
 input[type=range]::-moz-range-thumb {
   -moz-appearance: none !important;
-  background-color: #FABA00;
   border: none;
   height: 13px;
   width: 13px;
@@ -290,8 +158,6 @@ input[type=range]::-moz-range-thumb {
 
 .circle-loader {
   margin-top: 2.5px;
-  border: 1px solid #FCFCFC;
-  border-left-color: #FABA00;
   animation: loader-spin 1.2s infinite linear;
   position: relative;
   display: inline-block;
@@ -303,7 +169,6 @@ input[type=range]::-moz-range-thumb {
 .load-complete {
   -webkit-animation: none;
   animation: none;
-  border-color: #FABA00;
   transition: border 500ms ease-out; }
 
 .checkmark {
@@ -318,8 +183,6 @@ input[type=range]::-moz-range-thumb {
     height: 10px;
     width: 5px;
     transform-origin: left top;
-    border-right: 3px solid #FABA00;
-    border-top: 3px solid #FABA00;
     content: '';
     left: 5px;
     top: 10px;
@@ -348,3 +211,44 @@ input[type=range]::-moz-range-thumb {
     height: 10px;
     width: 5px;
     opacity: 1; } }
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+  z-index: 5; }
+
+.sidenav li {
+  padding: 4px 0;
+  text-decoration: none;
+  display: block;
+  transition: 0.3s; }
+
+.sidenav li:hover {
+  font-weight: bold;
+  cursor: pointer; }
+
+.sidenav h2 {
+  margin: 10px 0;
+  font-size: 1.2em; }
+
+.sidenav h4 {
+  margin: 10px 0;
+  display: none; }
+
+.closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px; }
+
+.openbtn {
+  position: absolute;
+  left: 50px;
+  top: 50px; }
