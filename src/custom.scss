@@ -27,12 +27,20 @@ body {
     color: $agilitestOrange;
 }
 
+#logo {
+    opacity: 0.5;
+  }
+
+#flashReport {
+    color: $agilitestWhite;
+}
+
 #player {
     background-color: $agilitestBlack;
 }
 
-.chapterline {
-    border-left: 2px solid $agilitestOrange;
+.chapterLine {
+    border-left: 4px solid $agilitestOrange;
 }
 
 input[type=range]::-webkit-slider-thumb {
@@ -59,6 +67,10 @@ input[type=range]::-moz-range-thumb {
     }
 }
 
+#uploader {
+    font-size: 0.8vw;
+}
+
 .sidenav {
     color: $agilitestBlack;
     background-color: $agilitestWhite;
@@ -67,6 +79,7 @@ input[type=range]::-moz-range-thumb {
 
 .sidenav li {
     color: $agilitestBlack;
+    font-size: 0.8vw;
 }
 
 .sidenav li:hover {
@@ -75,10 +88,12 @@ input[type=range]::-moz-range-thumb {
 
 .sidenav h2 {
     color: $agilitestOrange;
+    font-size: 1.1vw;
 }
 
 .sidenav h4 {
     color: $agilitestBlack;
+    font-size: 1vw;
 }
 
 .openbtn {

@@ -3,6 +3,7 @@ import 'babel-polyfill';
 var $ = require('jQuery');
 import { TimelineMax } from "gsap/TweenMax";
 import { DH_CHECK_P_NOT_PRIME } from 'constants';
+import { types } from 'util';
 
 export var timelLineLite;
 
@@ -26,6 +27,8 @@ export var menu = $("#menu");
 export var loadingPercent = $("#loadingPercent");
 export var scriptName = $("#scriptName");
 //#endregion
+
+export const leftPanelWidth = 18; //vw
 
 // tableaux des données
 export var allData = [];
@@ -103,6 +106,23 @@ export function traitmentDone() {
     duration += element.element.duration;
     animate(element, currentImgIndex);
   }
+
+  var comments = allData.filter(_ => _.type === elementType.CHAPTER);
+  for (let comm = 0; comm < comments.length; comm++) {
+    const commentaire = comments[comm];
+
+    //create line in timeline
+    var left = 100 * getChapterPosition(commentaire.timeLine);
+    $('<div class="chapterLine" id="chapterLine'+commentaire.timeLine+'"></div>').appendTo('#navSlider');
+    $("#chapterLine"+commentaire.timeLine).css("left", left + "%");
+    $("#chapterLine" + commentaire.timeLine).on("mouseover", function(event) {
+      updateTooltipImg(event);
+    });
+    $("#chapterLine" + commentaire.timeLine).on("mouseleave", function() {
+      slidertitle.css("display", "none");
+    });
+  }
+
   var dt = new Date();
   dt.setHours(0,0,0,duration);
   $("#duration").html("Duration: " + getDuration(dt));
@@ -137,7 +157,7 @@ export function repeat(encodedData) {
 
 // calcul et mise en place du tooltip au survol de la progress bar
 export function updateTooltipImg(event) {
-  var currentMouseXPos = (event.clientX + window.pageXOffset) - 50;
+  var currentMouseXPos = (event.clientX - slideShow.offset().left) - 50;
   if(images.length > 0) {
     
     var intvalue = Math.round((images.length / 100) * calcSliderPos(event)*100);
@@ -155,7 +175,7 @@ export function updateTooltipImg(event) {
 }
 
 export function calcSliderPos(e) {
-  return ( e.clientX - e.target.offsetLeft ) / e.target.clientWidth * parseFloat(e.target.getAttribute('max'));
+  return (e.clientX - slideShow.offset().left) / slideShow.width();
 }
 
 export function openfile() {
@@ -273,13 +293,19 @@ export function stripHtml(html){
 }
 
 export function openNav() {
-  $("#mySidenav").css("width","18vw");
+  $("#mySidenav").css("width", leftPanelWidth + "vw");
   $(".sidenav").css("padding-left","20px");
+  $("#player").css("width", 100 - leftPanelWidth + "vw");
+  $("#slideshow").css("width",100 - leftPanelWidth + "vw");
+  $(".nav").css("width",100 - leftPanelWidth + "vw");
 }
 
 export function closeNav() {
   $("#mySidenav").css("width","0");
   $(".sidenav").css("padding-left","0");
+  $("#player").css("width","100vw");
+  $("#slideshow").css("width","100vw");
+  $(".nav").css("width","100vw");
 }
 
 export function getChapterPosition(timeline) {
@@ -317,7 +343,9 @@ export function resultSetup(result) {
 
     flashReport.append(output);
     allData.push({timeLine: flashReportObject.timeLine, element: flashReportObject.element, type: elementType.FLASHREPORT, img: null});
-  } 
+  }
+
+  var imgCounter = allData.filter(_ => _.type === elementType.IMAGE).length;
 
   for (let index = 0; index < actions.length; index++) {
     var element = actions[index];
@@ -333,7 +361,7 @@ export function resultSetup(result) {
           var bytes = new Uint8Array(img);
           var imgPreview = document.createElement('img');
           imgPreview.src = "data:image/"+ element.imageType +";base64,"+ encode(bytes);
-          imgPreview.id = "sliderImg"+ index;
+          imgPreview.id = "sliderImg"+ imgCounter;
           allData.push({timeLine: element.timeLine, element: element, type: elementType.IMAGE, img: imgPreview });
           slideShow.append(imgPreview);
         } 
@@ -356,12 +384,6 @@ export function resultSetup(result) {
 
   for (let comm = 0; comm < comments.length; comm++) {
     const commentaire = comments[comm];
-
-    //create line in timeline
-    var left = 100 * getChapterPosition(commentaire.timeLine);
-    $('<div class="chapterLine" id="chapterLine'+commentaire.timeLine+'"></div>').appendTo('#navSlider');
-    $("#chapterLine"+commentaire.timeLine).css("left", left + "%")
-
     $(".sidenav").append('<li id="chapter'+ commentaire.timeLine +'">' + stripHtml(commentaire.element.data) + '</li>');
     $("#chapter" + commentaire.timeLine).click(function() {
       updateByVal(getChapterPosition(commentaire.timeLine));

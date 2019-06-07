@@ -5,7 +5,7 @@ var $ = require('jQuery');
 // img.attr('src', codeURL);
 // $("#logo").append(img);
 
-const img2 = $('<img>');
+const img2 = $('<img id="logo">');
 img2.attr('src', codeURL);
 $("#flashReport").append(img2);
 

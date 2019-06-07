@@ -4,7 +4,7 @@ body {
   overflow: hidden; }
 
 #flashReport {
-  margin: 10px 20px;
+  margin: 10px 100px;
   position: absolute;
   display: block;
   top: 0;
@@ -30,15 +30,18 @@ body {
   justify-content: center;
   text-align: center;
   position: relative;
+  transition: 0.5s;
   width: 100vw;
   height: 93vh; }
 
-.chapterline {
-  height: 7px;
+.chapterLine {
+  height: 15px;
   position: relative;
   /* display: block; */
   /* text-align: left; */
-  float: left; }
+  float: left;
+  top: -20px;
+  cursor: pointer; }
 
 #slideshow img {
   position: absolute;
@@ -59,7 +62,8 @@ body {
   position: relative;
   padding: 7px 0 0 20px;
   width: 100vw;
-  text-align: center; }
+  text-align: center;
+  transition: 0.5s; }
 
 #navButtons, #navSlider, #navDisplay {
   display: inline-block; }
@@ -103,26 +107,15 @@ body {
 #player {
   padding: 0;
   margin: 0;
-  position: 'absolute';
+  position: absolute;
   width: 100vw;
   height: 100vh;
   top: 0;
+  transition: 0.5s;
   right: 0;
   bottom: 0;
-  left: 0;
   z-index: 0;
   overflow: hidden; }
-
-#logo {
-  width: 50px;
-  height: auto;
-  position: absolute;
-  top: 75px;
-  left: 35px; }
-
-#logo img {
-  width: 100%;
-  height: auto; }
 
 #output {
   display: none;
@@ -250,5 +243,5 @@ input[type=range]::-moz-range-thumb {
 
 .openbtn {
   position: absolute;
-  left: 50px;
-  top: 50px; }
+  left: 30px;
+  top: 30px; }
