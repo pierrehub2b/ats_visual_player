@@ -17,7 +17,7 @@ body {
   margin: 10px 10px;
 }
 
-#flashReport img {
+#flashReport #logo {
   position: fixed;
   left: 0;
   right: 0;
@@ -25,10 +25,14 @@ body {
   width: 20vw;
   top: 0;
   bottom: 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 20vw;
+  background-size: contain;
 }
 
-//slideShow
-#slideshow {
+//fondEcran
+#fondEcran {
   display: flex;
   padding: 0;
   margin: 0;
@@ -40,7 +44,7 @@ body {
   height: 93vh;
 }
 
-.chapterLine {
+.chapitresProgressBar {
   height: 15px;
   position: relative;
   /* display: block; */
@@ -50,7 +54,7 @@ body {
   cursor: pointer;
 }
 
-#slideshow img {
+#fondEcran img {
   position: absolute;
   max-width: 100%;
   max-height: 100%;
@@ -90,7 +94,7 @@ body {
   vertical-align: sub;
 }
 
-#slidertitle {
+#imgToolTip {
   display: none;
   position: absolute;
   cursor: default;
@@ -107,7 +111,7 @@ body {
   width: 100%;
 }
 
-#progressSlider:hover, #navButtons div, .sidenav a {
+#progressSlider:hover, #navButtons div, .panelGauche a {
   cursor: pointer;
 }
 
@@ -118,7 +122,7 @@ body {
   margin: 0 3px;
 }
 
-#progressDisplay {
+#avancementPointeur {
   font-size: 15px;
   display: inline-block;
   vertical-align: super;
@@ -137,6 +141,10 @@ body {
   bottom: 0;
   z-index: 0;
   overflow: hidden;
+}
+
+#pourcentageAvancement {
+  display: inline-block;
 }
 
  #output {
@@ -184,7 +192,7 @@ $check-width: $check-height/2;
 $check-left: ($loader-size/6 + $loader-size/12);
 $check-thickness: 3px;
 
-.circle-loader {
+.cercleChargement {
   margin-top: $loader-size/8;
   animation: loader-spin 1.2s infinite linear;
   position: relative;
@@ -195,19 +203,19 @@ $check-thickness: 3px;
   height: $loader-size;
 }
 
-.load-complete {
+.chargementTermine {
   -webkit-animation: none;
   animation: none;
   transition: border 500ms ease-out;
 }
 
-.checkmark {
+.chargementCheckmark {
   display: none;
   
   &.draw:after {
     animation-duration: 800ms;
     animation-timing-function: ease;
-    animation-name: checkmark;
+    animation-name: chargementCheckmark;
     transform: scaleX(-1) rotate(135deg);
   }
   
@@ -232,7 +240,7 @@ $check-thickness: 3px;
   }
 }
 
-@keyframes checkmark {
+@keyframes chargementCheckmark {
   0% {
     height: 0;
     width: 0;
@@ -255,7 +263,7 @@ $check-thickness: 3px;
   }
 }
 
-.sidenav {
+.panelGauche {
   height: 100%;
   width: 0;
   position: fixed;
@@ -267,24 +275,25 @@ $check-thickness: 3px;
   z-index: 5;
 }
 
-.sidenav li {
+.panelGauche li {
   padding: 4px 0;
   text-decoration: none;
   display: block;
   transition: 0.3s;
 }
 
-.sidenav li:hover {
-  font-weight: bold;
+.panelGauche li:hover {
   cursor: pointer;
 }
 
-.sidenav h2 {
+.panelGauche h2 {
   margin: 10px 0;
   font-size: 1.2em;
+  word-break: break-all;
+  width: 95%;
 }
 
-.sidenav h4 {
+.panelGauche h4 {
   margin: 10px 0;
   display: none;
 }
@@ -297,7 +306,7 @@ $check-thickness: 3px;
   margin-left: 50px;
 }
 
-.openbtn {
+.boutonOuverture {
   position: absolute;
   left: 30px;
   top: 30px;

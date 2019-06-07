@@ -1,5 +1,6 @@
 const merge = require('webpack-merge')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 const common = require('./webpack.common.js')
 
 const appCSS = new ExtractTextPlugin('style.css');
@@ -26,6 +27,9 @@ module.exports = merge(common, {
     ]
   },
   plugins: [
-    appCSS, customCSS
+    appCSS, customCSS,
+    new CopyWebpackPlugin([
+      {from:'src/images',to:'images'} 
+    ])
   ]
 })

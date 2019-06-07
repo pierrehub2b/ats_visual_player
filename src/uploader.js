@@ -10,25 +10,25 @@ export var timelLineLite;
 //#region objets du DOM
 export var progressSlider = $("#progressSlider");
 export var navSlider = $("#navSlider");
-export var slideShow = $("#slideshow");
-export var slidertitle = $("#slidertitle");
+export var fondEcran = $("#fondEcran");
+export var imgToolTip = $("#imgToolTip");
 export var flashReport = $("#flashReportData");
-export var progressDisplay = $("#progressDisplay");
+export var avancementPointeur = $("#avancementPointeur");
 export var playLabelBtn = $("#playLabel");
 export var pauseLabelBtn = $("#pauseLabel");
 export var restartBtn = $("#restart");
 export var output = $("#output");
 export var spinner = $("#spinner");
-export var checkmark = $("#checkmark");
+export var chargementCheckmark = $("#chargementCheckmark");
 export var player = $("#player");
 export var input = $("#uploader");
 export var chapterTitle = $("#chapterTitle");
 export var menu = $("#menu");
-export var loadingPercent = $("#loadingPercent");
+export var pourcentageAvancement = $("#pourcentageAvancement");
 export var scriptName = $("#scriptName");
 //#endregion
 
-export const leftPanelWidth = 18; //vw
+export const leftPanelWidth = 17; //vw
 
 // tableaux des données
 export var allData = [];
@@ -64,14 +64,14 @@ export function setupScreen() {
     updateTooltipImg(event);
   });
   progressSlider.on("mouseleave", function() {
-    slidertitle.css("display", "none");
+    imgToolTip.css("display", "none");
   });
 
   $(".closebtn").on("click", function() {
     closeNav();
   });
 
-  $(".openbtn").on("click", function() {
+  $(".boutonOuverture").on("click", function() {
     openNav();
   });
 }
@@ -88,45 +88,42 @@ export function toAMFObjects(data) {
   //   console.log("Erreur lors de la génération de la vidéo.")
   // });
   // promise.progress((r, p) => {
-  //   loadingPercent.html(p + "%");
+  //   pourcentageAvancement.html(p + "%");
   //   resultSetup(r);
   // });
 
   repeat(encodedData);
 }
 
+export var duration;
 export function traitmentDone() {
-  spinner.addClass("load-complete");
-  checkmark.css("display", "block");
-  var duration = 0;
-  images = allData.filter(_ => _.type === elementType.IMAGE);
-  images.shift();
-  for (let currentImgIndex = 0; currentImgIndex < images.length; currentImgIndex++) {
-    const element = images[currentImgIndex];
-    duration += element.element.duration;
-    animate(element, currentImgIndex);
-  }
-
+  spinner.addClass("chargementTermine");
+  chargementCheckmark.css("display", "block");
   var comments = allData.filter(_ => _.type === elementType.CHAPTER);
   for (let comm = 0; comm < comments.length; comm++) {
     const commentaire = comments[comm];
-
     //create line in timeline
-    var left = 100 * getChapterPosition(commentaire.timeLine);
-    $('<div class="chapterLine" id="chapterLine'+commentaire.timeLine+'"></div>').appendTo('#navSlider');
-    $("#chapterLine"+commentaire.timeLine).css("left", left + "%");
-    $("#chapterLine" + commentaire.timeLine).on("mouseover", function(event) {
+    var left = (100 * getChapterPosition(commentaire.timeLine)) * navSlider.width() /100;
+    $('<div class="chapitresProgressBar" id="chapitresProgressBar'+commentaire.timeLine+'"></div>').appendTo('#navSlider');
+    var component = $("#chapitresProgressBar"+commentaire.timeLine);
+    component.css("left", left + "px");
+    component.on("mouseover", function(event) {
       updateTooltipImg(event);
+      $("#chapter"+commentaire.timeLine).addClass("hoverChapter");
     });
-    $("#chapterLine" + commentaire.timeLine).on("mouseleave", function() {
-      slidertitle.css("display", "none");
+    component.on("mouseleave", function() {
+      imgToolTip.css("display", "none");
+      $("#chapter"+commentaire.timeLine).removeClass("hoverChapter");
+    });
+    component.on("click", function() {
+      updateByVal(getChapterPosition(commentaire.timeLine));
     });
   }
 
   var dt = new Date();
   dt.setHours(0,0,0,duration);
   $("#duration").html("Duration: " + getDuration(dt));
-  loadingPercent.html("");
+  pourcentageAvancement.html("");
 }
 
 export function getDuration(date) {
@@ -136,20 +133,31 @@ export function getDuration(date) {
   return str;
 } 
 
+export var results = [];
 export function repeat(encodedData) {
-  var results = [];
   if (encodedData.pos >= encodedData.buf.byteLength) { 
+    results = encodedData.objectReferences.filter(_ => _ != undefined && _.type);
+    if(results.length > 0) {
+      resultSetup(results, percent);
+      pourcentageAvancement.html(100 + "%");
+      updateLoadingPointer(100);
+    }
     traitmentDone();
     return 
   };
   encodedData.deserialize();
-  results = encodedData.objectReferences.filter(_ => _ != undefined && _.type);
-  encodedData.objectReferences = [];
-  resultSetup(results);
-  loadingPercent.html(Math.round(encodedData.pos/encodedData.buf.byteLength * 100) + "%");
+  if(encodedData.objectReferences.length > 10) {
+    results = encodedData.objectReferences.filter(_ => _ != undefined && _.type);
+    encodedData.objectReferences = [];
+    resultSetup(results, percent);
+    var percent = Math.round(encodedData.pos/encodedData.buf.byteLength * 100);
+    pourcentageAvancement.html(percent + "%");
+    updateLoadingPointer(percent);
+  }
+  
   setTimeout(function() {
     repeat(encodedData);
-  },1);
+  });
   
   //deferred.notify(results, Math.round(encodedData.pos/encodedData.buf.byteLength * 100)); 
   
@@ -157,10 +165,10 @@ export function repeat(encodedData) {
 
 // calcul et mise en place du tooltip au survol de la progress bar
 export function updateTooltipImg(event) {
-  var currentMouseXPos = (event.clientX - slideShow.offset().left) - 50;
+  var currentMouseXPos = (event.clientX - fondEcran.offset().left) - 50;
   if(images.length > 0) {
     
-    var intvalue = Math.round((images.length / 100) * calcSliderPos(event)*100);
+    var intvalue = Math.round(calcSliderPos(event));
     var objCopy = $("#sliderImg" + intvalue).clone();
 
     objCopy.attr("id", "toolTipImg");
@@ -168,30 +176,32 @@ export function updateTooltipImg(event) {
     objCopy.css("max-height", "100px");
     objCopy.css("opacity", 1);
     objCopy.css("display", "block");
-    slidertitle.css("display", "block");
-    slidertitle.html(objCopy);
-    slidertitle.css("left", currentMouseXPos + 'px');
+    imgToolTip.css("display", "block");
+    imgToolTip.html(objCopy);
+    imgToolTip.css("left", currentMouseXPos + 'px');
   }
 }
 
 export function calcSliderPos(e) {
-  return (e.clientX - slideShow.offset().left) / slideShow.width();
+  return images.length * e.offsetX / navSlider.width();
+  //return (e.clientX - navSlider.offset().left) / navSlider.width();
 }
 
 export function openfile() {
   timelLineLite = new TimelineMax({ paused: true, repeat: 0, onUpdate:adjustUI});
-  slideShow.html("");
+  fondEcran.html("");
   allData = [];
   images = [];
-  spinner.removeClass("load-complete");
+  spinner.removeClass("chargementTermine");
   flashReport.html("");
-  checkmark.css("display", "none");
+  chargementCheckmark.css("display", "none");
   chapterTitle.css("display", "none");
   output.css("display", "inline-block");
-  $(".chapterLine").remove();
+  $(".chapitresProgressBar").remove();
   $("#menu > li").remove();
+  duration = 0;
   timelLineLite.progress(0).pause();
-  updateProgressDisplay();
+  updateavancementPointeur();
 
   var file = input.prop('files')[0];
   if(file != undefined) {
@@ -236,20 +246,21 @@ export function encode (input) {
 //#region maj de l'UI en fonction de l'avancée du slider
 export function adjustUI() {
   progressSlider.val(timelLineLite.progress());
-  updateProgressDisplay();
+  updateavancementPointeur();
 }
 
 export function update(){
   timelLineLite.progress(parseFloat(progressSlider.val())).pause();
-  updateProgressDisplay();
+  updateavancementPointeur();
 }
 
 export function updateByVal(value){
-  timelLineLite.progress(value).pause();
-  updateProgressDisplay();
+  timelLineLite.pause();
+  timelLineLite.progress(value);
+  updateavancementPointeur();
 }
 
-export function updateProgressDisplay() {
+export function updateavancementPointeur() {
   if(progressSlider.val() == 0 && flashReport.css("display") == "none") {
     flashReport.css("display", "block");
   } else if(progressSlider.val() > 0 && flashReport.css("display") == "block") {
@@ -257,19 +268,29 @@ export function updateProgressDisplay() {
   }
 
   var v = parseFloat(progressSlider.val()) * 100;
-  progressDisplay.html(v.toFixed());
+  avancementPointeur.html(v.toFixed());
   var val = (parseFloat(progressSlider.val()) - progressSlider.attr("min") / (progressSlider.attr("max") - progressSlider.attr("min")));
   var percent = val * 100;
 
   progressSlider.css('background-image',
         '-webkit-gradient(linear, left top, right top, ' +
         'color-stop(' + percent + '%, #FABA00), ' +
-        'color-stop(' + percent + '%, #FCFCFC)' +
+        'color-stop(' + percent + '%, #9BA0A5)' +
         ')');
 
-  progressSlider.css('background-image','-moz-linear-gradient(left center, #FABA00 0%, #FABA00 ' + percent + '%, #FCFCFC ' + percent + '%, #FCFCFC 100%)');
+  progressSlider.css('background-image','-moz-linear-gradient(left center, #FABA00 0%, #FABA00 ' + percent + '%, #9BA0A5 ' + percent + '%, #9BA0A5 100%)');
 }
 //#endregion
+
+export function updateLoadingPointer(percent) {
+  progressSlider.css('background-image',
+  '-webkit-gradient(linear, left top, right top, ' +
+  'color-stop(' + percent + '%, #9BA0A5), ' +
+  'color-stop(' + percent + '%, #FCFCFC)' +
+  ')');
+
+  progressSlider.css('background-image','-moz-linear-gradient(left center, #9BA0A5 0%, #9BA0A5 ' + percent + '%, #FCFCFC ' + percent + '%, #FCFCFC 100%)');
+}
 
 // equivalent du string format en c#
 export function format(str, col) {
@@ -293,18 +314,18 @@ export function stripHtml(html){
 }
 
 export function openNav() {
-  $("#mySidenav").css("width", leftPanelWidth + "vw");
-  $(".sidenav").css("padding-left","20px");
-  $("#player").css("width", 100 - leftPanelWidth + "vw");
-  $("#slideshow").css("width",100 - leftPanelWidth + "vw");
-  $(".nav").css("width",100 - leftPanelWidth + "vw");
+  $("#mypanelGauche").css("width", leftPanelWidth + "vw");
+  $(".panelGauche").css("padding-left","20px");
+  $("#player").css("width", 99 - leftPanelWidth + "vw");
+  $("#fondEcran").css("width",99 - leftPanelWidth + "vw");
+  $(".nav").css("width",99 - leftPanelWidth + "vw");
 }
 
 export function closeNav() {
-  $("#mySidenav").css("width","0");
-  $(".sidenav").css("padding-left","0");
+  $("#mypanelGauche").css("width","0");
+  $(".panelGauche").css("padding-left","0");
   $("#player").css("width","100vw");
-  $("#slideshow").css("width","100vw");
+  $("#fondEcran").css("width","100vw");
   $(".nav").css("width","100vw");
 }
 
@@ -312,7 +333,7 @@ export function getChapterPosition(timeline) {
   return parseFloat((((100 / images.length) * images.filter(_ => _.timeLine <= timeline).length)/100).toFixed(2));
 }
 
-export function resultSetup(result) {
+export function resultSetup(result, percent) {
   //#region traitment
   var actions = result.filter(_ => _.type ? _.type.indexOf("com.ats") > -1 : false);
   var flashReportObject = result.filter(_ => _.type == "startVisualReport")[0];
@@ -347,6 +368,7 @@ export function resultSetup(result) {
 
   var imgCounter = allData.filter(_ => _.type === elementType.IMAGE).length;
 
+  var currentImgs = [];
   for (let index = 0; index < actions.length; index++) {
     var element = actions[index];
     if(element.type.indexOf("ActionComment") > -1) {
@@ -362,8 +384,10 @@ export function resultSetup(result) {
           var imgPreview = document.createElement('img');
           imgPreview.src = "data:image/"+ element.imageType +";base64,"+ encode(bytes);
           imgPreview.id = "sliderImg"+ imgCounter;
+          imgCounter++;
           allData.push({timeLine: element.timeLine, element: element, type: elementType.IMAGE, img: imgPreview });
-          slideShow.append(imgPreview);
+          currentImgs.push({timeLine: element.timeLine, element: element, type: elementType.IMAGE, img: imgPreview });
+          fondEcran.append(imgPreview);
         } 
       }
     }
@@ -379,15 +403,29 @@ export function resultSetup(result) {
     chapterTitle.css("display", "block");
   }
 
-  $(".chapterLine").remove();
-  $(".sidenav > li").remove();
+  $(".chapitresProgressBar").remove();
+  $(".panelGauche > li").remove();
 
   for (let comm = 0; comm < comments.length; comm++) {
     const commentaire = comments[comm];
-    $(".sidenav").append('<li id="chapter'+ commentaire.timeLine +'">' + stripHtml(commentaire.element.data) + '</li>');
-    $("#chapter" + commentaire.timeLine).click(function() {
+    $('<li id="chapter'+ commentaire.timeLine +'">' + stripHtml(commentaire.element.data) + '</li>').insertBefore($("#output"));
+    var component = $("#chapter" + commentaire.timeLine);
+    component.click(function() {
       updateByVal(getChapterPosition(commentaire.timeLine));
     });
+    component.on("mouseover", function(event) {
+      $("#chapter" + commentaire.timeLine).addClass("hoverChapter");
+    });
+    component.on("mouseleave", function() {
+      $("#chapter" + commentaire.timeLine).removeClass("hoverChapter");
+    });
+  }
+
+  images = allData.filter(_ => _.type === elementType.IMAGE);
+  for (let currentImgIndex = 0; currentImgIndex < currentImgs.length; currentImgIndex++) {
+    const element = currentImgs[currentImgIndex];
+    duration += element.element.duration;
+    animate(element, images.length-currentImgs.length+currentImgIndex);
   }
   //#endregion   
 }

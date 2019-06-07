@@ -1,20 +1,22 @@
 $agilitestOrange: #FABA00;
 $agilitestBlack: #11171B;
 $agilitestWhite: #FCFCFC;
+$fontSize: 15px;
 
 body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-#loadingPercent {
+#pourcentageAvancement {
     color: $agilitestOrange;
+    font-size: $fontSize;
 }
 
-#slideshow {
+#fondEcran {
     background-color: black;
 }
 
-#slidertitle {
+#imgToolTip {
     background-color: $agilitestWhite;
     border: $agilitestBlack 1px solid;
 }
@@ -23,12 +25,13 @@ body {
     color: $agilitestWhite;
 }
 
-#progressDisplay {
+#avancementPointeur {
     color: $agilitestOrange;
 }
 
 #logo {
     opacity: 0.5;
+    background-image: url("./images/agilitest_logo.png");
   }
 
 #flashReport {
@@ -39,7 +42,7 @@ body {
     background-color: $agilitestBlack;
 }
 
-.chapterLine {
+.chapitresProgressBar {
     border-left: 4px solid $agilitestOrange;
 }
 
@@ -51,16 +54,16 @@ input[type=range]::-moz-range-thumb {
     background-color: $agilitestOrange;
 }
 
-.circle-loader {
+.cercleChargement {
     border: 1px solid $agilitestWhite;
     border-left-color: $agilitestOrange;
 }
 
-.load-complete {
+.chargementTermine {
     border-color: $agilitestOrange;
 }
 
-.checkmark {    
+.chargementCheckmark {    
     &:after {
         border-right: 3px solid $agilitestOrange;
         border-top: 3px solid $agilitestOrange;
@@ -68,34 +71,35 @@ input[type=range]::-moz-range-thumb {
 }
 
 #uploader {
-    font-size: 0.8vw;
+    font-size: $fontSize;
 }
 
-.sidenav {
+.panelGauche {
     color: $agilitestBlack;
     background-color: $agilitestWhite;
     border-right: $agilitestBlack 1px solid;
 }
 
-.sidenav li {
-    color: $agilitestBlack;
-    font-size: 0.8vw;
+.panelGauche li {
+    font-size: $fontSize;
 }
 
-.sidenav li:hover {
+.panelGauche h2 {
     color: $agilitestOrange;
+    font-size: 20px;
 }
 
-.sidenav h2 {
-    color: $agilitestOrange;
-    font-size: 1.1vw;
-}
-
-.sidenav h4 {
+.panelGauche h4 {
     color: $agilitestBlack;
-    font-size: 1vw;
+    font-size: 18px;
 }
 
-.openbtn {
+.boutonOuverture {
     color: $agilitestWhite;
+}
+
+
+.hoverChapter {
+    color: $agilitestOrange;
+    font-weight: bold;
 }

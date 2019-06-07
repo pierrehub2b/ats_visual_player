@@ -6,25 +6,26 @@
   </head>
   <body>
 
-      <div id="mySidenav" class="sidenav">
+      <div id="mypanelGauche" class="panelGauche">
           <a class="closebtn">&times;</a>
-          <div id="logo"></div>
           <input type="file" id="uploader" />
-          <div id="output">
-              <div id="spinner" class="circle-loader">
-                  <div id="checkmark" class="checkmark draw"></div>
-              </div>
-          </div>
-          <p id="loadingPercent"></p>
+          
+            <p id="pourcentageAvancement"></p>
+          
           <h2 id="scriptName"></h2>
           <h4 id="chapterTitle">Chapitres: </h4>
+
+          <div id="output">
+          <div id="spinner" class="cercleChargement">
+            <div id="chargementCheckmark" class="chargementCheckmark draw"></div>
+          </div></div>
         </div>
         
       <div id="player">
         <div id="flashReport">
           <div id="flashReportData"></div>
         </div>
-        <div id="slideshow"></div>
+        <div id="fondEcran"></div>
         <div class="nav">
           <div id="navButtons">
               <div id="playLabel"><i class="fas fa-play"></i></div>
@@ -34,17 +35,17 @@
           
           <div id="navSlider">
               <input id="progressSlider" type="range" min="0" max="1" value="0" step="0.001" />
-              <span id="slidertitle"></span>
+              <span id="imgToolTip"></span>
           </div>
 
           <div id="navDisplay">
-              <span id="progressDisplay"></span>
+              <span id="avancementPointeur"></span>
           </div>
         </div>
       </div>
 
       
 
-      <span class="openbtn" style="font-size:30px;cursor:pointer">&#9776;</span>
+      <span class="boutonOuverture" style="font-size:30px;cursor:pointer">&#9776;</span>
   </body>
 </html>
