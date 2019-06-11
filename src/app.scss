@@ -294,7 +294,7 @@ $check-thickness: 3px;
 
 
 
-.left-pane li {
+.left-pane .chapterNode {
   padding: 4px 0;
   text-decoration: none;
   display: block;
@@ -347,4 +347,46 @@ $check-thickness: 3px;
   margin: 0;
   padding: 0;
   height: 100%;
+}
+
+#chaptersList {
+  overflow-y: auto;
+  /* margin-right: 20px; */
+  max-height: 45vh;
+  overflow-x: hidden;
+  margin-top: 20px;
+}
+
+#listing {
+  max-height: 25vh;
+  overflow: auto;
+}
+
+.atsvList {
+  list-style-type: none;
+  margin-left: 0 !important;
+  margin-top: 10px;
+  font-size: 15px;
+  margin-right: 20px;
+}
+
+.atsvList p {
+  text-overflow: ellipsis;
+  word-break: break-all;
+  display: unset;
+  margin: 0;
+}
+
+.atsvList:hover {
+  font-weight: bold;
+}
+
+.bolder {
+  font-weight: bold;
+}
+
+.atsvList i {
+  width: 10px;
+  height: 10px;
+  margin-right: 10px;
 }

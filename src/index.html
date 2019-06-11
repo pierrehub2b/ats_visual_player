@@ -8,8 +8,11 @@
     <div class="panes-container">
       <div class="left-pane" id="left-pane">
         <a class="closebtn">&times;</a>
-        <input type="file" id="uploader" />
+        <!-- <input type="file" id="uploader" /> -->
+        <input type="file" id="uploader" accept=".atsv" webkitdirectory mozdirectory msdirectory odirectory directory multiple />
+        <ul id="listing"></ul>
         <h4 id="chapterTitle">Chapitres: </h4>
+        <div id="chaptersList"></div>
         <div id="output">
           <div id="spinner" class="cercleChargement">
             <div id="chargementCheckmark" class="chargementCheckmark draw"></div>

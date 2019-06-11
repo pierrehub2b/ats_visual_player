@@ -207,7 +207,7 @@ export function calcSliderPos(e) {
   //return (e.clientX - navSlider.offset().left) / navSlider.width();
 }
 
-export function openfile() {
+export function openfile(file) {
   timelLineLite = new TimelineMax({ paused: true, repeat: 0, onUpdate:adjustUI});
   fondEcran.html("");
   allData = [];
@@ -223,7 +223,7 @@ export function openfile() {
   timelLineLite.progress(0).pause();
   updateavancementPointeur();
 
-  var file = input.prop('files')[0];
+  //var file = input.prop('files')[0];
   if(file != undefined) {
     var reader = new FileReader();
     reader.onload = function() { 
@@ -420,11 +420,11 @@ export function resultSetup(result, percent) {
   }
 
   $(".chapitresProgressBar").remove();
-  $(".left-pane > li").remove();
+  $("#chaptersList > li").remove();
 
   for (let comm = 0; comm < comments.length; comm++) {
     const commentaire = comments[comm];
-    $('<li id="chapter'+ commentaire.timeLine +'">' + stripHtml(commentaire.element.data) + '</li>').insertBefore($("#output"));
+    $('<li class="chapterNode" id="chapter'+ commentaire.timeLine +'">' + stripHtml(commentaire.element.data) + '</li>').appendTo($("#chaptersList"));
     var component = $("#chapter" + commentaire.timeLine);
     component.click(function() {
       updateByVal(getChapterPosition(commentaire.timeLine));
