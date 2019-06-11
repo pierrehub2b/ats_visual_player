@@ -1,11 +1,7 @@
 import AMF from 'amf-js';
 import 'babel-polyfill';
-var $ = require('jQuery');
 import { TimelineMax } from "gsap/TweenMax";
-import { DH_CHECK_P_NOT_PRIME } from 'constants';
-import { types } from 'util';
-
-export var timelLineLite;
+var $ = require('jQuery');
 
 //#region objets du DOM
 export var progressSlider = $("#progressSlider");
@@ -28,12 +24,15 @@ export var pourcentageAvancement = $("#pourcentageAvancement");
 export var scriptName = $("#scriptName");
 //#endregion
 
-export const leftPanelWidth = 17; //vw
-
-// tableaux des données
+//#region variables globales
 export var allData = [];
 export var images = [];
 export var deferred = $.Deferred();
+export var duration;
+export var results = [];
+export var timelLineLite;
+export const leftPanelWidth = 17; //vw
+//#endregion
 
 // enum sur les différents types d'objets dans allData
 export const elementType = {
@@ -77,25 +76,10 @@ export function setupScreen() {
 }
 
 export function toAMFObjects(data) {
-  // deferred = $.Deferred();
-  // var promise = deferred.promise();
   var encodedData = new AMF.Deserializer(data.buffer);
-  
-  // promise.done(() => {
-    
-  // })
-  // promise.fail(() => {
-  //   console.log("Erreur lors de la génération de la vidéo.")
-  // });
-  // promise.progress((r, p) => {
-  //   pourcentageAvancement.html(p + "%");
-  //   resultSetup(r);
-  // });
-
   repeat(encodedData);
 }
 
-export var duration;
 export function traitmentDone() {
   spinner.addClass("chargementTermine");
   chargementCheckmark.css("display", "block");
@@ -133,7 +117,6 @@ export function getDuration(date) {
   return str;
 } 
 
-export var results = [];
 export function repeat(encodedData) {
   if (encodedData.pos >= encodedData.buf.byteLength) { 
     results = encodedData.objectReferences.filter(_ => _ != undefined && _.type);
@@ -163,7 +146,6 @@ export function repeat(encodedData) {
   
 }
 
-// calcul et mise en place du tooltip au survol de la progress bar
 export function updateTooltipImg(event) {
   var currentMouseXPos = (event.clientX - fondEcran.offset().left) - 50;
   if(images.length > 0) {
@@ -215,7 +197,6 @@ export function openfile() {
   }
 }
 
-// encodage des images
 export function encode (input) {
     var keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
     var output = "";
@@ -340,7 +321,8 @@ export function resultSetup(result, percent) {
 
   if(flashReportObject) {
     scriptName.html(flashReportObject.name);
-    scriptName.css("display", "block");
+    $('head title', window.parent.document).text(flashReportObject.name);
+    scriptName.css("display", "inline-block");
     var frData = {
       name: flashReportObject.name,
       id:flashReportObject.id,

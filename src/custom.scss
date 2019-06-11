@@ -38,6 +38,7 @@ body {
     color: $agilitestWhite;
 }
 
+
 #player {
     background-color: $agilitestBlack;
 }
@@ -89,9 +90,10 @@ input[type=range]::-moz-range-thumb {
     font-size: 20px;
 }
 
-.panelGauche h4 {
-    color: $agilitestBlack;
-    font-size: 18px;
+#scriptName {
+    color: $agilitestWhite;
+    font-size: 16px;
+    margin: 5px;
 }
 
 .boutonOuverture {
