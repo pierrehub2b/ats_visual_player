@@ -30,6 +30,9 @@ module.exports = merge(common, {
     appCSS, customCSS,
     new CopyWebpackPlugin([
       {from:'src/images',to:'images'} 
+    ]),
+    new CopyWebpackPlugin([
+      {from:'src/webfonts',to:'webfonts'} 
     ])
   ]
 })

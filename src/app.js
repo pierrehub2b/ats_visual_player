@@ -4,10 +4,11 @@ if (module.hot) {
 
 import './app.scss';
 import './custom.scss';
+import './images';
 var $ = require('jQuery');
 import { setupScreen } from './uploader';
 
-import './images'
+//$('head').append('<link rel="stylesheet" type="text/css" href="./webfonts/font.css">');
 
 $('#uploader').on('change', function() {
   import("./uploader").then(upload => {

@@ -2,6 +2,7 @@ import AMF from 'amf-js';
 import 'babel-polyfill';
 import { TimelineMax } from "gsap/TweenMax";
 var $ = require('jQuery');
+import './simpledrag';
 
 //#region objets du DOM
 export var progressSlider = $("#progressSlider");
@@ -30,8 +31,7 @@ export var images = [];
 export var deferred = $.Deferred();
 export var duration;
 export var results = [];
-export var timelLineLite;
-export const leftPanelWidth = 17; //vw
+export var timelLineLite; 
 //#endregion
 
 // enum sur les différents types d'objets dans allData
@@ -73,6 +73,45 @@ export function setupScreen() {
   $(".boutonOuverture").on("click", function() {
     openNav();
   });
+
+  var leftPane = document.getElementById('left-pane');
+    var rightPane = document.getElementById('player');
+    var paneSep = document.getElementById('panes-separator');
+
+    // The script below constrains the target to move horizontally between a left and a right virtual boundaries.
+    // - the left limit is positioned at 10% of the screen width
+    // - the right limit is positioned at 90% of the screen width
+    var leftLimit = 15;
+    var rightLimit = 85;
+
+
+    paneSep.sdrag(function (el, pageX, startX, pageY, startY, fix) {
+
+        fix.skipX = true;
+
+        if (pageX < window.innerWidth * leftLimit / 100) {
+            pageX = window.innerWidth * leftLimit / 100;
+            fix.pageX = pageX;
+        }
+        if (pageX > window.innerWidth * rightLimit / 100) {
+            pageX = window.innerWidth * rightLimit / 100;
+            fix.pageX = pageX;
+        }
+
+        var cur = pageX / window.innerWidth * 100;
+        if (cur < 0) {
+            cur = 0;
+        }
+        if (cur > window.innerWidth) {
+            cur = window.innerWidth;
+        }
+
+
+        var right = (100-cur);
+        leftPane.style.width = cur + '%';
+        rightPane.style.width = right + '%';
+
+    }, null, 'horizontal');
 }
 
 export function toAMFObjects(data) {
@@ -107,7 +146,6 @@ export function traitmentDone() {
   var dt = new Date();
   dt.setHours(0,0,0,duration);
   $("#duration").html("Duration: " + getDuration(dt));
-  pourcentageAvancement.html("");
 }
 
 export function getDuration(date) {
@@ -295,19 +333,15 @@ export function stripHtml(html){
 }
 
 export function openNav() {
-  $("#mypanelGauche").css("width", leftPanelWidth + "vw");
-  $(".panelGauche").css("padding-left","20px");
-  $("#player").css("width", 99 - leftPanelWidth + "vw");
-  $("#fondEcran").css("width",99 - leftPanelWidth + "vw");
-  $(".nav").css("width",99 - leftPanelWidth + "vw");
+  $("#left-pane").css("width","20%");
+  $("#left-pane").css("display","block");
+  $("#player").css("width","80%");
 }
 
 export function closeNav() {
-  $("#mypanelGauche").css("width","0");
-  $(".panelGauche").css("padding-left","0");
-  $("#player").css("width","100vw");
-  $("#fondEcran").css("width","100vw");
-  $(".nav").css("width","100vw");
+  $("#left-pane").css("width","0%");
+  $("#left-pane").css("display","none");
+  $("#player").css("width","100%");
 }
 
 export function getChapterPosition(timeline) {
@@ -386,7 +420,7 @@ export function resultSetup(result, percent) {
   }
 
   $(".chapitresProgressBar").remove();
-  $(".panelGauche > li").remove();
+  $(".left-pane > li").remove();
 
   for (let comm = 0; comm < comments.length; comm++) {
     const commentaire = comments[comm];

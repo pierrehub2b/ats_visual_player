@@ -1,12 +1,10 @@
 html, body {
-  height: 100%;
-}
+  height: 100%; }
 
 body {
   margin: 0;
   padding: 0;
-  overflow: hidden;
-}
+  overflow: hidden; }
 
 #flashReport {
   margin: 10px 100px;
@@ -14,12 +12,10 @@ body {
   display: block;
   top: 0;
   left: 0;
-  z-index: 1;
-}
+  z-index: 1; }
 
 #flashReport div {
-  margin: 10px 10px;
-}
+  margin: 10px 10px; }
 
 #flashReport #logo {
   position: fixed;
@@ -32,10 +28,8 @@ body {
   background-repeat: no-repeat;
   background-position: center;
   height: 20vw;
-  background-size: contain;
-}
+  background-size: contain; }
 
-//fondEcran
 #fondEcran {
   display: flex;
   padding: 0;
@@ -45,8 +39,7 @@ body {
   position: relative;
   transition: 0.5s;
   width: 100%;
-  height: 93vh;
-}
+  height: 93vh; }
 
 .chapitresProgressBar {
   height: 15px;
@@ -55,8 +48,7 @@ body {
   /* text-align: left; */
   float: left;
   top: -20px;
-  cursor: pointer;
-}
+  cursor: pointer; }
 
 #fondEcran img {
   position: absolute;
@@ -70,33 +62,27 @@ body {
   margin-right: auto;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 2;
-}
+  z-index: 2; }
 
-//nav panel
 .nav {
   display: inline-block;
   position: relative;
   padding: 7px 0 0 20px;
   width: 100%;
   text-align: center;
-  transition: 0.5s;
-}
+  transition: 0.5s; }
 
 #navButtons, #navSlider, #navDisplay {
   display: inline-block;
-  vertical-align: top;
-}
+  vertical-align: top; }
 
-#navDisplay{
-  margin-left: 20px;
-}
+#navDisplay {
+  margin-left: 20px; }
 
 #navSlider {
   width: 70%;
   height: 4vh;
-  vertical-align: sub;
-}
+  vertical-align: sub; }
 
 #imgToolTip {
   display: none;
@@ -106,36 +92,28 @@ body {
   height: 100px;
   top: -90px;
   left: 0;
-  z-index: 3;
-}
+  z-index: 3; }
 
-//slider
 #progressSlider {
   vertical-align: super;
-  width: 100%;
-}
+  width: 100%; }
 
 #progressSlider:hover, #navButtons div, .left-pane a {
-  cursor: pointer;
-}
+  cursor: pointer; }
 
-//player
 #playLabel, #pauseLabel, #restart, #fullScreen {
   display: inline-block;
   font-size: 15px;
-  margin: 0 3px;
-}
+  margin: 0 3px; }
 
 #avancementPointeur {
   font-size: 15px;
   display: inline-block;
-  vertical-align: super;
-}
+  vertical-align: super; }
 
 #player {
   padding: 0;
   margin: 0;
-  // display: inline-block;
   position: absolute;
   width: 82vw;
   height: 100vh;
@@ -144,137 +122,104 @@ body {
   right: 0;
   bottom: 0;
   z-index: 0;
-  overflow: hidden;
-}
+  overflow: hidden; }
 
 #pourcentageAvancement {
   display: inline-block;
-  margin: 5px;
-}
+  margin: 5px; }
 
- #output {
-  display: none;
-}
+#output {
+  display: none; }
 
 input[type=range] {
   -webkit-appearance: none;
   -moz-apperance: none;
   border-radius: 6px;
-  height: 6px;
-}
+  height: 6px; }
 
 input[type=range]::-moz-range-track {
   border: none;
   background: none;
-  outline: none;
-}
+  outline: none; }
 
 input[type=range]:focus {
   outline: none;
-  border: none;
-}
+  border: none; }
 
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none !important;
   height: 13px;
   width: 13px;
-  border-radius: 50%;
-}
+  border-radius: 50%; }
 
 input[type=range]::-moz-range-thumb {
   -moz-appearance: none !important;
   border: none;
   height: 13px;
   width: 13px;
-  border-radius: 50%;
-}
+  border-radius: 50%; }
 
 #uploader {
-  margin-top: 3vh;
-}
+  margin-top: 3vh; }
 
 #uploader, #chapterTitle, .left-pane li, #spinner {
-  margin-left: 20px;
-}
-
-
-// loader
-$loader-size: 20px;
-$check-height: $loader-size/2;
-$check-width: $check-height/2;
-$check-left: ($loader-size/6 + $loader-size/12);
-$check-thickness: 3px;
+  margin-left: 20px; }
 
 .cercleChargement {
-  margin-top: $loader-size/8;
+  margin-top: 2.5px;
   animation: loader-spin 1.2s infinite linear;
   position: relative;
   display: inline-block;
   vertical-align: top;
   border-radius: 50%;
-  width: $loader-size;
-  height: $loader-size;
-}
+  width: 20px;
+  height: 20px; }
 
 .chargementTermine {
   -webkit-animation: none;
   animation: none;
-  transition: border 500ms ease-out;
-}
+  transition: border 500ms ease-out; }
 
 .chargementCheckmark {
-  display: none;
-  
-  &.draw:after {
+  display: none; }
+  .chargementCheckmark.draw:after {
     animation-duration: 800ms;
     animation-timing-function: ease;
     animation-name: chargementCheckmark;
-    transform: scaleX(-1) rotate(135deg);
-  }
-  
-  &:after {
+    transform: scaleX(-1) rotate(135deg); }
+  .chargementCheckmark:after {
     opacity: 1;
-    height: $check-height;
-    width: $check-width;
+    height: 10px;
+    width: 5px;
     transform-origin: left top;
     content: '';
-    left: $check-left;
-    top: $check-height;
-    position: absolute;
-  }
-}
+    left: 5px;
+    top: 10px;
+    position: absolute; }
 
 @keyframes loader-spin {
   0% {
-    transform: rotate(0deg);
-  }
+    transform: rotate(0deg); }
   100% {
-    transform: rotate(360deg);
-  }
-}
+    transform: rotate(360deg); } }
 
 @keyframes chargementCheckmark {
   0% {
     height: 0;
     width: 0;
-    opacity: 1;
-  }
+    opacity: 1; }
   20% {
     height: 0;
-    width: $check-width;
-    opacity: 1;
-  }
+    width: 5px;
+    opacity: 1; }
   40% {
-    height: $check-height;
-    width: $check-width;
-    opacity: 1;
-  }
+    height: 10px;
+    width: 5px;
+    opacity: 1; }
   100% {
-    height: $check-height;
-    width: $check-width;
-    opacity: 1;
-  }
-}
+    height: 10px;
+    width: 5px;
+    opacity: 1; } }
 
 .closebtn {
   font-size: 36px;
@@ -282,63 +227,51 @@ $check-thickness: 3px;
   /* margin: 20px 25px 0 0; */
   display: block;
   text-align: right;
-  margin: 10px;
-}
+  margin: 10px; }
 
 .boutonOuverture {
   position: absolute;
   left: 30px;
   top: 30px;
-  z-index: 2;
-}
-
-
+  z-index: 2; }
 
 .left-pane li {
   padding: 4px 0;
   text-decoration: none;
   display: block;
-  transition: 0.3s;
-}
+  transition: 0.3s; }
 
 .left-pane li:hover {
-  cursor: pointer;
-}
+  cursor: pointer; }
 
 .left-pane h2 {
   margin: 10px 0;
   font-size: 1.2em;
   word-break: break-all;
-  width: 95%;
-}
+  width: 95%; }
 
 .left-pane h4 {
   margin: auto;
   display: none;
-  margin: 20px 0 2px 0;
-}
+  margin: 20px 0 2px 0; }
 
 .panes-container {
   display: flex;
   width: 100%;
-  overflow: hidden;
-}
+  overflow: hidden; }
 
 .left-pane {
   width: 18%;
   z-index: 4;
-  overflow: hidden;
-}
+  overflow: hidden; }
 
 .panes-separator {
   z-index: 5;
   position: relative;
-  cursor: col-resize;
-}
+  cursor: col-resize; }
 
 .right-pane {
-  flex: auto;
-}
+  flex: auto; }
 
 .panes-container,
 .panes-separator,
@@ -346,5 +279,4 @@ $check-thickness: 3px;
 .right-pane {
   margin: 0;
   padding: 0;
-  height: 100%;
-}
+  height: 100%; }

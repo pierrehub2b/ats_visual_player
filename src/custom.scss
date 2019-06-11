@@ -75,11 +75,11 @@ input[type=range]::-moz-range-thumb {
     font-size: $fontSize;
 }
 
-.panelGauche {
+.left-pane {
+    width: 18%;
+    background: $agilitestWhite;
     color: $agilitestBlack;
-    background-color: $agilitestWhite;
-    border-right: $agilitestBlack 1px solid;
-}
+  }
 
 .panelGauche li {
     font-size: $fontSize;
@@ -105,3 +105,9 @@ input[type=range]::-moz-range-thumb {
     color: $agilitestOrange;
     font-weight: bold;
 }
+
+
+.panes-separator {
+    width: 10px;
+    background: $agilitestOrange;
+  }
