@@ -81,8 +81,7 @@ body {
 
 #navSlider {
   width: 70%;
-  height: 4vh;
-  vertical-align: sub; }
+  height: 4vh; }
 
 #imgToolTip {
   display: none;
@@ -91,14 +90,14 @@ body {
   width: 150px;
   height: 100px;
   top: -90px;
-  left: 0;
+  left: 0px;
   z-index: 3; }
 
 #progressSlider {
-  vertical-align: super;
+  vertical-align: baseline;
   width: 100%; }
 
-#progressSlider:hover, #navButtons div, .left-pane a {
+#progressSlider:hover, #navButtons div, .left-pane a, .left-pane-atsv a {
   cursor: pointer; }
 
 #playLabel, #pauseLabel, #restart, #fullScreen {
@@ -162,7 +161,7 @@ input[type=range]::-moz-range-thumb {
 #uploader {
   margin-top: 3vh; }
 
-#uploader, #chapterTitle, .left-pane li, #spinner {
+#uploader, #chapterTitle, .left-pane li, #spinner, .left-pane-atsv li, #openATSVPane {
   margin-left: 20px; }
 
 .cercleChargement {
@@ -221,7 +220,7 @@ input[type=range]::-moz-range-thumb {
     width: 5px;
     opacity: 1; } }
 
-.closebtn {
+.closebtn, .closebtnATSV {
   font-size: 36px;
   /* margin-right: 50px; */
   /* margin: 20px 25px 0 0; */
@@ -241,7 +240,7 @@ input[type=range]::-moz-range-thumb {
   display: block;
   transition: 0.3s; }
 
-.left-pane li:hover {
+.left-pane li:hover, .left-pane-atsv li:hover {
   cursor: pointer; }
 
 .left-pane h2 {
@@ -260,10 +259,17 @@ input[type=range]::-moz-range-thumb {
   width: 100%;
   overflow: hidden; }
 
-.left-pane {
+.left-pane, .left-pane-atsv {
   width: 18%;
   z-index: 4;
   overflow: hidden; }
+
+.left-pane-atsv {
+  width: 0%;
+  display: none;
+  z-index: 7;
+  position: absolute;
+  transition: 0.5s; }
 
 .panes-separator {
   z-index: 5;
@@ -276,6 +282,7 @@ input[type=range]::-moz-range-thumb {
 .panes-container,
 .panes-separator,
 .left-pane,
+.left-pane-atsv,
 .right-pane {
   margin: 0;
   padding: 0;
@@ -287,10 +294,6 @@ input[type=range]::-moz-range-thumb {
   max-height: 45vh;
   overflow-x: hidden;
   margin-top: 20px; }
-
-#listing {
-  max-height: 25vh;
-  overflow: auto; }
 
 .atsvList {
   list-style-type: none;

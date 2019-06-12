@@ -78,3 +78,7 @@ input[type=range]::-moz-range-thumb {
 .panes-separator {
   width: 10px;
   background: #FABA00; }
+
+.left-pane-atsv {
+  background-color: #CCC;
+  border-right: 2px black solid; }

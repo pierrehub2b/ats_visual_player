@@ -1,6 +1,7 @@
 $agilitestOrange: #FABA00;
 $agilitestBlack: #11171B;
 $agilitestWhite: #FCFCFC;
+$agilitestGrey: #CCC;
 $fontSize: 15px;
 
 body {
@@ -110,4 +111,9 @@ input[type=range]::-moz-range-thumb {
 .panes-separator {
     width: 10px;
     background: $agilitestOrange;
+  }
+
+  .left-pane-atsv {
+    background-color: $agilitestGrey;
+    border-right: 2px black solid;
   }

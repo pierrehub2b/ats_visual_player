@@ -70,20 +70,21 @@ export function setupScreen() {
     closeNav();
   });
 
+  $(".closebtnATSV").on("click", function() {
+    closeATSVPane();
+  });
+
   $(".boutonOuverture").on("click", function() {
     openNav();
   });
 
   var leftPane = document.getElementById('left-pane');
-    var rightPane = document.getElementById('player');
-    var paneSep = document.getElementById('panes-separator');
+  var leftPaneATSV = document.getElementById('left-pane-atsv');
+  var rightPane = document.getElementById('player');
+  var paneSep = document.getElementById('panes-separator');
 
-    // The script below constrains the target to move horizontally between a left and a right virtual boundaries.
-    // - the left limit is positioned at 10% of the screen width
-    // - the right limit is positioned at 90% of the screen width
     var leftLimit = 15;
-    var rightLimit = 85;
-
+    var rightLimit = 50;
 
     paneSep.sdrag(function (el, pageX, startX, pageY, startY, fix) {
 
@@ -109,6 +110,10 @@ export function setupScreen() {
 
         var right = (100-cur);
         leftPane.style.width = cur + '%';
+        if(leftPaneATSV.style.display != "none") {
+          leftPaneATSV.style.width = cur-2 + '%';
+        }
+        
         rightPane.style.width = right + '%';
 
     }, null, 'horizontal');
@@ -185,7 +190,7 @@ export function repeat(encodedData) {
 }
 
 export function updateTooltipImg(event) {
-  var currentMouseXPos = (event.clientX - fondEcran.offset().left) - 50;
+  var currentMouseXPos = (event.clientX - fondEcran.offset().left) - 70;
   if(images.length > 0) {
     
     var intvalue = Math.round(calcSliderPos(event));
@@ -338,9 +343,16 @@ export function openNav() {
   $("#player").css("width","80%");
 }
 
+export function closeATSVPane() {
+  $("#left-pane-atsv").css("width","0%");
+  $("#left-pane-atsv").css("display","none");
+}
+
 export function closeNav() {
   $("#left-pane").css("width","0%");
+  $("#left-pane-atsv").css("width","0%");
   $("#left-pane").css("display","none");
+  $("#left-pane-atsv").css("display","none");
   $("#player").css("width","100%");
 }
 

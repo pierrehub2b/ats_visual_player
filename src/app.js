@@ -9,8 +9,15 @@ var $ = require('jQuery');
 import { setupScreen } from './uploader';
 var upload = require('./uploader');
 export var input = $("#uploader");
+export var buttonATSV = $("#openATSVPane");
 const fs = require('fs');
 var directory = './ATSV';
+
+buttonATSV.on("click", function() {
+  var percent =  $('#left-pane').width() / $('body').width() * 100;
+  $("#left-pane-atsv").css("width",percent-2 + "%");
+  $("#left-pane-atsv").css("display","block");
+});
 
 input.on("change", function(event) {
   let listing = $("#listing");
@@ -47,7 +54,8 @@ input.on("change", function(event) {
 //         if(files[i].type == "application/ats.action-test-script.visual-report") {
 //           var fileName = files[i].name;
 //           // if(fileName.length > 35) {
-//           //   fileName = fileName.substring(0, 30) + "...";
+//           
+ //   fileName = fileName.substring(0, 30) + "...";
 //           // }
           
 //           var item = $("<li class='atsvList'><i class='fas fa-file-video'></i><p>"+ fileName +"</p></li>");
