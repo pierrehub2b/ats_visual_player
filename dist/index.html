@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Player HTML</title>
+    <link href="./webfonts/font.css" type="text/css" rel="stylesheet"> <!--load all styles -->
+  <link href="style.css" rel="stylesheet"><link href="custom.css" rel="stylesheet"></head>
+  <body>
+    <div class="panes-container">
+      <div class="left-pane" id="left-pane">
+        <a class="closebtn">&times;</a>
+        <!-- <input type="file" id="uploader" /> -->
+        <input type="file" id="uploader" accept=".atsv" webkitdirectory mozdirectory msdirectory odirectory directory multiple />
+        <ul id="listing"></ul>
+        <h4 id="chapterTitle">Chapitres: </h4>
+        <div id="chaptersList"></div>
+        <div id="output">
+          <div id="spinner" class="cercleChargement">
+            <div id="chargementCheckmark" class="chargementCheckmark draw"></div>
+          </div>
+          <p id="pourcentageAvancement"></p>
+        </div>
+      </div>
+          
+      <div class="panes-separator" id="panes-separator"></div>
+          
+      <div class="right-pane" id="player">
+          <div id="flashReport">
+            <div id="flashReportData"></div>
+          </div>
+          <div id="fondEcran"></div>
+          <div class="nav">
+            <div id="navButtons">
+              <div id="playLabel"><i class="fas fa-play"></i></div>
+              <div id="pauseLabel"><i class="fas fa-pause"></i></div>
+              <div id="restart"><i class="fas fa-backward"></i></div>
+            </div>
+            
+            <div id="navSlider">
+              <input id="progressSlider" type="range" min="0" max="1" value="0" step="0.001" />
+              <span id="imgToolTip"></span>
+              <h3 id="scriptName"></h3>
+            </div>
+  
+            <div id="navDisplay">
+                <span id="avancementPointeur"></span>
+            </div>
+          </div>
+        </div>
+    </div>
+    <span class="boutonOuverture" style="font-size:30px;cursor:pointer">&#9776;</span>
+  <script type="text/javascript" src="app.bundle.js"></script></body>
+</html>
