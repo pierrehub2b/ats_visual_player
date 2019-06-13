@@ -79,6 +79,5 @@ input[type=range]::-moz-range-thumb {
   width: 10px;
   background: #FABA00; }
 
-.left-pane-atsv {
-  background-color: #EEE;
-  border-right: 2px black solid; }
+.bolder {
+  font-weight: bold; }

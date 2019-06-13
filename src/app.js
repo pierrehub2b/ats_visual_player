@@ -7,7 +7,7 @@ import './custom.scss';
 import './images';
 import AMF from 'amf-js';
 var $ = require('jQuery');
-import { setupScreen, toAMFObjects } from './uploader';
+import { setupScreen } from './uploader';
 var upload = require('./uploader');
 export var addLibrary = $("#addLibrary");
 export var addFiles = $("#addFiles");
@@ -18,13 +18,28 @@ export var libraryTitle = $("#libraryTitle");
 export var chapterTitle = $("#chapterTitle");
 export var chaptersList = $("#chaptersList");
 
+export var libraryExpanded = true;
+export var chapterExpanded = true;
+
 libraryTitle.on("click", function() {
   listATSV.children('ul').slideToggle(200);
+  libraryExpanded = !libraryExpanded;
+  if(libraryExpanded) {
+    $("#libraryTitleCaret").removeClass("fa-caret-right").addClass("fa-caret-down");
+  } else {
+    $("#libraryTitleCaret").removeClass("fa-caret-down").addClass("fa-caret-right");
+  }
 });
 
 chapterTitle.on("click", function() {
   $('.chapterNode').slideToggle(200);
   $('#output').slideToggle(200);
+  chapterExpanded = !chapterExpanded;
+  if(chapterExpanded) {
+    $("#chapterTitleCaret").removeClass("fa-caret-right").addClass("fa-caret-down");
+  } else {
+    $("#chapterTitleCaret").removeClass("fa-caret-down").addClass("fa-caret-right");
+  }
 });
 
 addLibrary.click(function () {
@@ -41,11 +56,19 @@ export function uploadFiles(event) {
 
   if(folders == 0) {
     //creation d'un dossier défaut 
-    var ulFolder = $("<ul id='defaultFolder'><i class='fas fa-folder'></i><p>Dossier par défaut</p></li>");
+    var ulFolder = $("<ul id='defaultFolder'><i class='fas fa-folder-open'></i><p>Dossier par défaut</p></li>");
     listATSV.append(ulFolder);
     ulFolder.on("click", function(event) {
       var elem = $("#" + event.target.parentNode.id);
       elem.children('.atsvList').slideToggle(200);
+      var iElem = elem.children('i')[0];
+      if(iElem.classList.contains("fa-folder-open")) {
+        iElem.classList.remove("fa-folder-open");
+        iElem.classList.add("fa-folder");
+      } else {
+        iElem.classList.remove("fa-folder")
+        iElem.classList.add("fa-folder-open")
+      }
     });
   }
 
@@ -63,6 +86,7 @@ export function uploadFiles(event) {
         $(".atsvList > p").removeClass("bolder");
         e.target.classList.add("bolder");
         upload.openfile(files[i]);
+        chapterExpanded = true;
       });
       folder.append(item);
     }
@@ -81,12 +105,20 @@ export async function onReaderLoad(event){
   for (let i = 0; i < obj.folders.length; i++) {
     const folder = obj.folders[i];
     var name = folder.name;
-    var ulFolder = $("<ul id='"+name.replace(" ","_")+"'><i class='fas fa-folder'></i><p>"+name+"</p></li>");
+    var ulFolder = $("<ul id='"+name.replace(" ","_")+"'><i class='fas fa-folder-open'></i><p>"+name+"</p></li>");
     listATSV.append(ulFolder);
     var currentFolder = $("#"+name.replace(" ","_"));
     currentFolder.on("click", function(event) {
       var elem = $("#" + event.target.parentNode.id);
       elem.children('.atsvList').slideToggle(200);
+      var iElem = elem.children('i')[0];
+      if(iElem.classList.contains("fa-folder-open")) {
+        iElem.classList.remove("fa-folder-open");
+        iElem.classList.add("fa-folder");
+      } else {
+        iElem.classList.remove("fa-folder")
+        iElem.classList.add("fa-folder-open")
+      }
     });
     var urls = folder.urls;
     for (let index = 0; index < urls.length; index++) {
@@ -98,6 +130,7 @@ export async function onReaderLoad(event){
       item.attr("url", url);
       item.on("click", function(e) {
         $(".atsvList > p").removeClass("bolder");
+        chapterExpanded = true;
         e.target.classList.add("bolder");
         url = e.target.parentNode.getAttribute("url");
         if(url.startsWith("./") || url.startsWith("/")) {

@@ -306,3 +306,6 @@ input[type=range]::-moz-range-thumb {
   overflow-y: auto;
   overflow-x: hidden;
   margin-top: 20px; }
+
+#chapterTitle i, #libraryTitle i {
+  display: inline-block; }
