@@ -6,26 +6,15 @@
   <link href="style.css" rel="stylesheet"><link href="custom.css" rel="stylesheet"></head>
   <body>
     <div class="panes-container">
-        <div class="left-pane-atsv" id="left-pane-atsv">
-            <a class="closebtnATSV">&times;</a>
-            <!-- <input type="file" id="uploader" /> -->
-            <input type="file" id="uploader" accept=".atsv" webkitdirectory mozdirectory msdirectory odirectory directory multiple />
-            <ul id="listing"></ul>
-            <!-- <h4 id="chapterTitle">Dossiers: </h4>
-            <div id="chaptersList"></div>
-            <div id="output">
-              <div id="spinner" class="cercleChargement">
-                <div id="chargementCheckmark" class="chargementCheckmark draw"></div>
-              </div>
-              <p id="pourcentageAvancement"></p>
-            </div> -->
-          </div>
-
       <div class="left-pane" id="left-pane">
         <a class="closebtn">&times;</a>
         <!-- <input type="file" id="uploader" /> -->
-        <input type="button" id="openATSVPane" value="Ajouter des fichiers ATSV"/>
-        <ul id="listing"></ul>
+        <div id="addLibrary"><i class="fas fa-folder-open"></i>Importer une bibliothèque ATSV</div>
+        <div id="addFiles"><i class="fas fa-plus"></i>Ajouter des fichiers</div>
+        <input id="addLibraryInput" type="file" accept=".json" style="display: none"/>
+        <input id="addFilesInput" type="file" accept=".atsv" style="display: none" multiple/>
+        <h4 id="libraryTitle">Librairie: </h4>
+        <div id="listATSV"></div>
         <h4 id="chapterTitle">Chapitres: </h4>
         <div id="chaptersList"></div>
         <div id="output">

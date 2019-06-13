@@ -97,7 +97,7 @@ body {
   vertical-align: baseline;
   width: 100%; }
 
-#progressSlider:hover, #navButtons div, .left-pane a, .left-pane-atsv a {
+#progressSlider:hover, #navButtons div, .left-pane a, #listATSV ul, #chapterTitle, #libraryTitle {
   cursor: pointer; }
 
 #playLabel, #pauseLabel, #restart, #fullScreen {
@@ -158,11 +158,13 @@ input[type=range]::-moz-range-thumb {
   width: 13px;
   border-radius: 50%; }
 
-#uploader {
-  margin-top: 3vh; }
-
-#uploader, #chapterTitle, .left-pane li, #spinner, .left-pane-atsv li, #openATSVPane {
+#uploadFolder, #chapterTitle, .left-pane li, #spinner, #uploadFile, #listATSV p {
   margin-left: 20px; }
+
+#listATSV p {
+  display: inline;
+  margin: 0 10px;
+  padding: 10px 0; }
 
 .cercleChargement {
   margin-top: 2.5px;
@@ -220,7 +222,7 @@ input[type=range]::-moz-range-thumb {
     width: 5px;
     opacity: 1; } }
 
-.closebtn, .closebtnATSV {
+.closebtn {
   font-size: 36px;
   /* margin-right: 50px; */
   /* margin: 20px 25px 0 0; */
@@ -228,11 +230,30 @@ input[type=range]::-moz-range-thumb {
   text-align: right;
   margin: 10px; }
 
+#addLibrary, #addFiles {
+  margin: 10px 20px;
+  cursor: pointer; }
+
+#addLibrary i, #addFiles i {
+  width: 30px; }
+
 .boutonOuverture {
   position: absolute;
   left: 30px;
   top: 30px;
   z-index: 2; }
+
+#listATSV {
+  padding-left: 0px;
+  margin-top: 5px; }
+
+#listATSV ul {
+  padding-left: 30px; }
+
+.atsvList {
+  list-style-type: none;
+  word-break: break-all;
+  margin: 10px; }
 
 .left-pane .chapterNode {
   padding: 4px 0;
@@ -240,7 +261,7 @@ input[type=range]::-moz-range-thumb {
   display: block;
   transition: 0.3s; }
 
-.left-pane li:hover, .left-pane-atsv li:hover {
+.left-pane li:hover {
   cursor: pointer; }
 
 .left-pane h2 {
@@ -249,27 +270,21 @@ input[type=range]::-moz-range-thumb {
   word-break: break-all;
   width: 95%; }
 
-.left-pane h4 {
-  margin: auto;
-  display: none;
-  margin: 20px 0 2px 0; }
+#libraryTitle, #chapterTitle {
+  margin: 20px 0 2px 20px; }
+
+#chapterTitle {
+  display: none; }
 
 .panes-container {
   display: flex;
   width: 100%;
   overflow: hidden; }
 
-.left-pane, .left-pane-atsv {
+.left-pane {
   width: 18%;
   z-index: 4;
   overflow: hidden; }
-
-.left-pane-atsv {
-  width: 0%;
-  display: none;
-  z-index: 7;
-  position: absolute;
-  transition: 0.5s; }
 
 .panes-separator {
   z-index: 5;
@@ -282,7 +297,6 @@ input[type=range]::-moz-range-thumb {
 .panes-container,
 .panes-separator,
 .left-pane,
-.left-pane-atsv,
 .right-pane {
   margin: 0;
   padding: 0;
@@ -290,31 +304,5 @@ input[type=range]::-moz-range-thumb {
 
 #chaptersList {
   overflow-y: auto;
-  /* margin-right: 20px; */
-  max-height: 45vh;
   overflow-x: hidden;
   margin-top: 20px; }
-
-.atsvList {
-  list-style-type: none;
-  margin-left: 0 !important;
-  margin-top: 10px;
-  font-size: 15px;
-  margin-right: 20px; }
-
-.atsvList p {
-  text-overflow: ellipsis;
-  word-break: break-all;
-  display: unset;
-  margin: 0; }
-
-.atsvList:hover {
-  font-weight: bold; }
-
-.bolder {
-  font-weight: bold; }
-
-.atsvList i {
-  width: 10px;
-  height: 10px;
-  margin-right: 10px; }

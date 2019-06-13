@@ -114,7 +114,7 @@ body {
   width: 100%;
 }
 
-#progressSlider:hover, #navButtons div, .left-pane a, .left-pane-atsv a {
+#progressSlider:hover, #navButtons div, .left-pane a, #listATSV ul, #chapterTitle, #libraryTitle {
   cursor: pointer;
 }
 
@@ -188,12 +188,14 @@ input[type=range]::-moz-range-thumb {
   border-radius: 50%;
 }
 
-#uploader {
-  margin-top: 3vh;
+#uploadFolder, #chapterTitle, .left-pane li, #spinner, #uploadFile, #listATSV p {
+  margin-left: 20px;
 }
 
-#uploader, #chapterTitle, .left-pane li, #spinner,.left-pane-atsv li, #openATSVPane {
-  margin-left: 20px;
+#listATSV p {
+  display: inline;
+  margin: 0 10px;
+  padding: 10px 0;
 }
 
 
@@ -275,13 +277,22 @@ $check-thickness: 3px;
   }
 }
 
-.closebtn, .closebtnATSV {
+.closebtn {
   font-size: 36px;
   /* margin-right: 50px; */
   /* margin: 20px 25px 0 0; */
   display: block;
   text-align: right;
   margin: 10px;
+}
+
+#addLibrary, #addFiles {
+  margin: 10px 20px;
+  cursor: pointer;
+}
+
+#addLibrary i, #addFiles i {
+  width: 30px;
 }
 
 .boutonOuverture {
@@ -291,7 +302,20 @@ $check-thickness: 3px;
   z-index: 2;
 }
 
+#listATSV {
+  padding-left: 0px;
+  margin-top: 5px;
+}
 
+#listATSV ul {
+  padding-left: 30px;
+}
+
+.atsvList {
+  list-style-type: none;
+  word-break: break-all;
+  margin: 10px;
+}
 
 .left-pane .chapterNode {
   padding: 4px 0;
@@ -300,7 +324,7 @@ $check-thickness: 3px;
   transition: 0.3s;
 }
 
-.left-pane li:hover, .left-pane-atsv li:hover {
+.left-pane li:hover {
   cursor: pointer;
 }
 
@@ -311,10 +335,12 @@ $check-thickness: 3px;
   width: 95%;
 }
 
-.left-pane h4 {
-  margin: auto;
+#libraryTitle, #chapterTitle {
+  margin: 20px 0 2px 20px;
+}
+
+#chapterTitle {
   display: none;
-  margin: 20px 0 2px 0;
 }
 
 .panes-container {
@@ -323,18 +349,10 @@ $check-thickness: 3px;
   overflow: hidden;
 }
 
-.left-pane, .left-pane-atsv  {
+.left-pane  {
   width: 18%;
   z-index: 4;
   overflow: hidden;
-}
-
-.left-pane-atsv {
-  width: 0%;
-  display: none;
-  z-index:7;
-  position: absolute;
-  transition: 0.5s;
 }
 
 .panes-separator {
@@ -350,7 +368,6 @@ $check-thickness: 3px;
 .panes-container,
 .panes-separator,
 .left-pane,
-.left-pane-atsv,
 .right-pane {
   margin: 0;
   padding: 0;
@@ -359,37 +376,6 @@ $check-thickness: 3px;
 
 #chaptersList {
   overflow-y: auto;
-  /* margin-right: 20px; */
-  max-height: 45vh;
   overflow-x: hidden;
   margin-top: 20px;
-}
-
-.atsvList {
-  list-style-type: none;
-  margin-left: 0 !important;
-  margin-top: 10px;
-  font-size: 15px;
-  margin-right: 20px;
-}
-
-.atsvList p {
-  text-overflow: ellipsis;
-  word-break: break-all;
-  display: unset;
-  margin: 0;
-}
-
-.atsvList:hover {
-  font-weight: bold;
-}
-
-.bolder {
-  font-weight: bold;
-}
-
-.atsvList i {
-  width: 10px;
-  height: 10px;
-  margin-right: 10px;
 }

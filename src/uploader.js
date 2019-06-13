@@ -18,7 +18,6 @@ export var output = $("#output");
 export var spinner = $("#spinner");
 export var chargementCheckmark = $("#chargementCheckmark");
 export var player = $("#player");
-export var input = $("#uploader");
 export var chapterTitle = $("#chapterTitle");
 export var menu = $("#menu");
 export var pourcentageAvancement = $("#pourcentageAvancement");
@@ -70,16 +69,11 @@ export function setupScreen() {
     closeNav();
   });
 
-  $(".closebtnATSV").on("click", function() {
-    closeATSVPane();
-  });
-
   $(".boutonOuverture").on("click", function() {
     openNav();
   });
 
   var leftPane = document.getElementById('left-pane');
-  var leftPaneATSV = document.getElementById('left-pane-atsv');
   var rightPane = document.getElementById('player');
   var paneSep = document.getElementById('panes-separator');
 
@@ -109,11 +103,7 @@ export function setupScreen() {
 
 
         var right = (100-cur);
-        leftPane.style.width = cur + '%';
-        if(leftPaneATSV.style.display != "none") {
-          leftPaneATSV.style.width = cur-2 + '%';
-        }
-        
+        leftPane.style.width = cur + '%';       
         rightPane.style.width = right + '%';
 
     }, null, 'horizontal');
@@ -228,6 +218,12 @@ export function openfile(file) {
   timelLineLite.progress(0).pause();
   updateavancementPointeur();
 
+  if(file != null) {
+    loadFile(file);
+  } 
+}
+
+export function loadFile(file) {
   //var file = input.prop('files')[0];
   if(file != undefined) {
     var reader = new FileReader();
@@ -343,16 +339,9 @@ export function openNav() {
   $("#player").css("width","80%");
 }
 
-export function closeATSVPane() {
-  $("#left-pane-atsv").css("width","0%");
-  $("#left-pane-atsv").css("display","none");
-}
-
 export function closeNav() {
   $("#left-pane").css("width","0%");
-  $("#left-pane-atsv").css("width","0%");
   $("#left-pane").css("display","none");
-  $("#left-pane-atsv").css("display","none");
   $("#player").css("width","100%");
 }
 

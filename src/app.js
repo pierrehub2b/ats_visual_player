@@ -5,69 +5,129 @@ if (module.hot) {
 import './app.scss';
 import './custom.scss';
 import './images';
+import AMF from 'amf-js';
 var $ = require('jQuery');
-import { setupScreen } from './uploader';
+import { setupScreen, toAMFObjects } from './uploader';
 var upload = require('./uploader');
-export var input = $("#uploader");
-export var buttonATSV = $("#openATSVPane");
-const fs = require('fs');
-var directory = './ATSV';
+export var addLibrary = $("#addLibrary");
+export var addFiles = $("#addFiles");
+export var addLibraryInput = $("#addLibraryInput");
+export var addFilesInput = $("#addFilesInput");
+export var listATSV = $("#listATSV");
+export var libraryTitle = $("#libraryTitle");
+export var chapterTitle = $("#chapterTitle");
+export var chaptersList = $("#chaptersList");
 
-buttonATSV.on("click", function() {
-  var percent =  $('#left-pane').width() / $('body').width() * 100;
-  $("#left-pane-atsv").css("width",percent-2 + "%");
-  $("#left-pane-atsv").css("display","block");
+libraryTitle.on("click", function() {
+  listATSV.children('ul').slideToggle(200);
 });
 
-input.on("change", function(event) {
-  let listing = $("#listing");
-  listing.html("");
+chapterTitle.on("click", function() {
+  $('.chapterNode').slideToggle(200);
+  $('#output').slideToggle(200);
+});
+
+addLibrary.click(function () {
+  addLibraryInput.click();
+});
+
+addFiles.click(function () {
+  addFilesInput.click();
+});
+
+export function uploadFiles(event) {
   let files = event.target.files;
+  var folders = $("#defaultFolder").length;
+
+  if(folders == 0) {
+    //creation d'un dossier défaut 
+    var ulFolder = $("<ul id='defaultFolder'><i class='fas fa-folder'></i><p>Dossier par défaut</p></li>");
+    listATSV.append(ulFolder);
+    ulFolder.on("click", function(event) {
+      var elem = $("#" + event.target.parentNode.id);
+      elem.children('.atsvList').slideToggle(200);
+    });
+  }
+
+  var folder = $("#defaultFolder");
 
   for (let i=0; i<files.length; i++) {
     if(files[i].type == "application/ats.action-test-script.visual-report") {
       var fileName = files[i].name;
-      // if(fileName.length > 35) {
-      //   fileName = fileName.substring(0, 30) + "...";
-      // }
+      if(fileName.length > 35) {
+        fileName = fileName.substring(0, 30) + "...";
+      }  
       
-      var item = $("<li class='atsvList'><i class='fas fa-file-video'></i><p>"+ fileName +"</p></li>");
+      var item = $("<li class='atsvList'><i class='fas fa-file-alt'></i><p>"+ fileName +"</p></li>");
       item.on("click", function(e) {
         $(".atsvList > p").removeClass("bolder");
         e.target.classList.add("bolder");
         upload.openfile(files[i]);
       });
-      listing.append(item);
+      folder.append(item);
     }
   };
-});
+}
 
-// fs.readdir(directory, function (err, files) {
-//   //handling error
-//   if (err) {
-//       return console.log('Unable to scan directory: ' + err);
-//   } 
-//   //listing all files using forEach
-//   files.forEach(function (file) {
-//       // Do whatever you want to do with the file
-//       for (let i=0; i<files.length; i++) {
-//         if(files[i].type == "application/ats.action-test-script.visual-report") {
-//           var fileName = files[i].name;
-//           // if(fileName.length > 35) {
-//           
- //   fileName = fileName.substring(0, 30) + "...";
-//           // }
-          
-//           var item = $("<li class='atsvList'><i class='fas fa-file-video'></i><p>"+ fileName +"</p></li>");
-//           item.on("click", function(e) {
-//             $(".atsvList > p").removeClass("bolder");
-//             e.target.classList.add("bolder");
-//             upload.openfile(files[i]);
-//           });
-//           listing.append(item);
-//         }
-//       };
-//   });
-// });
+export function importLibrary(event) {
+  let file = event.target.files[0];
+  var reader = new FileReader();
+  reader.onload = onReaderLoad;
+  reader.readAsText(file);
+}
+
+export async function onReaderLoad(event){
+  var obj = JSON.parse(event.target.result);
+  for (let i = 0; i < obj.folders.length; i++) {
+    const folder = obj.folders[i];
+    var name = folder.name;
+    var ulFolder = $("<ul id='"+name.replace(" ","_")+"'><i class='fas fa-folder'></i><p>"+name+"</p></li>");
+    listATSV.append(ulFolder);
+    var currentFolder = $("#"+name.replace(" ","_"));
+    currentFolder.on("click", function(event) {
+      var elem = $("#" + event.target.parentNode.id);
+      elem.children('.atsvList').slideToggle(200);
+    });
+    var urls = folder.urls;
+    for (let index = 0; index < urls.length; index++) {
+      const url = urls[index];
+      url = url.replace(/\\/g, '/')
+      const table = url.split("/");
+      const fileName = table[table.length-1];
+      var item = $("<li class='atsvList'><i class='fas fa-file-alt'></i><p>"+ fileName +"</p></li>");
+      item.attr("url", url);
+      item.on("click", function(e) {
+        $(".atsvList > p").removeClass("bolder");
+        e.target.classList.add("bolder");
+        url = e.target.parentNode.getAttribute("url");
+        if(url.startsWith("./") || url.startsWith("/")) {
+          url = url.replace('./',__dirname + 'ATSV/');
+        }
+        getFile(url);
+        e.stopPropagation();
+      });
+      currentFolder.append(item);
+    }
+  }
+}
+
+export function getFile(url) {
+  $.ajax({
+    url: url,
+    xhrFields: {
+      responseType: "arraybuffer"
+   }
+   }).done(function(data) {
+      upload.openfile(null);
+      var encodedData = new AMF.Deserializer(data);
+      upload.repeat(encodedData);
+   });
+}
+
+addLibraryInput.on('change',function (event)
+{
+    importLibrary(event)
+});
+addFilesInput.on("change", uploadFiles);
 
 setupScreen();

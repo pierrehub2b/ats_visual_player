@@ -31,5 +31,8 @@ module.exports = merge(common, {
     new CopyPlugin([
       { from: 'src/webfonts', to: 'webfonts' }
     ]),
+    new CopyPlugin([
+      { from: 'src/ATSV', to: 'ATSV' }
+    ]),
   ],
 })
