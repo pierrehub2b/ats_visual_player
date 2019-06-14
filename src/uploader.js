@@ -423,6 +423,9 @@ export function resultSetup(result, percent) {
   $(".chapitresProgressBar").remove();
   $("#chaptersList > li").remove();
 
+  var parent = $(".bolder").parent();
+  $("#chapterContainer").insertAfter(parent);
+
   for (let comm = 0; comm < comments.length; comm++) {
     const commentaire = comments[comm];
     $('<li class="chapterNode" id="chapter'+ commentaire.timeLine +'">' + stripHtml(commentaire.element.data) + '</li>').appendTo($("#chaptersList"));

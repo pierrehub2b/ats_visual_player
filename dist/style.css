@@ -255,6 +255,9 @@ input[type=range]::-moz-range-thumb {
   word-break: break-all;
   margin: 10px; }
 
+.atsvList p:hover {
+  font-weight: bold; }
+
 .left-pane .chapterNode {
   padding: 4px 0;
   text-decoration: none;

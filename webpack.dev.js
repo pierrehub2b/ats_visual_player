@@ -27,12 +27,16 @@ module.exports = merge(common, {
       }
     ]
   },
+  devServer: {
+    headers: {
+      'Access-Control-Allow-Origin': '*'
+    }
+	},
   plugins: [
     new CopyPlugin([
-      { from: 'src/webfonts', to: 'webfonts' }
-    ]),
-    new CopyPlugin([
-      { from: 'src/ATSV', to: 'ATSV' }
-    ]),
+      { from: 'src/webfonts', to: 'webfonts' },
+      { from: 'src/ATSV', to: 'ATSV' },
+      { from: 'src/library.json', to: '' }
+    ])
   ],
 })

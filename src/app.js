@@ -56,11 +56,12 @@ export function uploadFiles(event) {
 
   if(folders == 0) {
     //creation d'un dossier défaut 
-    var ulFolder = $("<ul id='defaultFolder'><i class='fas fa-folder-open'></i><p>Dossier par défaut</p></li>");
+    var ulFolder = $("<ul id='defaultFolder'><i class='fas fa-folder-open'></i><p>Dossier local</p></li>");
     listATSV.append(ulFolder);
     ulFolder.on("click", function(event) {
       var elem = $("#" + event.target.parentNode.id);
       elem.children('.atsvList').slideToggle(200);
+      elem.children('#chapterContainer').slideToggle(200);
       var iElem = elem.children('i')[0];
       if(iElem.classList.contains("fa-folder-open")) {
         iElem.classList.remove("fa-folder-open");
@@ -81,7 +82,7 @@ export function uploadFiles(event) {
         fileName = fileName.substring(0, 30) + "...";
       }  
       
-      var item = $("<li class='atsvList'><i class='fas fa-file-alt'></i><p>"+ fileName +"</p></li>");
+      var item = $("<li class='atsvList'><i class='fas fa-film'></i><p>"+ fileName +"</p></li>");
       item.on("click", function(e) {
         $(".atsvList > p").removeClass("bolder");
         e.target.classList.add("bolder");
@@ -100,17 +101,33 @@ export function importLibrary(event) {
   reader.readAsText(file);
 }
 
-export async function onReaderLoad(event){
-  var obj = JSON.parse(event.target.result);
+export function readLocalJSON() {
+  $.ajax({
+    type: "GET",
+    url: '/library.json',
+    data: {},
+    crossDomain:true,
+    headers: { 
+      "Access-Control-Allow-Origin" : "*",
+      'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
+    },
+    success: function(data) {
+      JsonTraitment(data);
+    }
+  });
+}
+
+export function JsonTraitment(obj) {
   for (let i = 0; i < obj.folders.length; i++) {
     const folder = obj.folders[i];
     var name = folder.name;
-    var ulFolder = $("<ul id='"+name.replace(" ","_")+"'><i class='fas fa-folder-open'></i><p>"+name+"</p></li>");
+    var ulFolder = $("<ul id='"+name.replace(/ /g, '')+"'><i class='fas fa-folder-open'></i><p>"+name+"</p></li>");
     listATSV.append(ulFolder);
-    var currentFolder = $("#"+name.replace(" ","_"));
+    var currentFolder = $("#"+name.replace(/ /g, ''));
     currentFolder.on("click", function(event) {
       var elem = $("#" + event.target.parentNode.id);
       elem.children('.atsvList').slideToggle(200);
+      elem.children('#chapterContainer').slideToggle(200);
       var iElem = elem.children('i')[0];
       if(iElem.classList.contains("fa-folder-open")) {
         iElem.classList.remove("fa-folder-open");
@@ -123,19 +140,18 @@ export async function onReaderLoad(event){
     var urls = folder.urls;
     for (let index = 0; index < urls.length; index++) {
       const url = urls[index];
-      url = url.replace(/\\/g, '/')
+      url = url.replace(/\\/g, '/');
       const table = url.split("/");
       const fileName = table[table.length-1];
-      var item = $("<li class='atsvList'><i class='fas fa-file-alt'></i><p>"+ fileName +"</p></li>");
+      var item = $("<li class='atsvList'><i class='fas fa-film'></i><p>"+ fileName +"</p></li>");
       item.attr("url", url);
       item.on("click", function(e) {
         $(".atsvList > p").removeClass("bolder");
         chapterExpanded = true;
         e.target.classList.add("bolder");
         url = e.target.parentNode.getAttribute("url");
-        if(url.startsWith("./") || url.startsWith("/")) {
-          url = url.replace('./',__dirname + 'ATSV/');
-        }
+        console.log(__dirname);
+        url = __dirname + url.replace('./','').replace('/','');
         getFile(url);
         e.stopPropagation();
       });
@@ -144,17 +160,30 @@ export async function onReaderLoad(event){
   }
 }
 
+export async function onReaderLoad(event){
+  var obj = JSON.parse(event.target.result);
+  JsonTraitment(obj);
+}
+
 export function getFile(url) {
+  upload.openfile(null);
   $.ajax({
+    type: "GET",
     url: url,
+    data: {},
+    crossDomain:true,
     xhrFields: {
-      responseType: "arraybuffer"
-   }
-   }).done(function(data) {
-      upload.openfile(null);
+      responseType: 'arraybuffer',
+    },
+    headers: { 
+      "Access-Control-Allow-Origin" : "*",
+      'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
+    },
+    success: function(data) {
       var encodedData = new AMF.Deserializer(data);
       upload.repeat(encodedData);
-   });
+    }
+  });
 }
 
 addLibraryInput.on('change',function (event)
@@ -164,3 +193,4 @@ addLibraryInput.on('change',function (event)
 addFilesInput.on("change", uploadFiles);
 
 setupScreen();
+readLocalJSON();

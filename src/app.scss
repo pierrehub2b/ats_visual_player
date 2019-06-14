@@ -317,6 +317,10 @@ $check-thickness: 3px;
   margin: 10px;
 }
 
+.atsvList p:hover {
+  font-weight: bold;
+}
+
 .left-pane .chapterNode {
   padding: 4px 0;
   text-decoration: none;
