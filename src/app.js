@@ -21,9 +21,6 @@ export var chaptersList = $("#chaptersList");
 export var libraryExpanded = true;
 export var chapterExpanded = true;
 
-export var loc = window.location.pathname;
-export var serverDir = loc.substring(0, loc.lastIndexOf('/'));
-
 libraryTitle.on("click", function() {
   listATSV.children('ul').slideToggle(200);
   libraryExpanded = !libraryExpanded;
@@ -105,6 +102,8 @@ export function importLibrary(event) {
 }
 
 export function readLocalJSON() {
+  var loc = window.location.pathname;
+  var serverDir = loc.substring(0, loc.lastIndexOf('/'));
   $.ajax({
     type: "GET",
     url: serverDir + '/library.json',
@@ -153,7 +152,11 @@ export function JsonTraitment(obj) {
         chapterExpanded = true;
         e.target.classList.add("bolder");
         url = e.target.parentNode.getAttribute("url");
-        url = serverDir + url.replace('./','').replace('/','');
+        if(url.startWidth("./") || url.startWidth("/")) {
+          var loc = window.location.pathname;
+          var serverDir = loc.substring(0, loc.lastIndexOf('/'));
+          url = serverDir + url.replace('./','/')
+        }
         getFile(url);
         e.stopPropagation();
       });
