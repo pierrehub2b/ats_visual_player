@@ -152,7 +152,7 @@ export function JsonTraitment(obj) {
         chapterExpanded = true;
         e.target.classList.add("bolder");
         url = e.target.parentNode.getAttribute("url");
-        if(url.startWidth("./") || url.startWidth("/")) {
+        if(url.startsWith("./") || url.startsWith("/")) {
           var loc = window.location.pathname;
           var serverDir = loc.substring(0, loc.lastIndexOf('/'));
           url = serverDir + url.replace('./','/')
