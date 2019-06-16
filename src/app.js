@@ -20,6 +20,57 @@ export var chaptersList = $("#chaptersList");
 
 export var libraryExpanded = true;
 export var chapterExpanded = true;
+export var localeValues = getLocalizationValues();
+
+export function replaceLocal(token) {
+  if(localeValues == null) return "";
+  var domElement = $('span[name='+token.name+']');
+  var localValue = localeValues.find(_ => _.name == token.name);
+  if(localValue) {
+    if(domElement.length > 0) {
+      domElement.replaceWith(localValue.value);
+      return;
+    }
+    return localValue.value;
+  }
+  return "";
+}
+
+export async function getLocalizationValues() {
+  var loc = window.location.pathname;
+  var serverDir = loc.substring(0, loc.lastIndexOf('/'));
+  await $.ajax({
+    type: "GET",
+    url: serverDir + '/locales/locale.json',
+    data: {},
+    crossDomain:true,
+    headers: { 
+      "Access-Control-Allow-Origin" : "*",
+      'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
+    },
+    success: function(data) {
+      var locale = data.defaultLocale;
+      switch(locale) {
+        case "fr":
+          localeValues = data.fr;
+          break;
+        case "en":
+          localeValues = data.en;
+          break;
+      }
+
+      setupLocalization();
+    }
+  }); 
+}
+
+export async function setupLocalization() {
+  if(localeValues == null) return;
+  for (let index = 0; index < localeValues.length; index++) {
+    const token = localeValues[index];
+    replaceLocal(token);
+  }
+}
 
 libraryTitle.on("click", function() {
   listATSV.children('ul').slideToggle(200);
@@ -56,7 +107,7 @@ export function uploadFiles(event) {
 
   if(folders == 0) {
     //creation d'un dossier défaut 
-    var ulFolder = $("<ul id='defaultFolder'><i class='fas fa-folder-open'></i><p>Dossier local</p></li>");
+    var ulFolder = $("<ul id='defaultFolder'><i class='fas fa-folder-open'></i><p>"+replaceLocal({ name: "__localFolder"})+"</p></li>");
     listATSV.append(ulFolder);
     ulFolder.on("click", function(event) {
       var elem = $("#" + event.target.parentNode.id);

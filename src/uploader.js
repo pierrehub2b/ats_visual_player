@@ -3,6 +3,7 @@ import 'babel-polyfill';
 import { TimelineMax } from "gsap/TweenMax";
 var $ = require('jQuery');
 import './simpledrag';
+import { replaceLocal } from './app';
 
 //#region objets du DOM
 export var progressSlider = $("#progressSlider");
@@ -140,7 +141,7 @@ export function traitmentDone() {
 
   var dt = new Date();
   dt.setHours(0,0,0,duration);
-  $("#duration").html("Duration: " + getDuration(dt));
+  $("#duration").html(replaceLocal({name: "__scriptDuration"}) + ": " + getDuration(dt));
 }
 
 export function getDuration(date) {
@@ -369,15 +370,15 @@ export function resultSetup(result, percent) {
       groups:flashReportObject.groups
     }
 
-    var output = format("<h3>ATS Visual Report</h3>" +
-    "<div>Script name: {name}</div>"+
-    "<div>Script id: {id}</div>" +
-    "<div>Author: {author}</div>" +
-    "<div>Started: {started}</div>" +
-    "<div id='duration'>Duration: {duration}</div>" +
-    "<div>description: {description}</div>" +
-    "<div>Prerequisite: {prerequisite}</div>" +
-    "<div>Groups: {groups}</div>",frData);
+    var output = format("<h3>"+ replaceLocal({ name: "__visualReport"}) +"</h3>" +
+    "<div>"+ replaceLocal({ name: "__scriptName"}) +": {name}</div>"+
+    "<div>"+ replaceLocal({ name: "__scriptId"}) +": {id}</div>" +
+    "<div>"+ replaceLocal({ name: "__scriptAuthor"}) +": {author}</div>" +
+    "<div>"+ replaceLocal({ name: "__scriptStarter"}) +": {started}</div>" +
+    "<div id='duration'>"+ replaceLocal({ name: "__scriptDuration"}) +": {duration}</div>" +
+    "<div>"+ replaceLocal({ name: "__scriptDescription"}) +": {description}</div>" +
+    "<div>"+ replaceLocal({ name: "__scriptPrerequisite"}) +": {prerequisite}</div>" +
+    "<div>"+ replaceLocal({ name: "__scriptGroups"}) +": {groups}</div>",frData);
 
     flashReport.append(output);
     allData.push({timeLine: flashReportObject.timeLine, element: flashReportObject.element, type: elementType.FLASHREPORT, img: null});

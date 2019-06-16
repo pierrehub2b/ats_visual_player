@@ -1,0 +1,119 @@
+{
+    "defaultLocale": "fr",
+    "fr": [
+        {
+          "name" : "__addLibrary",
+          "value" : "Importer une librairie ATSV"
+        },
+        {
+            "name" : "__openATSV",
+            "value" : "Ouvrir un ATSV"
+          },
+          {
+            "name" : "__ATSVLibrary",
+            "value" : "Librairie ATSV"
+          },
+          {
+            "name" : "__chaptersList",
+            "value" : "Chapitres"
+          },
+          {
+            "name" : "__localFolder",
+            "value" : "Dossier local"
+          },
+          {
+            "name" : "__visualReport",
+            "value" : "Rapport visuel"
+          },
+          {
+            "name" : "__scriptName",
+            "value" : "Nom du script"
+          },
+          {
+            "name" : "__scriptId",
+            "value" : "Identifiant"
+          },
+          {
+            "name" : "__scriptAuthor",
+            "value" : "Créateur"
+          },
+          {
+            "name" : "__scriptStarter",
+            "value" : "Démarrage"
+          },
+          {
+            "name" : "__scriptDuration",
+            "value" : "Durée"
+          },
+          {
+            "name" : "__scriptDescription",
+            "value" : "Description"
+          },
+          {
+            "name" : "__scriptPrerequisite",
+            "value" : "Prérequis"
+          },
+          {
+            "name" : "__scriptGroups",
+            "value" : "Groupes"
+          }
+      ],
+      "en": [
+        {
+          "name" : "__addLibrary",
+          "value" : "Import an ATSV library"
+        },
+        {
+            "name" : "__openATSV",
+            "value" : "Open an ATSV"
+          },
+          {
+            "name" : "__ATSVLibrary",
+            "value" : "ATSV library"
+          },
+          {
+            "name" : "__chaptersList",
+            "value" : "Chapters"
+          },
+          {
+            "name" : "__localFolder",
+            "value" : "Local folder"
+          },
+          {
+            "name" : "__visualReport",
+            "value" : "Visual report"
+          },
+          {
+            "name" : "__scriptName",
+            "value" : "Script name"
+          },
+          {
+            "name" : "__scriptId",
+            "value" : "Id"
+          },
+          {
+            "name" : "__scriptAuthor",
+            "value" : "Author"
+          },
+          {
+            "name" : "__scriptStarter",
+            "value" : "Starter"
+          },
+          {
+            "name" : "__scriptDuration",
+            "value" : "Duration"
+          },
+          {
+            "name" : "__scriptDescription",
+            "value" : "Description"
+          },
+          {
+            "name" : "__scriptPrerequisite",
+            "value" : "Prerequistes"
+          },
+          {
+            "name" : "__scriptGroups",
+            "value" : "Groups"
+          }
+      ]
+  }
