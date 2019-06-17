@@ -114,6 +114,26 @@ body {
   z-index: 0;
   overflow: hidden; }
 
+.watermark {
+  opacity: 0.5;
+  color: white;
+  position: absolute;
+  left: 30%;
+  /* right: 0; */
+  top: 35%;
+  /* bottom: 50%; */
+  /* display: flex; */
+  /* height: 200px; */
+  /* width: auto; */
+  z-index: 10;
+  text-align: center;
+  transform: rotate(-30deg);
+  display: none;
+  height: 30vh;
+  width: 30vw;
+  background-repeat: no-repeat;
+  background-size: contain; }
+
 #loadingPercent {
   display: inline-block;
   margin: 5px; }

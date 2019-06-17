@@ -120,6 +120,8 @@ export function toAMFObjects(data) {
 
 export function traitmentDone() {
   spinner.addClass("loadingDone");
+  var v = parseFloat(progressSlider.val()) * 100;
+  rangePointer.html(v.toFixed());
   loadingCheckmark.css("display", "block");
   var comments = allData.filter(_ => _.type === elementType.CHAPTER);
   for (let comm = 0; comm < comments.length; comm++) {
@@ -137,7 +139,8 @@ export function traitmentDone() {
       imgToolTip.css("display", "none");
       $("#chapter"+commentaire.timeLine).removeClass("hoverChapter");
     });
-    component.on("click", function() {
+    component.on("click", function(event) {
+      event.stopPropagation();
       updateByVal(getChapterPosition(commentaire.timeLine));
     });
   }
@@ -293,12 +296,15 @@ export function updateByVal(value){
 export function updaterangePointer() {
   if(progressSlider.val() == 0 && flashReport.css("display") == "none") {
     flashReport.css("display", "block");
+    $(".watermark").css("display", "none");
   } else if(progressSlider.val() > 0 && flashReport.css("display") == "block") {
     flashReport.css("display", "none");
+    $(".watermark").css("display", "block");
   }
 
   var v = parseFloat(progressSlider.val()) * 100;
   rangePointer.html(v.toFixed());
+
   var val = (parseFloat(progressSlider.val()) - progressSlider.attr("min") / (progressSlider.attr("max") - progressSlider.attr("min")));
   var percent = val * 100;
 
@@ -362,6 +368,7 @@ export function resultSetup(result, percent) {
   //#region traitment
   var actions = result.filter(_ => _.type ? _.type.indexOf("com.ats") > -1 : false);
   var flashReportObject = result.filter(_ => _.type == "startVisualReport")[0];
+  rangePointer.html($("#output").clone());
 
   if(flashReportObject) {
     scriptName.html(flashReportObject.name);

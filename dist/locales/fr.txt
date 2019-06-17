@@ -1,5 +1,5 @@
 ADDLIBRARY=Importer une librairie ATSV
-OPENATSV=Ouvrir un ATSV
+OPENATSV=Ajouter un rapport visual ATS
 ATSVLIBRARY=Librairie ATSV
 CHAPTERS=Chapitres
 LOCALFOLDER=Dossier local
@@ -13,3 +13,4 @@ SCRIPTDESCRIPTION=Description
 SCRIPTPREREQUISTES=Prérequis
 SCRIPTGROUPS=Groupes
 LOADINGDURATION=Calcul en cours
+LOADING=Téléchargement en cours...

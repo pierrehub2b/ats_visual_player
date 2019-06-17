@@ -16,10 +16,10 @@ body {
 #screenBackground {
     background-color: black;
     background-image: url("./images/agilitest_logo.png");
-    background-repeat: no-repeat;
-    background-attachment: inherit;
-    background-position: center;
-    background-size: 30vh;
+}
+
+.watermark {
+    background-image: url("./images/agilitest_logo.png");
 }
 
 #imgToolTip {
@@ -85,6 +85,14 @@ input[type=range]::-moz-range-thumb {
 .progress {
     background: $agilitestOrange;
   }
+
+#loadingLabel {
+    color: $agilitestOrange;
+}
+
+.hide {
+    display: none;
+}
 
 #scriptName {
     color: $agilitestWhite;

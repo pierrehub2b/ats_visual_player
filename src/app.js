@@ -98,7 +98,8 @@ export async function setupLocalization() {
 //#endregion
 
 //#region setup click events
-libraryTitle.on("click", function() {
+libraryTitle.on("click", function(event) {
+  event.stopPropagation();
   listATSV.children('ul').slideToggle(200);
   libraryExpanded = !libraryExpanded;
   if(libraryExpanded) {
@@ -108,7 +109,8 @@ libraryTitle.on("click", function() {
   }
 });
 
-chapterTitle.on("click", function() {
+chapterTitle.on("click", function(event) {
+  event.stopImmediatePropagation();
   $('.chapterNode').slideToggle(200);
   chapterExpanded = !chapterExpanded;
   if(chapterExpanded) {
@@ -136,6 +138,7 @@ export function uploadFiles(event) {
     var ulFolder = $("<ul id='defaultFolder'><i class='fas fa-folder-open'></i><p>"+replaceLocal({ name: "LOCALFOLDER"})+"</p></li>");
     listATSV.append(ulFolder);
     ulFolder.on("click", function(event) {
+      event.stopPropagation();
       var elem = $("#" + event.target.parentNode.id);
       elem.children('.atsvList').slideToggle(200);
       elem.children('#chapterContainer').slideToggle(200);
@@ -199,6 +202,7 @@ export function JsonTraitment(obj) {
     listATSV.append(ulFolder);
     var currentFolder = $("#"+name.replace(/ /g, ''));
     currentFolder.on("click", function(event) {
+      event.stopPropagation();
       var elem = $("#" + event.target.parentNode.id);
       elem.children('.atsvList').slideToggle(200);
       elem.children('#chapterContainer').slideToggle(200);
@@ -223,15 +227,18 @@ export function JsonTraitment(obj) {
       var item = $("<li class='atsvList'><i class='fas fa-film'></i><p>"+ fileName +"</p></li>");
       item.attr("url", url);
       item.on("click", function(e) {
+        e.stopPropagation();
         $(".atsvList > p").removeClass("bolder");
         chapterExpanded = true;
         e.target.classList.add("bolder");
         url = e.target.parentNode.getAttribute("url");
-        if(url.startsWith("./") || url.startsWith("/")) {
-          url = serverDir + url.replace('./','/')
+        if(url) {
+          if(url.startsWith("./") || url.startsWith("/")) {
+            url = serverDir + url.replace('./','/')
+          }
+          getFile(url);
         }
-        getFile(url);
-        e.stopPropagation();
+
       });
       currentFolder.append(item);
     }
@@ -247,31 +254,25 @@ export function getFile(url) {
   upload.openfile(null);
   $("#progress").remove();
   var parent = $(".bolder").parent();
-  parent.append("<div id='progress' class='progress' value='0'></div>");
+  parent.append("<div id='progress' class='progress' value='0'></div><div id='loadingLabel'>"+ replaceLocal({ name: "LOADING"}) +"</div>");
   var progressBar = $("#progress");
+  var loadingLabel = $("#loadingLabel");
   $.ajax({
     xhr: function () {
         var xhr = new window.XMLHttpRequest();
-        xhr.upload.addEventListener("progress", function (evt) {
-              if (evt.lengthComputable) {
-                  var percentComplete = evt.loaded / evt.total;
-                  progressBar.css({
-                      width: percentComplete * 100 + '%'
-                  });
-                  if (percentComplete === 1) {
-                    progressBar.addClass('hide');
-                  }
-              }
-          }, false);
-          xhr.addEventListener("progress", function (evt) {
-              if (evt.lengthComputable) {
-                  var percentComplete = evt.loaded / evt.total;
-                  progressBar.css({
-                      width: percentComplete * 100 + '%'
-                  });
-              }
-          }, false);
-          return xhr;
+        xhr.addEventListener("progress", function (evt) {
+            if (evt.lengthComputable) {
+                var percentComplete = evt.loaded / evt.total;
+                progressBar.css({
+                    width: percentComplete * 100 + '%'
+                });
+                if(percentComplete == 1) {
+                  loadingLabel.remove();
+                  progressBar.remove();
+                }
+            }
+        }, false);
+        return xhr;
       },
       type: "GET",
       url: url,
@@ -284,7 +285,7 @@ export function getFile(url) {
       crossDomain: true,
       success: function (data) {
         var encodedData = new AMF.Deserializer(data);
-        var byteLength = encodedData.buf.byteLength
+        var byteLength = encodedData.buf.byteLength;
         upload.repeat(encodedData, byteLength);
       }
   });
