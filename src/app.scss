@@ -19,36 +19,40 @@ body {
 
 #flashReport div {
   margin: 10px 10px;
+  vertical-align: middle;
 }
 
-#flashReport #logo {
-  position: fixed;
-  left: 0;
-  right: 0;
-  margin: auto;
-  width: 20vw;
-  top: 0;
-  bottom: 0;
-  background-repeat: no-repeat;
-  background-position: center;
-  height: 20vw;
-  background-size: contain;
-}
+// #flashReport #logo {
+//   position: fixed;
+//   left: 0;
+//   right: 0;
+//   margin: auto;
+//   width: 20vw;
+//   top: 0;
+//   bottom: 0;
+//   background-repeat: no-repeat;
+//   background-position: center;
+//   height: 20vw;
+//   background-size: contain;
+// }
 
-//fondEcran
-#fondEcran {
+//screenBackground
+#screenBackground {
   display: flex;
   padding: 0;
   margin: 0;
   justify-content: center;
   text-align: center;
   position: relative;
-  transition: 0.5s;
   width: 100%;
   height: 93vh;
+  background-repeat: no-repeat;
+  background-attachment: inherit;
+  background-position: center;
+  background-size: 30vh;
 }
 
-.chapitresProgressBar {
+.chapterProgressBar {
   height: 15px;
   position: relative;
   /* display: block; */
@@ -58,7 +62,7 @@ body {
   cursor: pointer;
 }
 
-#fondEcran img {
+#screenBackground img {
   position: absolute;
   max-width: 100%;
   max-height: 100%;
@@ -125,7 +129,7 @@ body {
   margin: 0 3px;
 }
 
-#avancementPointeur {
+#rangePointer {
   font-size: 15px;
   display: inline-block;
   vertical-align: super;
@@ -136,7 +140,7 @@ body {
   margin: 0;
   // display: inline-block;
   position: absolute;
-  width: 82vw;
+  width: 75vw;
   height: 100vh;
   top: 0;
   transition: 0.5s;
@@ -146,7 +150,7 @@ body {
   overflow: hidden;
 }
 
-#pourcentageAvancement {
+#loadingPercent {
   display: inline-block;
   margin: 5px;
 }
@@ -206,7 +210,7 @@ $check-width: $check-height/2;
 $check-left: ($loader-size/6 + $loader-size/12);
 $check-thickness: 3px;
 
-.cercleChargement {
+.loadingCircle {
   margin-top: $loader-size/8;
   animation: loader-spin 1.2s infinite linear;
   position: relative;
@@ -217,19 +221,19 @@ $check-thickness: 3px;
   height: $loader-size;
 }
 
-.chargementTermine {
+.loadingDone {
   -webkit-animation: none;
   animation: none;
   transition: border 500ms ease-out;
 }
 
-.chargementCheckmark {
+.loadingCheckmark {
   display: none;
   
   &.draw:after {
     animation-duration: 800ms;
     animation-timing-function: ease;
-    animation-name: chargementCheckmark;
+    animation-name: loadingCheckmark;
     transform: scaleX(-1) rotate(135deg);
   }
   
@@ -254,7 +258,7 @@ $check-thickness: 3px;
   }
 }
 
-@keyframes chargementCheckmark {
+@keyframes loadingCheckmark {
   0% {
     height: 0;
     width: 0;
@@ -291,11 +295,23 @@ $check-thickness: 3px;
   cursor: pointer;
 }
 
+#addLibrary:hover, #addFiles:hover {
+  font-weight: bolder;
+}
+
+.progress {
+  display: block;
+  height: 2px;
+  transition: width .3s;
+  width: 0px;
+  margin-top: 10px;
+}
+
 #addLibrary i, #addFiles i {
   width: 30px;
 }
 
-.boutonOuverture {
+.openingButton {
   position: absolute;
   left: 30px;
   top: 30px;
@@ -305,6 +321,9 @@ $check-thickness: 3px;
 #listATSV {
   padding-left: 0px;
   margin-top: 5px;
+  overflow-y: auto;
+  padding-right: 10px;
+  height: 80vh;
 }
 
 #listATSV ul {
@@ -319,6 +338,10 @@ $check-thickness: 3px;
 
 .atsvList p:hover {
   font-weight: bold;
+}
+
+.atsvList p {
+  font-size: 17px;
 }
 
 .left-pane .chapterNode {
@@ -354,7 +377,6 @@ $check-thickness: 3px;
 }
 
 .left-pane  {
-  width: 18%;
   z-index: 4;
   overflow: hidden;
 }
@@ -381,9 +403,14 @@ $check-thickness: 3px;
 #chaptersList {
   overflow-y: auto;
   overflow-x: hidden;
-  margin-top: 20px;
 }
 
 #chapterTitle i, #libraryTitle i {
   display: inline-block;
 }
+
+#chapterContainer {
+  font-size: 15px;
+  margin-left: 30px;
+}
+

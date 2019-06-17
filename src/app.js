@@ -4,10 +4,9 @@ if (module.hot) {
 
 import './app.scss';
 import './custom.scss';
-import './images';
 import AMF from 'amf-js';
 var $ = require('jQuery');
-import { setupScreen } from './uploader';
+import { setupScreen, interuptDeserialize, currentByteLenght } from './uploader';
 var upload = require('./uploader');
 export var addLibrary = $("#addLibrary");
 export var addFiles = $("#addFiles");
@@ -17,10 +16,26 @@ export var listATSV = $("#listATSV");
 export var libraryTitle = $("#libraryTitle");
 export var chapterTitle = $("#chapterTitle");
 export var chaptersList = $("#chaptersList");
+export var flashReport = $("#flashReport");
 
 export var libraryExpanded = true;
 export var chapterExpanded = true;
-export var localeValues = getLocalizationValues();
+export var localeValues = null;
+export var defaultLocale = null;
+
+export var header = { 
+  "Access-Control-Allow-Origin" : "*",
+  'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT'
+};
+
+var loc = window.location.pathname;
+var serverDir = loc.substring(0, loc.lastIndexOf('/'));
+
+const img2 = $('<div id="logo">');
+flashReport.append(img2);
+
+//#region localization
+getLocalization();
 
 export function replaceLocal(token) {
   if(localeValues == null) return "";
@@ -36,29 +51,38 @@ export function replaceLocal(token) {
   return "";
 }
 
-export async function getLocalizationValues() {
-  var loc = window.location.pathname;
-  var serverDir = loc.substring(0, loc.lastIndexOf('/'));
+export async function getLocalization() {
   await $.ajax({
     type: "GET",
     url: serverDir + '/locales/locale.json',
     data: {},
     crossDomain:true,
-    headers: { 
-      "Access-Control-Allow-Origin" : "*",
-      'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
-    },
+    headers: header,
     success: function(data) {
-      var locale = data.defaultLocale;
-      switch(locale) {
-        case "fr":
-          localeValues = data.fr;
-          break;
-        case "en":
-          localeValues = data.en;
-          break;
-      }
+      defaultLocale = data.defaultLocale;
+      return getLocalizationValues(defaultLocale);
+    }
+  }); 
+}
 
+export async function getLocalizationValues(locale) {
+  await $.ajax({
+    type: "GET",
+    url: serverDir + '/locales/'+locale+'.txt',
+    data: {},
+    crossDomain:true,
+    headers: header,
+    success: function(data) {
+      var values = [];
+      data = data.split("\n");
+      for (let index = 0; index < data.length; index++) {
+        const val = data[index];
+        var keyValuePair = val.split("=");
+        if(keyValuePair.length == 2) {
+          values.push({ name: keyValuePair[0], value: keyValuePair[1]})
+        }
+      }
+      localeValues = values;
       setupLocalization();
     }
   }); 
@@ -71,7 +95,9 @@ export async function setupLocalization() {
     replaceLocal(token);
   }
 }
+//#endregion
 
+//#region setup click events
 libraryTitle.on("click", function() {
   listATSV.children('ul').slideToggle(200);
   libraryExpanded = !libraryExpanded;
@@ -84,7 +110,6 @@ libraryTitle.on("click", function() {
 
 chapterTitle.on("click", function() {
   $('.chapterNode').slideToggle(200);
-  $('#output').slideToggle(200);
   chapterExpanded = !chapterExpanded;
   if(chapterExpanded) {
     $("#chapterTitleCaret").removeClass("fa-caret-right").addClass("fa-caret-down");
@@ -100,6 +125,7 @@ addLibrary.click(function () {
 addFiles.click(function () {
   addFilesInput.click();
 });
+//#endregion
 
 export function uploadFiles(event) {
   let files = event.target.files;
@@ -107,7 +133,7 @@ export function uploadFiles(event) {
 
   if(folders == 0) {
     //creation d'un dossier défaut 
-    var ulFolder = $("<ul id='defaultFolder'><i class='fas fa-folder-open'></i><p>"+replaceLocal({ name: "__localFolder"})+"</p></li>");
+    var ulFolder = $("<ul id='defaultFolder'><i class='fas fa-folder-open'></i><p>"+replaceLocal({ name: "LOCALFOLDER"})+"</p></li>");
     listATSV.append(ulFolder);
     ulFolder.on("click", function(event) {
       var elem = $("#" + event.target.parentNode.id);
@@ -129,9 +155,9 @@ export function uploadFiles(event) {
   for (let i=0; i<files.length; i++) {
     if(files[i].type == "application/ats.action-test-script.visual-report") {
       var fileName = files[i].name;
-      if(fileName.length > 35) {
-        fileName = fileName.substring(0, 30) + "...";
-      }  
+      if(fileName.length > 45) {
+        fileName = fileName.substring(0,40) + " ...";
+      }
       
       var item = $("<li class='atsvList'><i class='fas fa-film'></i><p>"+ fileName +"</p></li>");
       item.on("click", function(e) {
@@ -153,17 +179,12 @@ export function importLibrary(event) {
 }
 
 export function readLocalJSON() {
-  var loc = window.location.pathname;
-  var serverDir = loc.substring(0, loc.lastIndexOf('/'));
   $.ajax({
     type: "GET",
     url: serverDir + '/library.json',
     data: {},
     crossDomain:true,
-    headers: { 
-      "Access-Control-Allow-Origin" : "*",
-      'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
-    },
+    headers: header,
     success: function(data) {
       JsonTraitment(data);
     }
@@ -196,6 +217,9 @@ export function JsonTraitment(obj) {
       url = url.replace(/\\/g, '/');
       const table = url.split("/");
       const fileName = table[table.length-1];
+      if(fileName.length > 45) {
+        fileName = fileName.substring(0,40) + " ...";
+      }
       var item = $("<li class='atsvList'><i class='fas fa-film'></i><p>"+ fileName +"</p></li>");
       item.attr("url", url);
       item.on("click", function(e) {
@@ -204,8 +228,6 @@ export function JsonTraitment(obj) {
         e.target.classList.add("bolder");
         url = e.target.parentNode.getAttribute("url");
         if(url.startsWith("./") || url.startsWith("/")) {
-          var loc = window.location.pathname;
-          var serverDir = loc.substring(0, loc.lastIndexOf('/'));
           url = serverDir + url.replace('./','/')
         }
         getFile(url);
@@ -223,22 +245,48 @@ export async function onReaderLoad(event){
 
 export function getFile(url) {
   upload.openfile(null);
+  $("#progress").remove();
+  var parent = $(".bolder").parent();
+  parent.append("<div id='progress' class='progress' value='0'></div>");
+  var progressBar = $("#progress");
   $.ajax({
-    type: "GET",
-    url: url,
-    data: {},
-    crossDomain:true,
-    xhrFields: {
-      responseType: 'arraybuffer',
-    },
-    headers: { 
-      "Access-Control-Allow-Origin" : "*",
-      'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
-    },
-    success: function(data) {
-      var encodedData = new AMF.Deserializer(data);
-      upload.repeat(encodedData);
-    }
+    xhr: function () {
+        var xhr = new window.XMLHttpRequest();
+        xhr.upload.addEventListener("progress", function (evt) {
+              if (evt.lengthComputable) {
+                  var percentComplete = evt.loaded / evt.total;
+                  progressBar.css({
+                      width: percentComplete * 100 + '%'
+                  });
+                  if (percentComplete === 1) {
+                    progressBar.addClass('hide');
+                  }
+              }
+          }, false);
+          xhr.addEventListener("progress", function (evt) {
+              if (evt.lengthComputable) {
+                  var percentComplete = evt.loaded / evt.total;
+                  progressBar.css({
+                      width: percentComplete * 100 + '%'
+                  });
+              }
+          }, false);
+          return xhr;
+      },
+      type: "GET",
+      url: url,
+      data: {},
+      crossDomain:true,
+      xhrFields: {
+        responseType: 'arraybuffer',
+      },
+      headers: header,
+      crossDomain: true,
+      success: function (data) {
+        var encodedData = new AMF.Deserializer(data);
+        var byteLength = encodedData.buf.byteLength
+        upload.repeat(encodedData, byteLength);
+      }
   });
 }
 

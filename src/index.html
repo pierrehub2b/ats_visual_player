@@ -10,31 +10,31 @@
       <div class="left-pane" id="left-pane">
         <a class="closebtn">&times;</a>
         <!-- <input type="file" id="uploader" /> -->
-        <div id="addLibrary"><i class="fas fa-file-alt"></i><span name="__addLibrary"></span></div>
-        <div id="addFiles"><i class="fas fa-film"></i><span name="__openATSV"></span></div>
+        <div id="addLibrary"><i class="fas fa-file-alt"></i><span name="ADDLIBRARY"></span></div>
+        <div id="addFiles"><i class="fas fa-film"></i><span name="OPENATSV"></span></div>
         <input id="addLibraryInput" type="file" accept=".json" style="display: none"/>
         <input id="addFilesInput" type="file" accept=".atsv" style="display: none" multiple/>
-        <h4 id="libraryTitle"><i id="libraryTitleCaret" class="fas fa-caret-down"></i><span name="__ATSVLibrary"></span>:</h4>
+        <h4 id="libraryTitle"><i id="libraryTitleCaret" class="fas fa-caret-down"></i><span name="ATSVLIBRARY"></span>:</h4>
         <div id="listATSV"></div>
         <div id="chapterContainer">
-        <h4 id="chapterTitle"><i id="chapterTitleCaret" class="fas fa-caret-down"></i><span name="__chaptersList"></span>:</h4>
-        <div id="chaptersList"></div>
-        <div id="output">
-          <div id="spinner" class="cercleChargement">
-            <div id="chargementCheckmark" class="chargementCheckmark draw"></div>
-          </div>
-          <p id="pourcentageAvancement"></p>
+          <h4 id="chapterTitle"><i id="chapterTitleCaret" class="fas fa-caret-down"></i><span name="CHAPTERS"></span>:</h4>
+          <div id="chaptersList"></div>
         </div>
-      </div>
       </div>
           
       <div class="panes-separator" id="panes-separator"></div>
           
       <div class="right-pane" id="player">
           <div id="flashReport">
+              <div id="output">
+                  <div id="spinner" class="loadingCircle">
+                    <div id="loadingCheckmark" class="loadingCheckmark draw"></div>
+                  </div>
+                  <p id="loadingPercent"></p>
+                </div>
             <div id="flashReportData"></div>
           </div>
-          <div id="fondEcran"></div>
+          <div id="screenBackground"></div>
           <div class="nav">
             <div id="navButtons">
               <div id="playLabel"><i class="fas fa-play"></i></div>
@@ -49,11 +49,11 @@
             </div>
   
             <div id="navDisplay">
-                <span id="avancementPointeur"></span>
+                <span id="rangePointer"></span>
             </div>
           </div>
         </div>
     </div>
-    <span class="boutonOuverture" style="font-size:30px;cursor:pointer">&#9776;</span>
+    <span class="openingButton" style="font-size:30px;cursor:pointer">&#9776;</span>
   </body>
 </html>

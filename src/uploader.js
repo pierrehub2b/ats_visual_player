@@ -3,25 +3,26 @@ import 'babel-polyfill';
 import { TimelineMax } from "gsap/TweenMax";
 var $ = require('jQuery');
 import './simpledrag';
-import { replaceLocal } from './app';
+import { replaceLocal, defaultLocale } from './app';
 
 //#region objets du DOM
 export var progressSlider = $("#progressSlider");
 export var navSlider = $("#navSlider");
-export var fondEcran = $("#fondEcran");
+export var screenBackground = $("#screenBackground");
 export var imgToolTip = $("#imgToolTip");
-export var flashReport = $("#flashReportData");
-export var avancementPointeur = $("#avancementPointeur");
+export var flashReportData = $("#flashReportData");
+export var flashReport = $("#flashReport");
+export var rangePointer = $("#rangePointer");
 export var playLabelBtn = $("#playLabel");
 export var pauseLabelBtn = $("#pauseLabel");
 export var restartBtn = $("#restart");
 export var output = $("#output");
 export var spinner = $("#spinner");
-export var chargementCheckmark = $("#chargementCheckmark");
+export var loadingCheckmark = $("#loadingCheckmark");
 export var player = $("#player");
 export var chapterTitle = $("#chapterTitle");
 export var menu = $("#menu");
-export var pourcentageAvancement = $("#pourcentageAvancement");
+export var loadingPercent = $("#loadingPercent");
 export var scriptName = $("#scriptName");
 //#endregion
 
@@ -31,7 +32,8 @@ export var images = [];
 export var deferred = $.Deferred();
 export var duration;
 export var results = [];
-export var timelLineLite; 
+export var timelLineLite;
+export var currentByteLenght; 
 //#endregion
 
 // enum sur les différents types d'objets dans allData
@@ -70,7 +72,7 @@ export function setupScreen() {
     closeNav();
   });
 
-  $(".boutonOuverture").on("click", function() {
+  $(".openingButton").on("click", function() {
     openNav();
   });
 
@@ -112,19 +114,20 @@ export function setupScreen() {
 
 export function toAMFObjects(data) {
   var encodedData = new AMF.Deserializer(data.buffer);
-  repeat(encodedData);
+  currentByteLenght = encodedData.buf.byteLength;
+  repeat(encodedData, null);
 }
 
 export function traitmentDone() {
-  spinner.addClass("chargementTermine");
-  chargementCheckmark.css("display", "block");
+  spinner.addClass("loadingDone");
+  loadingCheckmark.css("display", "block");
   var comments = allData.filter(_ => _.type === elementType.CHAPTER);
   for (let comm = 0; comm < comments.length; comm++) {
     const commentaire = comments[comm];
     //create line in timeline
     var left = (100 * getChapterPosition(commentaire.timeLine)) * navSlider.width() /100;
-    $('<div class="chapitresProgressBar" id="chapitresProgressBar'+commentaire.timeLine+'"></div>').appendTo('#navSlider');
-    var component = $("#chapitresProgressBar"+commentaire.timeLine);
+    $('<div class="chapterProgressBar" id="chapterProgressBar'+commentaire.timeLine+'"></div>').appendTo('#navSlider');
+    var component = $("#chapterProgressBar"+commentaire.timeLine);
     component.css("left", left + "px");
     component.on("mouseover", function(event) {
       updateTooltipImg(event);
@@ -141,7 +144,7 @@ export function traitmentDone() {
 
   var dt = new Date();
   dt.setHours(0,0,0,duration);
-  $("#duration").html(replaceLocal({name: "__scriptDuration"}) + ": " + getDuration(dt));
+  $("#duration").html(replaceLocal({name: "SCRIPTDURATION"}) + ": " + getDuration(dt));
 }
 
 export function getDuration(date) {
@@ -151,12 +154,18 @@ export function getDuration(date) {
   return str;
 } 
 
-export function repeat(encodedData) {
+export function repeat(encodedData, byteLength) {
+  if(byteLength) {
+    currentByteLenght = byteLength;
+  }
+  if(currentByteLenght != encodedData.buf.byteLength) {
+    return;
+  }
   if (encodedData.pos >= encodedData.buf.byteLength) { 
     results = encodedData.objectReferences.filter(_ => _ != undefined && _.type);
     if(results.length > 0) {
       resultSetup(results, percent);
-      pourcentageAvancement.html(100 + "%");
+      loadingPercent.html(100 + "%");
       updateLoadingPointer(100);
     }
     traitmentDone();
@@ -168,12 +177,12 @@ export function repeat(encodedData) {
     encodedData.objectReferences = [];
     resultSetup(results, percent);
     var percent = Math.round(encodedData.pos/encodedData.buf.byteLength * 100);
-    pourcentageAvancement.html(percent + "%");
+    loadingPercent.html(percent + "%");
     updateLoadingPointer(percent);
   }
   
   setTimeout(function() {
-    repeat(encodedData);
+    repeat(encodedData, null);
   });
   
   //deferred.notify(results, Math.round(encodedData.pos/encodedData.buf.byteLength * 100)); 
@@ -181,7 +190,7 @@ export function repeat(encodedData) {
 }
 
 export function updateTooltipImg(event) {
-  var currentMouseXPos = (event.clientX - fondEcran.offset().left) - 70;
+  var currentMouseXPos = (event.clientX - screenBackground.offset().left) - 70;
   if(images.length > 0) {
     
     var intvalue = Math.round(calcSliderPos(event));
@@ -205,19 +214,19 @@ export function calcSliderPos(e) {
 
 export function openfile(file) {
   timelLineLite = new TimelineMax({ paused: true, repeat: 0, onUpdate:adjustUI});
-  fondEcran.html("");
+  screenBackground.html("");
   allData = [];
   images = [];
-  spinner.removeClass("chargementTermine");
-  flashReport.html("");
-  chargementCheckmark.css("display", "none");
+  spinner.removeClass("loadingDone");
+  flashReportData.html("");
+  loadingCheckmark.css("display", "none");
   chapterTitle.css("display", "none");
   output.css("display", "inline-block");
-  $(".chapitresProgressBar").remove();
+  $(".chapterProgressBar").remove();
   $("#menu > li").remove();
   duration = 0;
   timelLineLite.progress(0).pause();
-  updateavancementPointeur();
+  updaterangePointer();
 
   if(file != null) {
     loadFile(file);
@@ -267,21 +276,21 @@ export function encode (input) {
 //#region maj de l'UI en fonction de l'avancée du slider
 export function adjustUI() {
   progressSlider.val(timelLineLite.progress());
-  updateavancementPointeur();
+  updaterangePointer();
 }
 
 export function update(){
   timelLineLite.progress(parseFloat(progressSlider.val())).pause();
-  updateavancementPointeur();
+  updaterangePointer();
 }
 
 export function updateByVal(value){
   timelLineLite.pause();
   timelLineLite.progress(value);
-  updateavancementPointeur();
+  updaterangePointer();
 }
 
-export function updateavancementPointeur() {
+export function updaterangePointer() {
   if(progressSlider.val() == 0 && flashReport.css("display") == "none") {
     flashReport.css("display", "block");
   } else if(progressSlider.val() > 0 && flashReport.css("display") == "block") {
@@ -289,7 +298,7 @@ export function updateavancementPointeur() {
   }
 
   var v = parseFloat(progressSlider.val()) * 100;
-  avancementPointeur.html(v.toFixed());
+  rangePointer.html(v.toFixed());
   var val = (parseFloat(progressSlider.val()) - progressSlider.attr("min") / (progressSlider.attr("max") - progressSlider.attr("min")));
   var percent = val * 100;
 
@@ -324,7 +333,6 @@ export function format(str, col) {
   });
 };
 
-// eneleve les tags HTML dans les images de chapitres (par exemple les images)
 export function stripHtml(html){
   // Create a new div element
   var temporalDivElement = document.createElement("div");
@@ -359,28 +367,41 @@ export function resultSetup(result, percent) {
     scriptName.html(flashReportObject.name);
     $('head title', window.parent.document).text(flashReportObject.name);
     scriptName.css("display", "inline-block");
+
+    var locale = "";
+    switch(defaultLocale) {
+      case 'fr':
+        locale = 'fr-FR';
+        break;
+      case 'en':
+        locale = 'en-US';
+        break;
+    }
+
+    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour:"2-digit", minute:"2-digit", second:"2-digit" };
+
     var frData = {
       name: flashReportObject.name,
       id:flashReportObject.id,
       author:flashReportObject.author,
-      started:new Date(parseInt(flashReportObject.started)),
-      duration:flashReportObject.duration,
+      started:new Date(parseInt(flashReportObject.started)).toLocaleDateString(locale, options),
+      duration:replaceLocal({ name: "LOADINGDURATION"}),
       description:flashReportObject.description,
       prerequisite:flashReportObject.prerequisite,
       groups:flashReportObject.groups
     }
 
-    var output = format("<h3>"+ replaceLocal({ name: "__visualReport"}) +"</h3>" +
-    "<div>"+ replaceLocal({ name: "__scriptName"}) +": {name}</div>"+
-    "<div>"+ replaceLocal({ name: "__scriptId"}) +": {id}</div>" +
-    "<div>"+ replaceLocal({ name: "__scriptAuthor"}) +": {author}</div>" +
-    "<div>"+ replaceLocal({ name: "__scriptStarter"}) +": {started}</div>" +
-    "<div id='duration'>"+ replaceLocal({ name: "__scriptDuration"}) +": {duration}</div>" +
-    "<div>"+ replaceLocal({ name: "__scriptDescription"}) +": {description}</div>" +
-    "<div>"+ replaceLocal({ name: "__scriptPrerequisite"}) +": {prerequisite}</div>" +
-    "<div>"+ replaceLocal({ name: "__scriptGroups"}) +": {groups}</div>",frData);
+    var output = format("<h3>"+ replaceLocal({ name: "VISUALREPORT"}) +"</h3>" +
+    "<div>"+ replaceLocal({ name: "SCRIPTNAME"}) +": {name}</div>"+
+    "<div>"+ replaceLocal({ name: "SCRIPTID"}) +": {id}</div>" +
+    "<div>"+ replaceLocal({ name: "SCRIPTAUTHOR"}) +": {author}</div>" +
+    "<div>"+ replaceLocal({ name: "SCRIPTSTARTER"}) +": {started}</div>" +
+    "<div id='duration'>"+ replaceLocal({ name: "SCRIPTDURATION"}) +": {duration}</div>" +
+    "<div>"+ replaceLocal({ name: "SCRIPTDESCRIPTION"}) +": {description}</div>" +
+    "<div>"+ replaceLocal({ name: "SCRIPTPREREQUISTES"}) +": {prerequisite}</div>" +
+    "<div>"+ replaceLocal({ name: "SCRIPTGROUPS"}) +": {groups}</div>",frData);
 
-    flashReport.append(output);
+    flashReportData.append(output);
     allData.push({timeLine: flashReportObject.timeLine, element: flashReportObject.element, type: elementType.FLASHREPORT, img: null});
   }
 
@@ -405,7 +426,7 @@ export function resultSetup(result, percent) {
           imgCounter++;
           allData.push({timeLine: element.timeLine, element: element, type: elementType.IMAGE, img: imgPreview });
           currentImgs.push({timeLine: element.timeLine, element: element, type: elementType.IMAGE, img: imgPreview });
-          fondEcran.append(imgPreview);
+          screenBackground.append(imgPreview);
         } 
       }
     }
@@ -421,17 +442,23 @@ export function resultSetup(result, percent) {
     chapterTitle.css("display", "block");
   }
 
-  $(".chapitresProgressBar").remove();
+  $(".chapterProgressBar").remove();
   $("#chaptersList > li").remove();
 
   var parent = $(".bolder").parent();
-  $("#chapterContainer").insertAfter(parent);
+  var chapterContainer = $("#chapterContainer");
+  $("#chapterContainer").remove();
+  parent.append(chapterContainer);
 
   for (let comm = 0; comm < comments.length; comm++) {
     const commentaire = comments[comm];
+    if(commentaire.element.data.length > 75) {
+      commentaire.element.data = commentaire.element.data.substring(0, 70) + " ...";
+    }
     $('<li class="chapterNode" id="chapter'+ commentaire.timeLine +'">' + stripHtml(commentaire.element.data) + '</li>').appendTo($("#chaptersList"));
     var component = $("#chapter" + commentaire.timeLine);
-    component.click(function() {
+    component.click(function(event) {
+      event.stopPropagation();
       updateByVal(getChapterPosition(commentaire.timeLine));
     });
     component.on("mouseover", function(event) {

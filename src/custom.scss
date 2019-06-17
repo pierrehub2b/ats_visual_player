@@ -8,13 +8,18 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-#pourcentageAvancement {
+#loadingPercent {
     color: $agilitestOrange;
     font-size: $fontSize;
 }
 
-#fondEcran {
+#screenBackground {
     background-color: black;
+    background-image: url("./images/agilitest_logo.png");
+    background-repeat: no-repeat;
+    background-attachment: inherit;
+    background-position: center;
+    background-size: 30vh;
 }
 
 #imgToolTip {
@@ -26,14 +31,9 @@ body {
     color: $agilitestWhite;
 }
 
-#avancementPointeur {
+#rangePointer {
     color: $agilitestOrange;
 }
-
-#logo {
-    opacity: 0.5;
-    background-image: url("./images/agilitest_logo.png");
-  }
 
 #flashReport {
     color: $agilitestWhite;
@@ -44,7 +44,7 @@ body {
     background-color: $agilitestBlack;
 }
 
-.chapitresProgressBar {
+.chapterProgressBar {
     border-left: 4px solid $agilitestOrange;
 }
 
@@ -56,16 +56,16 @@ input[type=range]::-moz-range-thumb {
     background-color: $agilitestOrange;
 }
 
-.cercleChargement {
+.loadingCircle {
     border: 1px solid $agilitestWhite;
     border-left-color: $agilitestOrange;
 }
 
-.chargementTermine {
+.loadingDone {
     border-color: $agilitestOrange;
 }
 
-.chargementCheckmark {    
+.loadingCheckmark {    
     &:after {
         border-right: 3px solid $agilitestOrange;
         border-top: 3px solid $agilitestOrange;
@@ -77,19 +77,14 @@ input[type=range]::-moz-range-thumb {
 }
 
 .left-pane {
-    width: 18%;
+    width: 25%;
     background: $agilitestWhite;
     color: $agilitestBlack;
   }
 
-.panelGauche li {
-    font-size: $fontSize;
-}
-
-.panelGauche h2 {
-    color: $agilitestOrange;
-    font-size: 20px;
-}
+.progress {
+    background: $agilitestOrange;
+  }
 
 #scriptName {
     color: $agilitestWhite;
@@ -97,7 +92,7 @@ input[type=range]::-moz-range-thumb {
     margin: 5px;
 }
 
-.boutonOuverture {
+.openingButton {
     color: $agilitestWhite;
 }
 

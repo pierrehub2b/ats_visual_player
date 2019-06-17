@@ -15,33 +15,24 @@ body {
   z-index: 1; }
 
 #flashReport div {
-  margin: 10px 10px; }
+  margin: 10px 10px;
+  vertical-align: middle; }
 
-#flashReport #logo {
-  position: fixed;
-  left: 0;
-  right: 0;
-  margin: auto;
-  width: 20vw;
-  top: 0;
-  bottom: 0;
-  background-repeat: no-repeat;
-  background-position: center;
-  height: 20vw;
-  background-size: contain; }
-
-#fondEcran {
+#screenBackground {
   display: flex;
   padding: 0;
   margin: 0;
   justify-content: center;
   text-align: center;
   position: relative;
-  transition: 0.5s;
   width: 100%;
-  height: 93vh; }
+  height: 93vh;
+  background-repeat: no-repeat;
+  background-attachment: inherit;
+  background-position: center;
+  background-size: 30vh; }
 
-.chapitresProgressBar {
+.chapterProgressBar {
   height: 15px;
   position: relative;
   /* display: block; */
@@ -50,7 +41,7 @@ body {
   top: -20px;
   cursor: pointer; }
 
-#fondEcran img {
+#screenBackground img {
   position: absolute;
   max-width: 100%;
   max-height: 100%;
@@ -105,7 +96,7 @@ body {
   font-size: 15px;
   margin: 0 3px; }
 
-#avancementPointeur {
+#rangePointer {
   font-size: 15px;
   display: inline-block;
   vertical-align: super; }
@@ -114,7 +105,7 @@ body {
   padding: 0;
   margin: 0;
   position: absolute;
-  width: 82vw;
+  width: 75vw;
   height: 100vh;
   top: 0;
   transition: 0.5s;
@@ -123,7 +114,7 @@ body {
   z-index: 0;
   overflow: hidden; }
 
-#pourcentageAvancement {
+#loadingPercent {
   display: inline-block;
   margin: 5px; }
 
@@ -166,7 +157,7 @@ input[type=range]::-moz-range-thumb {
   margin: 0 10px;
   padding: 10px 0; }
 
-.cercleChargement {
+.loadingCircle {
   margin-top: 2.5px;
   animation: loader-spin 1.2s infinite linear;
   position: relative;
@@ -176,19 +167,19 @@ input[type=range]::-moz-range-thumb {
   width: 20px;
   height: 20px; }
 
-.chargementTermine {
+.loadingDone {
   -webkit-animation: none;
   animation: none;
   transition: border 500ms ease-out; }
 
-.chargementCheckmark {
+.loadingCheckmark {
   display: none; }
-  .chargementCheckmark.draw:after {
+  .loadingCheckmark.draw:after {
     animation-duration: 800ms;
     animation-timing-function: ease;
-    animation-name: chargementCheckmark;
+    animation-name: loadingCheckmark;
     transform: scaleX(-1) rotate(135deg); }
-  .chargementCheckmark:after {
+  .loadingCheckmark:after {
     opacity: 1;
     height: 10px;
     width: 5px;
@@ -204,7 +195,7 @@ input[type=range]::-moz-range-thumb {
   100% {
     transform: rotate(360deg); } }
 
-@keyframes chargementCheckmark {
+@keyframes loadingCheckmark {
   0% {
     height: 0;
     width: 0;
@@ -234,10 +225,20 @@ input[type=range]::-moz-range-thumb {
   margin: 10px 20px;
   cursor: pointer; }
 
+#addLibrary:hover, #addFiles:hover {
+  font-weight: bolder; }
+
+.progress {
+  display: block;
+  height: 2px;
+  transition: width .3s;
+  width: 0px;
+  margin-top: 10px; }
+
 #addLibrary i, #addFiles i {
   width: 30px; }
 
-.boutonOuverture {
+.openingButton {
   position: absolute;
   left: 30px;
   top: 30px;
@@ -245,7 +246,10 @@ input[type=range]::-moz-range-thumb {
 
 #listATSV {
   padding-left: 0px;
-  margin-top: 5px; }
+  margin-top: 5px;
+  overflow-y: auto;
+  padding-right: 10px;
+  height: 80vh; }
 
 #listATSV ul {
   padding-left: 30px; }
@@ -257,6 +261,9 @@ input[type=range]::-moz-range-thumb {
 
 .atsvList p:hover {
   font-weight: bold; }
+
+.atsvList p {
+  font-size: 17px; }
 
 .left-pane .chapterNode {
   padding: 4px 0;
@@ -285,7 +292,6 @@ input[type=range]::-moz-range-thumb {
   overflow: hidden; }
 
 .left-pane {
-  width: 18%;
   z-index: 4;
   overflow: hidden; }
 
@@ -307,8 +313,11 @@ input[type=range]::-moz-range-thumb {
 
 #chaptersList {
   overflow-y: auto;
-  overflow-x: hidden;
-  margin-top: 20px; }
+  overflow-x: hidden; }
 
 #chapterTitle i, #libraryTitle i {
   display: inline-block; }
+
+#chapterContainer {
+  font-size: 15px;
+  margin-left: 30px; }
