@@ -10,7 +10,14 @@ body {
   background-image: url(abccc4763757dba46ce2bb12ca861dca.png); }
 
 .watermark {
-  background-image: url(abccc4763757dba46ce2bb12ca861dca.png); }
+  background-image: url(abccc4763757dba46ce2bb12ca861dca.png);
+  opacity: 0.5;
+  color: white;
+  left: 30%;
+  top: 35%;
+  transform: rotate(-30deg);
+  height: 30vh;
+  width: 30vw; }
 
 #imgToolTip {
   background-color: #FCFCFC;

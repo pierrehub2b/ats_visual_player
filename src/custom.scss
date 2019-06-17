@@ -20,6 +20,13 @@ body {
 
 .watermark {
     background-image: url("./images/agilitest_logo.png");
+    opacity: 0.5;
+    color: white;
+    left: 30%;
+    top: 35%;
+    transform: rotate(-30deg);
+    height: 30vh;
+    width: 30vw;
 }
 
 #imgToolTip {
