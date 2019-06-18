@@ -1,9 +1,9 @@
 ADDLIBRARY=Importer une librairie ATSV
-OPENATSV=Ajouter un rapport visual ATS
+OPENATSV=Ajouter un rapport visuel ATS
 ATSVLIBRARY=Librairie ATSV
 CHAPTERS=Chapitres
 LOCALFOLDER=Dossier local
-VISUALREPORT=Rapport visuel
+VISUALREPORT=ActionTestScript: rapport visuel
 SCRIPTNAME=Nom du script
 SCRIPTID=Identifiant
 SCRIPTAUTHOR=Créateur
@@ -14,3 +14,4 @@ SCRIPTPREREQUISTES=Prérequis
 SCRIPTGROUPS=Groupes
 LOADINGDURATION=Calcul en cours
 LOADING=Téléchargement en cours...
+UNDEFINEDVALUE=Non renseigné

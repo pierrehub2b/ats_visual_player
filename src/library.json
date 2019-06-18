@@ -5,7 +5,10 @@
       "urls" : [
         "/ATSV/fonctionnel.catalogue.tests_catalogues.admin_si.actif.Catalogue_AdminSI_Actif_01Consulter (1).atsv", 
         "/ATSV/sample.websuite.s00_tranverse.scenario_websuite_ConsExterne_190419.atsv",
-        "/ATSV/subscripts.chapitres.atsv"
+        "/ATSV/subscripts.chapitres.atsv",
+        "/ATSV/inputs.DataInput.atsv",
+        "/ATSV/inputs.HtmlInputs.atsv",
+        "/ATSV/mouse.HoverAndDrag.atsv"
       ]
     },
     {

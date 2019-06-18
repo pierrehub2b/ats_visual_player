@@ -107,9 +107,28 @@ body {
   cursor: default;
   width: 150px;
   height: 100px;
-  top: -90px;
+  top: -100px;
   left: 0px;
   z-index: 3;
+}
+
+#flashReport a:link {
+  color: #FCFCFC;
+}
+
+/* visited link */
+#flashReport a:visited {
+  color: #FCFCFC;
+}
+
+/* mouse over link */
+#flashReport a:hover {
+  color: #FCFCFC;
+}
+
+/* selected link */
+#flashReport a:active {
+  color: #FCFCFC;
 }
 
 //slider
@@ -151,22 +170,10 @@ body {
 }
 
 .watermark {
-  opacity: 0.5;
-  color: white;
   position: absolute;
-  left: 30%;
-  /* right: 0; */
-  top: 35%;
-  /* bottom: 50%; */
-  /* display: flex; */
-  /* height: 200px; */
-  /* width: auto; */
   z-index: 10;
   text-align: center;
-  transform: rotate(-30deg);
   display: none;
-  height: 30vh;
-  width: 30vw;
   background-repeat: no-repeat;
   background-size: contain;
 }
@@ -383,8 +390,12 @@ $check-thickness: 3px;
   width: 95%;
 }
 
-#libraryTitle, #chapterTitle {
+#libraryTitle {
   margin: 20px 0 2px 20px;
+}
+
+#chapterTitle {
+  margin: 5px 0 2px 20px;
 }
 
 #chapterTitle {
@@ -432,6 +443,10 @@ $check-thickness: 3px;
 
 #chapterContainer {
   font-size: 15px;
-  margin-left: 30px;
+}
+
+#loadingLabel {
+  display: inline-block;
+  margin-left: 10px;
 }
 

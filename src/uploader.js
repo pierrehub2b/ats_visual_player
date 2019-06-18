@@ -4,6 +4,7 @@ import { TimelineMax } from "gsap/TweenMax";
 var $ = require('jQuery');
 import './simpledrag';
 import { replaceLocal, defaultLocale } from './app';
+import { create } from 'domain';
 
 //#region objets du DOM
 export var progressSlider = $("#progressSlider");
@@ -33,7 +34,9 @@ export var deferred = $.Deferred();
 export var duration;
 export var results = [];
 export var timelLineLite;
-export var currentByteLenght; 
+export var currentUID; 
+export var atsvUrl = "https://github.com/pierrehub2b/actiontestscript";
+export var chapterExpanded = true;
 //#endregion
 
 // enum sur les différents types d'objets dans allData
@@ -43,21 +46,34 @@ export const elementType = {
   IMAGE: 'image'
 }
 
+export function create_UUID() {
+  // I generate the UID from two parts here 
+  // to ensure the random number provide enough bits.
+  var firstPart = (Math.random() * 46656) | 0;
+  var secondPart = (Math.random() * 46656) | 0;
+  firstPart = ("000" + firstPart.toString(36)).slice(-3);
+  secondPart = ("000" + secondPart.toString(36)).slice(-3);
+  return firstPart + secondPart;
+}
+
 // instancie timeLineLite et met en place les eventListeners sur les boutons
 export function setupScreen() {
   timelLineLite = new TimelineMax({ paused: true, repeat: 0, onUpdate:adjustUI});
   
   progressSlider.on("change", update);
 
-  playLabelBtn.on("click", function() {
+  playLabelBtn.on("click", function(event) {
+    event.stopPropagation();
     timelLineLite.play();
   });
 
-  restartBtn.on("click", function() {
+  restartBtn.on("click", function(event) {
+    event.stopPropagation();
     timelLineLite.restart();
   });
 
-  pauseLabelBtn.on("click", function() {
+  pauseLabelBtn.on("click", function(event) {
+    event.stopPropagation();
     timelLineLite.pause();
   });
 
@@ -68,11 +84,13 @@ export function setupScreen() {
     imgToolTip.css("display", "none");
   });
 
-  $(".closebtn").on("click", function() {
+  $(".closebtn").on("click", function(event) {
+    event.stopPropagation();
     closeNav();
   });
 
-  $(".openingButton").on("click", function() {
+  $(".openingButton").on("click", function(event) {
+    event.stopPropagation();
     openNav();
   });
 
@@ -114,8 +132,9 @@ export function setupScreen() {
 
 export function toAMFObjects(data) {
   var encodedData = new AMF.Deserializer(data.buffer);
-  currentByteLenght = encodedData.buf.byteLength;
-  repeat(encodedData, null);
+  currentUID = create_UUID();
+  encodedData.uuid = currentUID;
+  repeat(encodedData, false);
 }
 
 export function traitmentDone() {
@@ -123,6 +142,7 @@ export function traitmentDone() {
   var v = parseFloat(progressSlider.val()) * 100;
   rangePointer.html(v.toFixed());
   loadingCheckmark.css("display", "block");
+  output.css("display", "none");
   var comments = allData.filter(_ => _.type === elementType.CHAPTER);
   for (let comm = 0; comm < comments.length; comm++) {
     const commentaire = comments[comm];
@@ -157,11 +177,12 @@ export function getDuration(date) {
   return str;
 } 
 
-export function repeat(encodedData, byteLength) {
-  if(byteLength) {
-    currentByteLenght = byteLength;
+export function repeat(encodedData, newClick) {
+  if(newClick) {
+    currentUID = create_UUID();
+    encodedData.uuid = currentUID;
   }
-  if(currentByteLenght != encodedData.buf.byteLength) {
+  if(currentUID != encodedData.uuid) {
     return;
   }
   if (encodedData.pos >= encodedData.buf.byteLength) { 
@@ -185,7 +206,7 @@ export function repeat(encodedData, byteLength) {
   }
   
   setTimeout(function() {
-    repeat(encodedData, null);
+    repeat(encodedData, false);
   });
   
   //deferred.notify(results, Math.round(encodedData.pos/encodedData.buf.byteLength * 100)); 
@@ -371,6 +392,7 @@ export function resultSetup(result, percent) {
   rangePointer.html($("#output").clone());
 
   if(flashReportObject) {
+    $("#output").css("display", "block");
     scriptName.html(flashReportObject.name);
     $('head title', window.parent.document).text(flashReportObject.name);
     scriptName.css("display", "inline-block");
@@ -387,18 +409,19 @@ export function resultSetup(result, percent) {
 
     var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour:"2-digit", minute:"2-digit", second:"2-digit" };
 
+    var undefinedValue = replaceLocal({ name: "UNDEFINEDVALUE"});
     var frData = {
-      name: flashReportObject.name,
-      id:flashReportObject.id,
-      author:flashReportObject.author,
+      name: flashReportObject.name ? flashReportObject.name : undefinedValue,
+      id:flashReportObject.id ? flashReportObject.id : undefinedValue,
+      author:flashReportObject.author ? flashReportObject.author : undefinedValue,
       started:new Date(parseInt(flashReportObject.started)).toLocaleDateString(locale, options),
-      duration:replaceLocal({ name: "LOADINGDURATION"}),
-      description:flashReportObject.description,
-      prerequisite:flashReportObject.prerequisite,
-      groups:flashReportObject.groups
+      duration: replaceLocal({ name: "LOADINGDURATION"}),
+      description:flashReportObject.description ? flashReportObject.description : undefinedValue,
+      prerequisite:flashReportObject.prerequisite ? flashReportObject.prerequisite : undefinedValue,
+      groups:flashReportObject.groups ? flashReportObject.groups : undefinedValue
     }
 
-    var output = format("<h3>"+ replaceLocal({ name: "VISUALREPORT"}) +"</h3>" +
+    var output = format("<h3><a href='"+ atsvUrl +"' target='_blank'>"+ replaceLocal({ name: "VISUALREPORT"}) +"</a></h3>" +
     "<div>"+ replaceLocal({ name: "SCRIPTNAME"}) +": {name}</div>"+
     "<div>"+ replaceLocal({ name: "SCRIPTID"}) +": {id}</div>" +
     "<div>"+ replaceLocal({ name: "SCRIPTAUTHOR"}) +": {author}</div>" +
@@ -456,6 +479,17 @@ export function resultSetup(result, percent) {
   var chapterContainer = $("#chapterContainer");
   $("#chapterContainer").remove();
   parent.append(chapterContainer);
+  chapterExpanded = true;
+  chapterTitle.on("click", function(event) {
+    event.stopPropagation();
+    $('#chaptersList').slideToggle(200);
+    chapterExpanded = !chapterExpanded;
+    if(chapterExpanded) {
+      $("#chapterTitleCaret").removeClass("fa-caret-right").addClass("fa-caret-down");
+    } else {
+      $("#chapterTitleCaret").removeClass("fa-caret-down").addClass("fa-caret-right");
+    }
+  });
 
   for (let comm = 0; comm < comments.length; comm++) {
     const commentaire = comments[comm];

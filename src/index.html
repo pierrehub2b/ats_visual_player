@@ -3,6 +3,9 @@
   <head>
     <title>Player HTML</title>
     <meta charset="UTF-8">
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="-1" />
     <link href="./webfonts/font.css" type="text/css" rel="stylesheet"> <!--load all styles -->
   </head>
   <body>
@@ -27,13 +30,14 @@
       <div class="right-pane" id="player">
           <div class="watermark"></div>
           <div id="flashReport">
-              <div id="output">
-                  <div id="spinner" class="loadingCircle">
-                    <div id="loadingCheckmark" class="loadingCheckmark draw"></div>
-                  </div>
-                  <p id="loadingPercent"></p>
-                </div>
+              
             <div id="flashReportData"></div>
+            <div id="output">
+              <div id="spinner" class="loadingCircle">
+                <div id="loadingCheckmark" class="loadingCheckmark draw"></div>
+              </div>
+              <p id="loadingPercent"></p>
+            </div>
           </div>
           <div id="screenBackground"></div>
           <div class="nav">

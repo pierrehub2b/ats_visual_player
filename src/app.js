@@ -6,7 +6,7 @@ import './app.scss';
 import './custom.scss';
 import AMF from 'amf-js';
 var $ = require('jQuery');
-import { setupScreen, interuptDeserialize, currentByteLenght } from './uploader';
+import { setupScreen, interuptDeserialize, currentUID, create_UUID } from './uploader';
 var upload = require('./uploader');
 export var addLibrary = $("#addLibrary");
 export var addFiles = $("#addFiles");
@@ -19,7 +19,6 @@ export var chaptersList = $("#chaptersList");
 export var flashReport = $("#flashReport");
 
 export var libraryExpanded = true;
-export var chapterExpanded = true;
 export var localeValues = null;
 export var defaultLocale = null;
 
@@ -109,22 +108,13 @@ libraryTitle.on("click", function(event) {
   }
 });
 
-chapterTitle.on("click", function(event) {
-  event.stopImmediatePropagation();
-  $('.chapterNode').slideToggle(200);
-  chapterExpanded = !chapterExpanded;
-  if(chapterExpanded) {
-    $("#chapterTitleCaret").removeClass("fa-caret-right").addClass("fa-caret-down");
-  } else {
-    $("#chapterTitleCaret").removeClass("fa-caret-down").addClass("fa-caret-right");
-  }
-});
-
-addLibrary.click(function () {
+addLibrary.click(function (event) {
+  event.stopPropagation();
   addLibraryInput.click();
 });
 
-addFiles.click(function () {
+addFiles.click(function (event) {
+  event.stopPropagation();
   addFilesInput.click();
 });
 //#endregion
@@ -163,11 +153,11 @@ export function uploadFiles(event) {
       }
       
       var item = $("<li class='atsvList'><i class='fas fa-film'></i><p>"+ fileName +"</p></li>");
-      item.on("click", function(e) {
+      item.on("click", function(event) {
+        event.stopPropagation();
         $(".atsvList > p").removeClass("bolder");
-        e.target.classList.add("bolder");
+        event.target.classList.add("bolder");
         upload.openfile(files[i]);
-        chapterExpanded = true;
       });
       folder.append(item);
     }
@@ -226,12 +216,11 @@ export function JsonTraitment(obj) {
       }
       var item = $("<li class='atsvList'><i class='fas fa-film'></i><p>"+ fileName +"</p></li>");
       item.attr("url", url);
-      item.on("click", function(e) {
-        e.stopPropagation();
+      item.on("click", function(event) {
+        event.stopPropagation();
         $(".atsvList > p").removeClass("bolder");
-        chapterExpanded = true;
-        e.target.classList.add("bolder");
-        url = e.target.parentNode.getAttribute("url");
+        event.target.classList.add("bolder");
+        url = event.target.parentNode.getAttribute("url");
         if(url) {
           if(url.startsWith("./") || url.startsWith("/")) {
             url = serverDir + url.replace('./','/')
@@ -252,12 +241,12 @@ export async function onReaderLoad(event){
 
 export function getFile(url) {
   upload.openfile(null);
-  $("#progress").remove();
+  $("#downloadProgress").remove();
   var parent = $(".bolder").parent();
-  parent.append("<div id='progress' class='progress' value='0'></div><div id='loadingLabel'>"+ replaceLocal({ name: "LOADING"}) +"</div>");
+  parent.append("<div id='downloadProgress'><i id='stopRequest' class='fas fa-stop-circle'></i><div id='loadingLabel'>"+ replaceLocal({ name: "LOADING"}) +"</div><div id='progress' class='progress' value='0'></div></div>");
   var progressBar = $("#progress");
-  var loadingLabel = $("#loadingLabel");
-  $.ajax({
+
+  var ajxRequest = $.ajax({ 
     xhr: function () {
         var xhr = new window.XMLHttpRequest();
         xhr.addEventListener("progress", function (evt) {
@@ -267,8 +256,7 @@ export function getFile(url) {
                     width: percentComplete * 100 + '%'
                 });
                 if(percentComplete == 1) {
-                  loadingLabel.remove();
-                  progressBar.remove();
+                  $("#downloadProgress").remove();
                 }
             }
         }, false);
@@ -285,9 +273,15 @@ export function getFile(url) {
       crossDomain: true,
       success: function (data) {
         var encodedData = new AMF.Deserializer(data);
-        var byteLength = encodedData.buf.byteLength;
-        upload.repeat(encodedData, byteLength);
+        upload.repeat(encodedData, true);
       }
+  });
+
+  var stopButton = $("#stopRequest");
+  stopButton.on("click", function(event) {
+    event.stopPropagation();
+    ajxRequest.abort();
+    $("#downloadProgress").remove();
   });
 }
 

@@ -13,11 +13,16 @@ body {
   background-image: url(abccc4763757dba46ce2bb12ca861dca.png);
   opacity: 0.5;
   color: white;
-  left: 30%;
-  top: 35%;
-  transform: rotate(-30deg);
-  height: 30vh;
-  width: 30vw; }
+  right: 30px;
+  bottom: 30px;
+  transform: rotate(0deg);
+  height: 50px;
+  width: 50px;
+  background-position: center; }
+
+#stopRequest {
+  font-size: 20px;
+  color: #FABA00; }
 
 #imgToolTip {
   background-color: #FCFCFC;
