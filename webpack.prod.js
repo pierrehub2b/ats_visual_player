@@ -23,7 +23,14 @@ module.exports = merge(common, {
           fallback: 'style-loader',
           use: ['css-loader', 'sass-loader']
         })
-      }
+      },
+      {
+        test: /animation\.scss$/,
+        use: appCSS.extract({
+          fallback: 'style-loader',
+          use: ['css-loader', 'sass-loader']
+        })
+      },
     ]
   },
   plugins: [

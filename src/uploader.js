@@ -4,7 +4,7 @@ import { TimelineMax } from "gsap/TweenMax";
 var $ = require('jQuery');
 import './simpledrag';
 import { replaceLocal, defaultLocale } from './app';
-import { create } from 'domain';
+import { implementAnimation as ActionGotoUrl } from './animations/gotuUrlAnimation';
 
 //#region objets du DOM
 export var progressSlider = $("#progressSlider");
@@ -535,5 +535,12 @@ export function animate(currentElement, index) {
       timelLineLite.to(images[index-1].img, 0, {
         display: "none"
       }); 
-    }   
+    }
+    
+    //implement animations
+    switch(currentElement.element.type) {
+      case "com.ats.script.actions.ActionGotoUrl":
+        ActionGotoUrl(currentElement.element);
+        break
+    }
 }

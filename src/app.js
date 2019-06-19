@@ -2,8 +2,9 @@ if (module.hot) {
   module.hot.accept()
 }
 
-import './app.scss';
-import './custom.scss';
+import './style/app.scss';
+import './style/custom.scss';
+import './style/animation.scss';
 import AMF from 'amf-js';
 var $ = require('jQuery');
 import { setupScreen, interuptDeserialize, currentUID, create_UUID } from './uploader';
