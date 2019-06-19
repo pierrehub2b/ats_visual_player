@@ -14,4 +14,5 @@ SCRIPTPREREQUISTES=Prerequistes
 SCRIPTGROUPS=Groups
 LOADINGDURATION=Calculating
 LOADING=Downloading...
-UNDEFINEDVALUE=Not specified
+UNDEFINEDVALUE=[Not specified]
+WATERMARK=Copyright in english

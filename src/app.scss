@@ -1,5 +1,6 @@
 html, body {
   height: 100%;
+  font-size: 15px;
 }
 
 body {
@@ -112,23 +113,12 @@ body {
   z-index: 3;
 }
 
-#flashReport a:link {
+#flashReport a:link,#flashReport a:visited,#flashReport a:hover,#flashReport a:active  {
   color: #FCFCFC;
 }
 
-/* visited link */
-#flashReport a:visited {
-  color: #FCFCFC;
-}
-
-/* mouse over link */
-#flashReport a:hover {
-  color: #FCFCFC;
-}
-
-/* selected link */
-#flashReport a:active {
-  color: #FCFCFC;
+.fa-film {
+  float: left;
 }
 
 //slider
@@ -144,12 +134,10 @@ body {
 //player
 #playLabel, #pauseLabel, #restart, #fullScreen {
   display: inline-block;
-  font-size: 15px;
   margin: 0 3px;
 }
 
 #rangePointer {
-  font-size: 15px;
   display: inline-block;
   vertical-align: super;
 }
@@ -176,6 +164,14 @@ body {
   display: none;
   background-repeat: no-repeat;
   background-size: contain;
+}
+
+.watermark img {
+  width: 100%;
+}
+
+.watermark a:link,.watermark a:visited,.watermark a:hover,.watermark a:active {
+  color: inherit;
 }
 
 #loadingPercent {
@@ -220,7 +216,7 @@ input[type=range]::-moz-range-thumb {
   border-radius: 50%;
 }
 
-#uploadFolder, #chapterTitle, .left-pane li, #spinner, #uploadFile, #listATSV p {
+#uploadFolder, #chapterTitle, #spinner, #uploadFile, #listATSV p {
   margin-left: 20px;
 }
 
@@ -354,22 +350,14 @@ $check-thickness: 3px;
   height: 80vh;
 }
 
-#listATSV ul {
+#listATSV div {
+  margin-left: 10px;
+}
+
+#listATSV ul {    
+  margin-left: 0px;
   padding-left: 30px;
-}
-
-.atsvList {
-  list-style-type: none;
-  word-break: break-all;
-  margin: 10px;
-}
-
-.atsvList p:hover {
-  font-weight: bold;
-}
-
-.atsvList p {
-  font-size: 17px;
+  margin-top: 5px;
 }
 
 .left-pane .chapterNode {
@@ -377,6 +365,7 @@ $check-thickness: 3px;
   text-decoration: none;
   display: block;
   transition: 0.3s;
+  margin-left: 5px;
 }
 
 .left-pane li:hover {
@@ -385,8 +374,7 @@ $check-thickness: 3px;
 
 .left-pane h2 {
   margin: 10px 0;
-  font-size: 1.2em;
-  word-break: break-all;
+  word-break: keep-all;
   width: 95%;
 }
 
@@ -395,7 +383,7 @@ $check-thickness: 3px;
 }
 
 #chapterTitle {
-  margin: 5px 0 2px 20px;
+  margin: 5px 0 2px 0px;
 }
 
 #chapterTitle {
@@ -442,7 +430,7 @@ $check-thickness: 3px;
 }
 
 #chapterContainer {
-  font-size: 15px;
+  font-size: 13px;
 }
 
 #loadingLabel {
@@ -450,3 +438,13 @@ $check-thickness: 3px;
   margin-left: 10px;
 }
 
+.atsvList {
+  list-style-type: none;
+  overflow: hidden;
+  margin: 10px;
+  word-break: keep-all;
+}
+
+.atsvList p:hover {
+  font-weight: bold;
+}

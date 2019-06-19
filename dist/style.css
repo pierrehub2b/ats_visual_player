@@ -1,5 +1,6 @@
 html, body {
-  height: 100%; }
+  height: 100%;
+  font-size: 15px; }
 
 body {
   margin: 0;
@@ -84,20 +85,11 @@ body {
   left: 0px;
   z-index: 3; }
 
-#flashReport a:link {
+#flashReport a:link, #flashReport a:visited, #flashReport a:hover, #flashReport a:active {
   color: #FCFCFC; }
 
-/* visited link */
-#flashReport a:visited {
-  color: #FCFCFC; }
-
-/* mouse over link */
-#flashReport a:hover {
-  color: #FCFCFC; }
-
-/* selected link */
-#flashReport a:active {
-  color: #FCFCFC; }
+.fa-film {
+  float: left; }
 
 #progressSlider {
   vertical-align: baseline;
@@ -108,11 +100,9 @@ body {
 
 #playLabel, #pauseLabel, #restart, #fullScreen {
   display: inline-block;
-  font-size: 15px;
   margin: 0 3px; }
 
 #rangePointer {
-  font-size: 15px;
   display: inline-block;
   vertical-align: super; }
 
@@ -136,6 +126,12 @@ body {
   display: none;
   background-repeat: no-repeat;
   background-size: contain; }
+
+.watermark img {
+  width: 100%; }
+
+.watermark a:link, .watermark a:visited, .watermark a:hover, .watermark a:active {
+  color: inherit; }
 
 #loadingPercent {
   display: inline-block;
@@ -172,7 +168,7 @@ input[type=range]::-moz-range-thumb {
   width: 13px;
   border-radius: 50%; }
 
-#uploadFolder, #chapterTitle, .left-pane li, #spinner, #uploadFile, #listATSV p {
+#uploadFolder, #chapterTitle, #spinner, #uploadFile, #listATSV p {
   margin-left: 20px; }
 
 #listATSV p {
@@ -274,40 +270,34 @@ input[type=range]::-moz-range-thumb {
   padding-right: 10px;
   height: 80vh; }
 
+#listATSV div {
+  margin-left: 10px; }
+
 #listATSV ul {
-  padding-left: 30px; }
-
-.atsvList {
-  list-style-type: none;
-  word-break: break-all;
-  margin: 10px; }
-
-.atsvList p:hover {
-  font-weight: bold; }
-
-.atsvList p {
-  font-size: 17px; }
+  margin-left: 0px;
+  padding-left: 30px;
+  margin-top: 5px; }
 
 .left-pane .chapterNode {
   padding: 4px 0;
   text-decoration: none;
   display: block;
-  transition: 0.3s; }
+  transition: 0.3s;
+  margin-left: 5px; }
 
 .left-pane li:hover {
   cursor: pointer; }
 
 .left-pane h2 {
   margin: 10px 0;
-  font-size: 1.2em;
-  word-break: break-all;
+  word-break: keep-all;
   width: 95%; }
 
 #libraryTitle {
   margin: 20px 0 2px 20px; }
 
 #chapterTitle {
-  margin: 5px 0 2px 20px; }
+  margin: 5px 0 2px 0px; }
 
 #chapterTitle {
   display: none; }
@@ -345,8 +335,17 @@ input[type=range]::-moz-range-thumb {
   display: inline-block; }
 
 #chapterContainer {
-  font-size: 15px; }
+  font-size: 13px; }
 
 #loadingLabel {
   display: inline-block;
   margin-left: 10px; }
+
+.atsvList {
+  list-style-type: none;
+  overflow: hidden;
+  margin: 10px;
+  word-break: keep-all; }
+
+.atsvList p:hover {
+  font-weight: bold; }

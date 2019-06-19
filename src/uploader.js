@@ -392,6 +392,7 @@ export function resultSetup(result, percent) {
   rangePointer.html($("#output").clone());
 
   if(flashReportObject) {
+    flashReportData.html("");
     $("#output").css("display", "block");
     scriptName.html(flashReportObject.name);
     $('head title', window.parent.document).text(flashReportObject.name);
@@ -496,7 +497,7 @@ export function resultSetup(result, percent) {
     if(commentaire.element.data.length > 75) {
       commentaire.element.data = commentaire.element.data.substring(0, 70) + " ...";
     }
-    $('<li class="chapterNode" id="chapter'+ commentaire.timeLine +'">' + stripHtml(commentaire.element.data) + '</li>').appendTo($("#chaptersList"));
+    $('<li class="chapterNode" id="chapter'+ commentaire.timeLine +'">' + stripHtml((comm+1) + '/ ' + commentaire.element.data) + '</li>').appendTo($("#chaptersList"));
     var component = $("#chapter" + commentaire.timeLine);
     component.click(function(event) {
       event.stopPropagation();

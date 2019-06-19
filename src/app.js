@@ -21,7 +21,7 @@ export var flashReport = $("#flashReport");
 export var libraryExpanded = true;
 export var localeValues = null;
 export var defaultLocale = null;
-
+export var jsonLibraryUrl = '/library.json';
 export var header = { 
   "Access-Control-Allow-Origin" : "*",
   'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT'
@@ -33,8 +33,43 @@ var serverDir = loc.substring(0, loc.lastIndexOf('/'));
 const img2 = $('<div id="logo">');
 flashReport.append(img2);
 
-//#region localization
-getLocalization();
+export async function setupSettings() {
+  await $.ajax({
+    type: "GET",
+    url: serverDir + '/settings.txt',
+    data: {},
+    crossDomain:true,
+    headers: header,
+    success: function(data) {
+      var values = [];
+      data = data.split("\n");
+      for (let index = 0; index < data.length; index++) {
+        const val = data[index];
+        var keyValuePair = val.split("=");
+        if(keyValuePair.length == 2) {
+          values.push({ name: keyValuePair[0], value: keyValuePair[1]})
+        }
+      }
+      for (let index = 0; index < values.length; index++) {
+        const v = values[index];
+        switch(v.name) {
+          case 'IMGWATERMARK':
+            $("#watermarkImg").attr("src", v.value);
+            break;
+          case 'URLWATERMARK':
+            $("#watermarklink").attr("href", v.value);
+            break;
+          case 'IMGBACKGROUND':
+            $("#screenBackground").css("background-image", 'url('+v.value+')')
+            break;
+          case 'ATSVLIBRARY':
+            jsonLibraryUrl = v.value;
+            break;
+        }
+      }
+    }
+  }); 
+}
 
 export function replaceLocal(token) {
   if(localeValues == null) return "";
@@ -91,6 +126,10 @@ export async function setupLocalization() {
   if(localeValues == null) return;
   for (let index = 0; index < localeValues.length; index++) {
     const token = localeValues[index];
+    if(token.name == "WATERMARK") {
+      $("#watermarkTxt").append(token.value);
+      continue;
+    }
     replaceLocal(token);
   }
 }
@@ -125,12 +164,12 @@ export function uploadFiles(event) {
 
   if(folders == 0) {
     //creation d'un dossier défaut 
-    var ulFolder = $("<ul id='defaultFolder'><i class='fas fa-folder-open'></i><p>"+replaceLocal({ name: "LOCALFOLDER"})+"</p></li>");
+    var ulFolder = $("<ul id='defaultFolder'><i class='fas fa-folder-open'></i><p>"+replaceLocal({ name: "LOCALFOLDER"})+"</p><div></div></ul>");
     listATSV.append(ulFolder);
     ulFolder.on("click", function(event) {
       event.stopPropagation();
       var elem = $("#" + event.target.parentNode.id);
-      elem.children('.atsvList').slideToggle(200);
+      elem.children('div').slideToggle(200);
       elem.children('#chapterContainer').slideToggle(200);
       var iElem = elem.children('i')[0];
       if(iElem.classList.contains("fa-folder-open")) {
@@ -148,18 +187,18 @@ export function uploadFiles(event) {
   for (let i=0; i<files.length; i++) {
     if(files[i].type == "application/ats.action-test-script.visual-report") {
       var fileName = files[i].name;
-      if(fileName.length > 45) {
-        fileName = fileName.substring(0,40) + " ...";
-      }
+      // if(fileName.length > 45) {
+      //   fileName = fileName.substring(0,40) + " ...";
+      // }
       
-      var item = $("<li class='atsvList'><i class='fas fa-film'></i><p>"+ fileName +"</p></li>");
+      var item = $("<i class='fas fa-film'></i><li class='atsvList'><p>"+ fileName +"</p></li>");
       item.on("click", function(event) {
         event.stopPropagation();
         $(".atsvList > p").removeClass("bolder");
         event.target.classList.add("bolder");
         upload.openfile(files[i]);
       });
-      folder.append(item);
+      folder.children('div').append(item);
     }
   };
 }
@@ -174,7 +213,7 @@ export function importLibrary(event) {
 export function readLocalJSON() {
   $.ajax({
     type: "GET",
-    url: serverDir + '/library.json',
+    url: serverDir + jsonLibraryUrl,
     data: {},
     crossDomain:true,
     headers: header,
@@ -188,13 +227,13 @@ export function JsonTraitment(obj) {
   for (let i = 0; i < obj.folders.length; i++) {
     const folder = obj.folders[i];
     var name = folder.name;
-    var ulFolder = $("<ul id='"+name.replace(/ /g, '')+"'><i class='fas fa-folder-open'></i><p>"+name+"</p></li>");
+    var ulFolder = $("<ul id='"+name.replace(/ /g, '')+"'><i class='fas fa-folder-open'></i><p>"+name+"</p><div></div></ul>");
     listATSV.append(ulFolder);
     var currentFolder = $("#"+name.replace(/ /g, ''));
     currentFolder.on("click", function(event) {
       event.stopPropagation();
       var elem = $("#" + event.target.parentNode.id);
-      elem.children('.atsvList').slideToggle(200);
+      elem.children('div').slideToggle(200);
       elem.children('#chapterContainer').slideToggle(200);
       var iElem = elem.children('i')[0];
       if(iElem.classList.contains("fa-folder-open")) {
@@ -211,10 +250,10 @@ export function JsonTraitment(obj) {
       url = url.replace(/\\/g, '/');
       const table = url.split("/");
       const fileName = table[table.length-1];
-      if(fileName.length > 45) {
-        fileName = fileName.substring(0,40) + " ...";
-      }
-      var item = $("<li class='atsvList'><i class='fas fa-film'></i><p>"+ fileName +"</p></li>");
+      // if(fileName.length > 45) {
+      //   fileName = fileName.substring(0,40) + " ...";
+      // }
+      var item = $("<i class='fas fa-film'></i><li class='atsvList'><p>"+ fileName +"</p></li>");
       item.attr("url", url);
       item.on("click", function(event) {
         event.stopPropagation();
@@ -229,7 +268,7 @@ export function JsonTraitment(obj) {
         }
 
       });
-      currentFolder.append(item);
+      currentFolder.children('div').append(item);
     }
   }
 }
@@ -271,9 +310,14 @@ export function getFile(url) {
       },
       headers: header,
       crossDomain: true,
-      success: function (data) {
+      success: function (data, textStatus, xhr) {
+        upload.openfile(null);
         var encodedData = new AMF.Deserializer(data);
         upload.repeat(encodedData, true);
+      },
+      error: function( req, status, err ) {
+        $("#downloadProgress").remove();
+        $("#output").css("display", "none");
       }
   });
 
@@ -282,6 +326,7 @@ export function getFile(url) {
     event.stopPropagation();
     ajxRequest.abort();
     $("#downloadProgress").remove();
+    $("#output").css("display", "none");
   });
 }
 
@@ -291,5 +336,9 @@ addLibraryInput.on('change',function (event)
 });
 addFilesInput.on("change", uploadFiles);
 
-setupScreen();
-readLocalJSON();
+setupSettings().then(() => {
+  getLocalization().then(_ => {
+    setupScreen();
+    readLocalJSON();
+  });
+});
