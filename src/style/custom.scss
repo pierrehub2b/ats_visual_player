@@ -28,6 +28,10 @@ body {
     background-position: center;
 }
 
+#flashReportData > div {
+    background: black;
+}
+
 #stopRequest {
     font-size: 20px;
     color: $agilitestOrange;

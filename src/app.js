@@ -7,7 +7,7 @@ import './style/custom.scss';
 import './style/animation.scss';
 import AMF from 'amf-js';
 var $ = require('jQuery');
-import { setupScreen, interuptDeserialize, currentUID, create_UUID } from './uploader';
+import { setupScreen, interuptDeserialize, currentUID, create_UUID, flashReportData } from './uploader';
 var upload = require('./uploader');
 export var addLibrary = $("#addLibrary");
 export var addFiles = $("#addFiles");
@@ -22,6 +22,7 @@ export var flashReport = $("#flashReport");
 export var libraryExpanded = true;
 export var localeValues = null;
 export var defaultLocale = null;
+export var waitingCoefficient = 1;
 export var jsonLibraryUrl = '/library.json';
 export var header = { 
   "Access-Control-Allow-Origin" : "*",
@@ -55,13 +56,13 @@ export async function setupSettings() {
         const v = values[index];
         switch(v.name) {
           case 'IMGWATERMARK':
-            $("#watermarkImg").attr("src", v.value);
+            $("#watermarkImg").attr("src", serverDir + v.value);
             break;
           case 'URLWATERMARK':
             $("#watermarklink").attr("href", v.value);
             break;
           case 'IMGBACKGROUND':
-            $("#screenBackground").css("background-image", 'url('+v.value+')')
+            $("#screenBackground").css("background-image", 'url('+serverDir + v.value+')')
             break;
           case 'ATSVLIBRARY':
             jsonLibraryUrl = v.value;
@@ -95,6 +96,14 @@ export async function getLocalization() {
     headers: header,
     success: function(data) {
       defaultLocale = data.defaultLocale;
+      switch(defaultLocale) {
+        case 'fr':
+          waitingCoefficient = 0.5;
+          break;
+        case 'en':
+          waitingCoefficient = 0.5;
+          break;
+      }
       return getLocalizationValues(defaultLocale);
     }
   }); 
@@ -156,6 +165,14 @@ addLibrary.click(function (event) {
 addFiles.click(function (event) {
   event.stopPropagation();
   addFilesInput.click();
+});
+
+flashReportData.on("click", function(event) {
+  if(flashReportData.children('div').css("opacity") == "0") {
+    flashReportData.children('div').fadeTo(500,1);
+  } else {
+    flashReportData.children('div').fadeTo(500,0);
+  }
 });
 //#endregion
 

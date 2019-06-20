@@ -10,32 +10,18 @@ body {
 }
 
 #flashReport {
-  margin: 10px 100px;
+  margin: 10px 25px;
   position: absolute;
   display: block;
   top: 0;
   left: 0;
-  z-index: 1;
+  z-index: 5;
 }
 
 #flashReport div {
   margin: 10px 10px;
   vertical-align: middle;
 }
-
-// #flashReport #logo {
-//   position: fixed;
-//   left: 0;
-//   right: 0;
-//   margin: auto;
-//   width: 20vw;
-//   top: 0;
-//   bottom: 0;
-//   background-repeat: no-repeat;
-//   background-position: center;
-//   height: 20vw;
-//   background-size: contain;
-// }
 
 //screenBackground
 #screenBackground {
@@ -127,7 +113,7 @@ body {
   width: 100%;
 }
 
-#progressSlider:hover, #navButtons div, .left-pane a, #listATSV ul, #chapterTitle, #libraryTitle {
+#progressSlider:hover, #navButtons div, .left-pane a, #listATSV ul, #chapterTitle, #libraryTitle, #flashReportData i {
   cursor: pointer;
 }
 
@@ -427,6 +413,7 @@ $check-thickness: 3px;
 
 #chapterTitle i, #libraryTitle i {
   display: inline-block;
+  margin-right: 5px;
 }
 
 #chapterContainer {

@@ -41,12 +41,12 @@ body {
   overflow: hidden; }
 
 #flashReport {
-  margin: 10px 100px;
+  margin: 10px 25px;
   position: absolute;
   display: block;
   top: 0;
   left: 0;
-  z-index: 1; }
+  z-index: 5; }
 
 #flashReport div {
   margin: 10px 10px;
@@ -128,7 +128,7 @@ body {
   vertical-align: baseline;
   width: 100%; }
 
-#progressSlider:hover, #navButtons div, .left-pane a, #listATSV ul, #chapterTitle, #libraryTitle {
+#progressSlider:hover, #navButtons div, .left-pane a, #listATSV ul, #chapterTitle, #libraryTitle, #flashReportData i {
   cursor: pointer; }
 
 #playLabel, #pauseLabel, #restart, #fullScreen {
@@ -365,7 +365,8 @@ input[type=range]::-moz-range-thumb {
   overflow-x: hidden; }
 
 #chapterTitle i, #libraryTitle i {
-  display: inline-block; }
+  display: inline-block;
+  margin-right: 5px; }
 
 #chapterContainer {
   font-size: 13px; }
