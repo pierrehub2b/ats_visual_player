@@ -7,7 +7,7 @@ import './style/custom.scss';
 import './style/animation.scss';
 import AMF from 'amf-js';
 var $ = require('jQuery');
-import { setupScreen, interuptDeserialize, currentUID, create_UUID, flashReportData } from './uploader';
+import { setupScreen, create_UUID, progressSlider } from './uploader';
 var upload = require('./uploader');
 export var addLibrary = $("#addLibrary");
 export var addFiles = $("#addFiles");
@@ -18,6 +18,7 @@ export var libraryTitle = $("#libraryTitle");
 export var chapterTitle = $("#chapterTitle");
 export var chaptersList = $("#chaptersList");
 export var flashReport = $("#flashReport");
+export var currentReportId = null;
 
 export var libraryExpanded = true;
 export var localeValues = null;
@@ -31,9 +32,6 @@ export var header = {
 
 var loc = window.location.pathname;
 var serverDir = loc.substring(0, loc.lastIndexOf('/'));
-
-const img2 = $('<div id="logo">');
-flashReport.append(img2);
 
 export async function setupSettings() {
   await $.ajax({
@@ -140,6 +138,10 @@ export async function setupLocalization() {
       $("#watermarkTxt").append(token.value);
       continue;
     }
+    if(token.name == "SEARCHPLACEHOLDER") {
+      $("#filterATSVFiles").attr("placeholder", token.value);
+      continue;
+    }
     replaceLocal(token);
   }
 }
@@ -167,14 +169,40 @@ addFiles.click(function (event) {
   addFilesInput.click();
 });
 
-flashReportData.on("click", function(event) {
-  if(flashReportData.children('div').css("opacity") == "0") {
-    flashReportData.children('div').fadeTo(500,1);
+$("#infoLabel").on("click", function() {
+  if(flashReport.css("opacity") == "0") {
+    flashReport.fadeTo(500, 0.8);
   } else {
-    flashReportData.children('div').fadeTo(500,0);
+    flashReport.fadeTo(500, 0);
   }
 });
+
+$("#filterATSVFiles").keyup(filterList);
 //#endregion
+
+export function filterList(event){
+  var val = event.target.value;
+  var allATSV = $(".atsvList");
+  if(val.length > 0) {
+    for (let index = 0; index < allATSV.length; index++) {
+      const element = allATSV[index];
+      var content = element.firstChild.innerText;
+      if(content.toUpperCase().indexOf(val.toUpperCase()) >= 0) {
+        element.style.display = "list-item";
+        element.previousElementSibling.style.display = "inline-block";
+      } else {
+        element.style.display = "none";
+        element.previousElementSibling.style.display = "none";
+      }
+    }
+  } else {
+    for (let index = 0; index < allATSV.length; index++) {
+      const element = allATSV[index];
+      element.style.display = "list-item";
+      element.previousElementSibling.style.display = "inline-block";
+    }
+  }
+}
 
 export function uploadFiles(event) {
   let files = event.target.files;
@@ -212,9 +240,11 @@ export function uploadFiles(event) {
       var item = $("<i class='fas fa-film'></i><li class='atsvList'><p>"+ fileName +"</p></li>");
       item.on("click", function(event) {
         event.stopPropagation();
+        currentReportId = create_UUID();
         $(".atsvList > p").removeClass("bolder");
         event.target.classList.add("bolder");
-        upload.openfile(files[i]);
+        currentReportId = create_UUID();
+        upload.openfile(files[i], currentReportId);
       });
       folder.children('div').append(item);
     }
@@ -297,10 +327,11 @@ export async function onReaderLoad(event){
 }
 
 export function getFile(url) {
-  upload.openfile(null);
-  $("#downloadProgress").remove();
+  upload.openfile(null, null);
+  var id = create_UUID();
+  currentReportId = id;
   var parent = $(".bolder").parent();
-  parent.append("<div id='downloadProgress'><i id='stopRequest' class='fas fa-stop-circle'></i><div id='loadingLabel'>"+ replaceLocal({ name: "LOADING"}) +"</div><div id='progress' class='progress' value='0'></div></div>");
+  parent.append("<div id='downloadProgress"+id+"'><i id='stopRequest' class='fas fa-stop-circle'></i><div id='loadingLabel'>"+ replaceLocal({ name: "LOADING"}) +"</div><div id='progress' class='progress' value='0'></div></div>");
   var progressBar = $("#progress");
 
   var ajxRequest = $.ajax({ 
@@ -313,7 +344,7 @@ export function getFile(url) {
                     width: percentComplete * 100 + '%'
                 });
                 if(percentComplete == 1) {
-                  $("#downloadProgress").remove();
+                  $("#downloadProgress"+id).remove();
                 }
             }
         }, false);
@@ -329,12 +360,14 @@ export function getFile(url) {
       headers: header,
       crossDomain: true,
       success: function (data, textStatus, xhr) {
-        upload.openfile(null);
-        var encodedData = new AMF.Deserializer(data);
-        upload.repeat(encodedData, true);
+        if(id == currentReportId) {
+          upload.openfile(null, null);
+          var encodedData = new AMF.Deserializer(data);
+          upload.repeat(encodedData, true);
+        } 
       },
       error: function( req, status, err ) {
-        $("#downloadProgress").remove();
+        $("#downloadProgress"+id).remove();
         $("#output").css("display", "none");
       }
   });
@@ -343,7 +376,7 @@ export function getFile(url) {
   stopButton.on("click", function(event) {
     event.stopPropagation();
     ajxRequest.abort();
-    $("#downloadProgress").remove();
+    $("#downloadProgress"+id).remove();
     $("#output").css("display", "none");
   });
 }

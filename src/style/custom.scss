@@ -28,13 +28,39 @@ body {
     background-position: center;
 }
 
-#flashReportData > div {
-    background: black;
+#flashReport {
+    background-color: black;
+    border-radius: 6px;
+    box-shadow: 1px 1px 5px 0 rgba(238, 238, 238, 0.5);
+    border: 1px solid rgba(238,238,238,0.5);
 }
+
+#flashReport:after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    margin-left: -0.5em;
+    bottom: -28px;
+    left: 15px;
+    box-sizing: border-box;
+    border: 1em solid rgba(238,238,238,0.5);
+    border-color: transparent transparent black black;
+    
+    transform-origin: 0 0;
+    transform: rotate(-45deg);
+    
+    box-shadow: -3px 3px 3px 0 rgba(238,238,238,0.5);
+}
+
+#flashReport a:link,#flashReport a:visited,#flashReport a:hover,#flashReport a:active, #flashReport  {
+    color: $agilitestWhite;
+  }
 
 #stopRequest {
     font-size: 20px;
     color: $agilitestOrange;
+    float: right;
   }
   
 
@@ -43,18 +69,13 @@ body {
     border: $agilitestBlack 1px solid;
 }
 
-#playLabel, #pauseLabel, #restart, #fullScreen {
+#playLabel, #pauseLabel, #restart, #fullScreen, #infoLabel {
     color: $agilitestWhite;
 }
 
 #rangePointer {
     color: $agilitestOrange;
 }
-
-#flashReport {
-    color: $agilitestWhite;
-}
-
 
 #player {
     background-color: $agilitestBlack;

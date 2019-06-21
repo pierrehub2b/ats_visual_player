@@ -3,15 +3,17 @@ import 'babel-polyfill';
 import { TimelineMax } from "gsap/TweenMax";
 var $ = require('jQuery');
 import './simpledrag';
-import { replaceLocal, defaultLocale } from './app';
+import { replaceLocal, defaultLocale, currentReportId, flashReport } from './app';
 import { implementAnimation as ActionGotoUrl } from './animations/gotuUrlAnimation';
+import { implementAnimation as ActionChannelStart } from './animations/channelStartAnimation';
+import { implementAnimation as ActionMouseScroll } from './animations/mouseScrollAnimation';
+import { implementAnimation as ActionChannelClose } from './animations/closeChannelAnimation';
 
 //#region objets du DOM
 export var progressSlider = $("#progressSlider");
 export var navSlider = $("#navSlider");
 export var screenBackground = $("#screenBackground");
 export var imgToolTip = $("#imgToolTip");
-export var flashReportData = $("#flashReportData");
 export var rangePointer = $("#rangePointer");
 export var playLabelBtn = $("#playLabel");
 export var pauseLabelBtn = $("#pauseLabel");
@@ -65,7 +67,7 @@ export function setupScreen() {
     event.stopPropagation();
     timelLineLite.play();
     setTimeout(() => {
-      flashReportData.children('div').fadeTo(500,0);
+      flashReport.fadeTo(500,0);
     }, 500);
   });
 
@@ -238,13 +240,13 @@ export function calcSliderPos(e) {
   //return (e.clientX - navSlider.offset().left) / navSlider.width();
 }
 
-export function openfile(file) {
+export function openfile(file, id) {
   timelLineLite = new TimelineMax({ paused: true, repeat: 0, onUpdate:adjustUI});
   screenBackground.html("");
   allData = [];
   images = [];
   spinner.removeClass("loadingDone");
-  flashReportData.children('div').html("");
+  flashReport.html("");
   loadingCheckmark.css("display", "none");
   chapterTitle.css("display", "none");
   output.css("display", "inline-block");
@@ -254,7 +256,7 @@ export function openfile(file) {
   timelLineLite.progress(0).pause();
   updaterangePointer();
 
-  if(file != null) {
+  if(file != null && currentReportId == id) {
     loadFile(file);
   } 
 }
@@ -317,8 +319,8 @@ export function updateByVal(value){
 }
 
 export function updaterangePointer() {
-  if(progressSlider.val() == 0 && flashReportData.children('div').css("opacity") == "0") {
-    flashReportData.children('div').fadeTo(500,1);
+  if(progressSlider.val() == 0 && flashReport.css("opacity") == "0") {
+    flashReport.fadeTo(500, 0.8);
     $(".watermark").css("display", "none");
   } else if(progressSlider.val() > 0) {
     $(".watermark").css("display", "block");
@@ -390,11 +392,9 @@ export function resultSetup(result, percent) {
   //#region traitment
   var actions = result.filter(_ => _.type ? _.type.indexOf("com.ats") > -1 : false);
   var flashReportObject = result.filter(_ => _.type == "startVisualReport")[0];
-  rangePointer.html($("#output").clone());
 
   if(flashReportObject) {
-    flashReportData.children('div').html("");
-    flashReportData.children('div').css("opacity","0");
+    flashReport.html("");
     $("#output").css("display", "block");
     scriptName.html(flashReportObject.name);
     $('head title', window.parent.document).text(flashReportObject.name);
@@ -434,8 +434,8 @@ export function resultSetup(result, percent) {
     "<div>"+ replaceLocal({ name: "SCRIPTPREREQUISTES"}) +": {prerequisite}</div>" +
     "<div>"+ replaceLocal({ name: "SCRIPTGROUPS"}) +": {groups}</div>",frData);
 
-    flashReportData.children('div').append(output);
-    flashReportData.children('div').fadeTo(500,1);
+    flashReport.append(output);
+    flashReport.fadeTo(500,0.8);
     allData.push({timeLine: flashReportObject.timeLine, element: flashReportObject.element, type: elementType.FLASHREPORT, img: null});
   }
 
@@ -545,5 +545,14 @@ export function animate(currentElement, index) {
       case "com.ats.script.actions.ActionGotoUrl":
         ActionGotoUrl(currentElement.element);
         break
+      case "com.ats.script.actions.ActionChannelStart":
+        ActionChannelStart(currentElement.element);
+        break;
+      case "com.ats.script.actions.ActionChannelClose":
+        ActionChannelClose(currentElement.element);
+        break;
+      case "com.ats.script.actions.ActionMouseScroll":
+        //ActionMouseScroll(currentElement.element);
+        break;
     }
 }

@@ -13,14 +13,21 @@ body {
   margin: 10px 25px;
   position: absolute;
   display: block;
-  top: 0;
+  bottom: 9vh;
   left: 0;
   z-index: 5;
+  padding: 15px;
+  min-width: 50px;
+  min-height: 50px;
+  opacity: 0;
 }
 
 #flashReport div {
-  margin: 10px 10px;
-  vertical-align: middle;
+  margin: 5px;
+}
+
+.popup {
+  text-align: left;
 }
 
 //screenBackground
@@ -99,10 +106,6 @@ body {
   z-index: 3;
 }
 
-#flashReport a:link,#flashReport a:visited,#flashReport a:hover,#flashReport a:active  {
-  color: #FCFCFC;
-}
-
 .fa-film {
   float: left;
 }
@@ -113,12 +116,30 @@ body {
   width: 100%;
 }
 
-#progressSlider:hover, #navButtons div, .left-pane a, #listATSV ul, #chapterTitle, #libraryTitle, #flashReportData i {
+#progressSlider:hover, #navButtons div, .left-pane a, #listATSV ul, #chapterTitle, #libraryTitle {
   cursor: pointer;
 }
 
+#filterATSVFiles {
+  width: 80%;
+  margin: 5px 25px;
+  height: 20px;
+}
+
+#infoLabel {
+  position: absolute;
+  left: 40px;
+  font-size: 20px;
+}
+
+#output {
+  position: absolute;
+  left: 70px;
+  display: none;
+}
+
 //player
-#playLabel, #pauseLabel, #restart, #fullScreen {
+#playLabel, #pauseLabel, #restart, #fullScreen, #infoLabel {
   display: inline-block;
   margin: 0 3px;
 }
@@ -163,10 +184,6 @@ body {
 #loadingPercent {
   display: inline-block;
   margin: 5px;
-}
-
- #output {
-  display: none;
 }
 
 input[type=range] {
