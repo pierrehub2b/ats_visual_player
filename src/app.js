@@ -331,6 +331,8 @@ export function getFile(url) {
   var id = create_UUID();
   currentReportId = id;
   var parent = $(".bolder").parent();
+  parent.children("#chapterContainer").css("display",'none');
+  parent.find("#loadingLabel").parent().remove();
   parent.append("<div id='downloadProgress"+id+"'><i id='stopRequest' class='fas fa-stop-circle'></i><div id='loadingLabel'>"+ replaceLocal({ name: "LOADING"}) +"</div><div id='progress' class='progress' value='0'></div></div>");
   var progressBar = $("#progress");
 
@@ -344,7 +346,9 @@ export function getFile(url) {
                     width: percentComplete * 100 + '%'
                 });
                 if(percentComplete == 1) {
-                  $("#downloadProgress"+id).remove();
+                  $("#downloadProgress"+id).children("#loadingLabel").html(replaceLocal({ name: "LOADED"}));
+                  $("#downloadProgress"+id).children("#stopRequest").remove();
+                  $("#downloadProgress"+id).children("#progress").remove();
                 }
             }
         }, false);

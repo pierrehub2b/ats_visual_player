@@ -14,6 +14,7 @@ SCRIPTPREREQUISTES=Prérequis
 SCRIPTGROUPS=Groupes
 LOADINGDURATION=Calcul en cours
 LOADING=Téléchargement en cours...
+LOADED=Téléchargé
 UNDEFINEDVALUE=[Non renseigné]
 WATERMARK=Copyright en francais
 SEARCHPLACEHOLDER=Rechercher...

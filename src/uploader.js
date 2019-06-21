@@ -483,6 +483,9 @@ export function resultSetup(result, percent) {
   var chapterContainer = $("#chapterContainer");
   $("#chapterContainer").remove();
   parent.append(chapterContainer);
+  if(chapterContainer.css("display") == "none") {
+    chapterContainer.css("display","block");
+  }
   chapterExpanded = true;
   chapterTitle.on("click", function(event) {
     event.stopPropagation();
