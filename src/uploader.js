@@ -8,6 +8,7 @@ import { implementAnimation as ActionGotoUrl } from './animations/gotuUrlAnimati
 import { implementAnimation as ActionChannelStart } from './animations/channelStartAnimation';
 import { implementAnimation as ActionMouseScroll } from './animations/mouseScrollAnimation';
 import { implementAnimation as ActionChannelClose } from './animations/closeChannelAnimation';
+import { implementAnimation as ActionMouseKey } from './animations/mouseKeyAnimation';
 
 //#region objets du DOM
 export var progressSlider = $("#progressSlider");
@@ -553,6 +554,9 @@ export function animate(currentElement, index) {
         break;
       case "com.ats.script.actions.ActionChannelClose":
         ActionChannelClose(currentElement.element);
+        break;
+      case "com.ats.script.actions.ActionMouseKey":
+        ActionMouseKey(currentElement.element, currentElement.img.id);
         break;
       case "com.ats.script.actions.ActionMouseScroll":
         //ActionMouseScroll(currentElement.element);

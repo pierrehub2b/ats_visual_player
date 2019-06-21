@@ -115,3 +115,13 @@ input[type=range]::-moz-range-thumb {
 
 .bolder {
   font-weight: bold; }
+
+.popup {
+  background-color: #FABA00; }
+
+.popup h2 {
+  color: #FCFCFC; }
+
+.popup .content {
+  background-color: #FCFCFC;
+  color: #11171B; }

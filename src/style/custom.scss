@@ -156,3 +156,16 @@ input[type=range]::-moz-range-thumb {
   .bolder {
       font-weight: bold;
   }
+
+  .popup {
+      background-color: $agilitestOrange;
+  }
+
+  .popup h2 {
+      color: $agilitestWhite;
+  }
+
+  .popup .content {
+      background-color: $agilitestWhite;
+      color: $agilitestBlack;
+  }

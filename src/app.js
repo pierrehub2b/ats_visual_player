@@ -151,6 +151,7 @@ export async function setupLocalization() {
 libraryTitle.on("click", function(event) {
   event.stopPropagation();
   listATSV.children('ul').slideToggle(200);
+  $('#filterATSVFiles').slideToggle(200);
   libraryExpanded = !libraryExpanded;
   if(libraryExpanded) {
     $("#libraryTitleCaret").removeClass("fa-caret-right").addClass("fa-caret-down");

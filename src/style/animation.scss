@@ -13,8 +13,6 @@
 
 .popup {
   margin: auto;
-  padding: 20px;
-  background: #fff;
   border-radius: 5px;
   position: relative;
   transition: all 5s ease-in-out;
@@ -27,12 +25,19 @@
 }
 
 .popup h2 {
-  margin-top: 0;
-  color: #333;
+  padding: 10px 40px 10px 30px;
+  margin: 0;
   font-family: Tahoma, Arial, sans-serif;
 }
 
 .popup .content {
   max-height: 30%;
   overflow: auto;
+  padding: 5px 40px 10px 30px;
+}
+
+.pointerAction {
+  z-index: 5;
+  opacity: 0;
+  position: absolute;
 }

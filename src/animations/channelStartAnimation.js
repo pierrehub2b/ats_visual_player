@@ -1,7 +1,7 @@
 var $ = require('jQuery');
 import { timelLineLite } from '../uploader';
 var app = require('../app');
-import { TimelineMax, TweenMax } from "gsap/TweenMax";
+import { Ease, Elastic } from "gsap/TweenMax";
 
 export var templateFrame = '<div class="overlay"><div class="popup"><h2></h2><div class="content">'+
 '<p id="channelName"></p><p id="channelApplication"></p><p id="channelPosition"></p><p id="channelSize"></p></div></div></div>';
@@ -16,8 +16,10 @@ export function implementAnimation(element) {
     frame.find('.content').children("#channelPosition").append(app.replaceLocal({name:"CHANNELPOSITION"}) + ": " + element.channelBound.x + " x " + element.channelBound.y);
     frame.find('.content').children("#channelSize").append(app.replaceLocal({name:"CHANNELSIZE"}) + ": " + element.channelBound.width + " x " + element.channelBound.height);
     frame.appendTo("#screenBackground");
-    timelLineLite.fromTo(frame, 0.5, {x:-$("#screenBackground").width()}, {
-        x: 0,
+    timelLineLite.fromTo(frame, 0.5, {scale: 0, rotation: 360}, {
+        scale: 1, 
+        rotation: 0,
+        ease: Elastic.easeOut,
         opacity: 1,
         display: "flex",
         delay: 1
