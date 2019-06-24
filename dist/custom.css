@@ -21,7 +21,7 @@ body {
 #flashReport {
   background-color: black;
   border-radius: 6px;
-  box-shadow: 1px 1px 5px 0 rgba(238, 238, 238, 0.5);
+  box-shadow: 4px 4px 8px 2px rgba(238, 238, 238, 0.3);
   border: 1px solid rgba(238, 238, 238, 0.5); }
 
 #flashReport:after {
@@ -37,7 +37,7 @@ body {
   border-color: transparent transparent black black;
   transform-origin: 0 0;
   transform: rotate(-45deg);
-  box-shadow: -3px 3px 3px 0 rgba(238, 238, 238, 0.5); }
+  box-shadow: -3px 8px 6px 0px rgba(238, 238, 238, 0.3); }
 
 #flashReport a:link, #flashReport a:visited, #flashReport a:hover, #flashReport a:active, #flashReport {
   color: #FCFCFC; }

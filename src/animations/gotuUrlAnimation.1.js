@@ -12,10 +12,8 @@ export function implementAnimation(element) {
     frame.find('.popup').children("h2").append(app.replaceLocal({name:"GOTOURL"}) + ":");
     frame.find('.content').append(app.replaceLocal({name:"URLLABEL"}) + ": " + element.value);
     frame.appendTo("#screenBackground");
-    timelLineLite.fromTo(frame, 0.5, {scale: 0, rotation: 360}, {
-        scale: 1, 
-        rotation: 0,
-        ease: Elastic.easeOut,
+    timelLineLite.fromTo(frame, 0.5, {x:-$("#screenBackground").width()}, {
+        x: 0,
         opacity: 1,
         display: "flex",
         delay: 1

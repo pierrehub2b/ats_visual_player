@@ -347,7 +347,8 @@ export function getFile(url) {
                     width: percentComplete * 100 + '%'
                 });
                 if(percentComplete == 1) {
-                  $("#downloadProgress"+id).children("#loadingLabel").html(replaceLocal({ name: "LOADED"}));
+                  $("#downloadProgress"+id).children("#loadingLabel").html(replaceLocal({ name: "LOADED"})).css("color", "green");
+                  $("#downloadProgress"+id).css("height", "30px");
                   $("#downloadProgress"+id).children("#stopRequest").remove();
                   $("#downloadProgress"+id).children("#progress").remove();
                 }
