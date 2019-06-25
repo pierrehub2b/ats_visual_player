@@ -9,7 +9,7 @@ export function implementAnimation(element) {
     var box = $(base.box);
     box.attr("id", "box" + element.timeLine);
     frame.attr("id", divId);
-    frame.find('.popup').children("h2").append(app.replaceLocal({name:"ASSERTCOUNT"}) + ":");
+    frame.find('.popup').children("h2").append(app.replaceLocal({name:"ASSERTCOUNT"}));
     frame.find('.popup').addClass("positioned");
     frame.find('.popup').children("img").attr("src", base.pathToAssets + "check_value.png")
     frame.find('.content').append("<p class='textBolder'>" + app.replaceLocal({name:"CRITERIA"}) + ": </p>");

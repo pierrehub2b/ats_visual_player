@@ -12,7 +12,8 @@
         "/ATSV/check.Demo004paramFrais.atsv",
         "/ATSV/loop.atsv",
         "/ATSV/subscripts.allFunctions.atsv",
-        "/ATSV/subscripts.DemoCalculatrice.atsv"
+        "/ATSV/subscripts.DemoCalculatrice.atsv",
+        "/ATSV/subscripts.elementNotFound.atsv"
       ]
     },
     {

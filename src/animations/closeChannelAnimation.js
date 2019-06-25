@@ -10,7 +10,7 @@ export function implementAnimation(element) {
     var divId = "stopChannel" + element.timeLine;
     var frame = $(base.templateFrame);
     frame.attr("id", divId);
-    frame.find('.popup').children("h2").append(app.replaceLocal({name:"CLOSECHANNEL"}) + ":");
+    frame.find('.popup').children("h2").append(app.replaceLocal({name:"CLOSECHANNEL"}));
     frame.find('.popup').children("img").attr("src", base.pathToAssets + "layers_close.png");
     frame.find('.content').append('<p id="channelName"><span class="textBolder">'+app.replaceLocal({name:"CHANNELNAME"}) + ':</span> ' + element.channelName+'</p>')
     frame.find('.content').append('<p id="channelPosition"><span class="textBolder">'+app.replaceLocal({name:"CHANNELPOSITION"}) + ': </span>' + element.channelBound.x + " x " + element.channelBound.y +'</p>')

@@ -7,7 +7,7 @@ export function implementAnimation(element) {
     var divId = "goToUrl" + element.timeLine;
     var frame = $(base.templateFrame);
     frame.attr("id", divId);
-    frame.find('.popup').children("h2").append(app.replaceLocal({name:"GOTOURL"}) + ":");
+    frame.find('.popup').children("h2").append(app.replaceLocal({name:"GOTOURL"}));
     frame.find('.popup').children("img").attr("src", base.pathToAssets + "link_go.png");
     frame.find('.content').append("<span class='textBolder'>" + app.replaceLocal({name:"URLLABEL"}) + ":</span> " + element.value);
     frame.appendTo("#screenBackground");

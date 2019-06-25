@@ -9,7 +9,7 @@ export function implementAnimation(element) {
     var box = $(base.box);
     box.attr("id", "box" + element.timeLine);
     frame.attr("id", divId);
-    frame.find('.popup').children("h2").append(app.replaceLocal({name:"GETPROPERTY"}) + ":");
+    frame.find('.popup').children("h2").append(app.replaceLocal({name:"GETPROPERTY"}));
     frame.find('.popup').addClass("positioned");
     frame.find('.popup').children("img").attr("src", base.pathToAssets + "attributes_display.png")
     frame.find('.content').append("<p><span class='textBolder'>" + app.replaceLocal({name:"ELEMENT"}) + ": </span>" + element.value + "</p>");
@@ -19,7 +19,7 @@ export function implementAnimation(element) {
 
     var positions = base.calculPositions(element);
 
-    base.createBox(element.timeLine, positions.x-5,positions.y-5,element.element.bound.width, element.element.bound.height,0.3);
+    base.createBox(element.timeLine, positions.x-5,positions.y,element.element.bound.width * positions.ratio, element.element.bound.height * positions.ratio, 0.3);
     timelLineLite.to(frame.children(".popup"), 0.5, {
         x: element.element.bound.x + element.element.bound.height,
         y: positions.yMouse + 40

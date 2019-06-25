@@ -6,6 +6,7 @@ export var box = '<div class="box"><span id="left-side"></span><span id="top-sid
 export var clickEffectElement = '<div class="circle"><div class="inner"></div></div>';
 export var templateFrame = '<div class="overlay"><div class="popup"><img class="animationImg" /><h2></h2><div class="content"></div></div></div>';
 export var mousePointer = "<div class='pointerAction'><img class='animationImg' src='"+pathToAssets+"mouse.png' /></div>";
+export var keyboardPointer = "<div class='pointerAction'><img class='animationImg' src='"+pathToAssets+"keyboard.png' /></div>";
 export var arrowUp = "<div class='pointerAction'><img class='animationImg' src='"+pathToAssets+"mouse_select_scroll_up.png' /></div>";
 export var arrowDown = ""+pathToAssets+"mouse_select_scroll_down.png";
 

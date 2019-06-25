@@ -4,23 +4,22 @@ var app = require('../app');
 var base = require('./baseAnimation');
 
 export function implementAnimation(element) {
-    var divId = "propertyAssertion" + element.timeLine;
+    var divId = "javascript" + element.timeLine;
     var frame = $(base.templateFrame);
     var box = $(base.box);
     box.attr("id", "box" + element.timeLine);
     frame.attr("id", divId);
-    frame.find('.popup').children("h2").append(app.replaceLocal({name:"ASSERTPROPERTY"}));
+    frame.find('.popup').children("h2").append(app.replaceLocal({name:"JAVASCRIPTANIMATION"}));
     frame.find('.popup').addClass("positioned");
-    frame.find('.popup').children("img").attr("src", base.pathToAssets + "check_property.png")
-    frame.find('.content').append("<p><span class='textBolder'>" + app.replaceLocal({name:"ELEMENT"}) + ": </span>" + element.value + "</p>");
-    frame.find('.content').append('<p id="egal"><i class="fas fa-equals"></i></p>')
-    frame.find('.content').append("<p><span class='textBolder'>" + app.replaceLocal({name:"VALUE"}) + ": </span>" + element.data + "</p>");
+    frame.find('.popup').children("img").attr("src", base.pathToAssets + "javascript.png")
+    frame.find('.content').append("<p><span class='textBolder'>" + app.replaceLocal({name:"CRITERIA"}) + ": </span>" + element.element.criterias + "</p>");
+    frame.find('.content').append("<p><span class='textBolder'>" + app.replaceLocal({name:"ACTION"}) + ": </span>" + element.value + "</p>");
     frame.appendTo("#screenBackground");
     box.appendTo("#screenBackground");
 
     var positions = base.calculPositions(element);
 
-    base.createBox(element.timeLine, positions.x-5,positions.y-5,element.element.bound.width, element.element.bound.height,0.3);
+    base.createBox(element.timeLine, positions.x,positions.y,element.element.bound.width * positions.ratio, element.element.bound.height * positions.ratio,0.3);
     timelLineLite.to(frame.children(".popup"), 0.5, {
         x: element.element.bound.x + element.element.bound.height,
         y: positions.yMouse + 40

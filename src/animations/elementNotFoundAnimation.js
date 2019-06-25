@@ -4,12 +4,13 @@ var app = require('../app');
 var base = require('./baseAnimation');
 
 export function implementAnimation(element) {
-    var divId = "comment" + element.timeLine;
+    var divId = "switchWindow" + element.timeLine;
     var frame = $(base.templateFrame);
     frame.attr("id", divId);
-    frame.find('.popup').children("h2").append(app.replaceLocal({name:"COMMENT"}));
-    frame.find('.popup').children("img").attr("src", base.pathToAssets + "comment.png")
-    frame.find('.content').append('<p id="applicationComment">'+element.data+'</p>')
+    frame.find('.popup').children("h2").append(app.replaceLocal({name:"ELEMENTNOTFOUND"}));
+    frame.find('.popup').children("img").attr("src", base.pathToAssets + "error.png");
+    frame.find('.content').append("<p class='textBolder'>" + app.replaceLocal({name:"CRITERIA"}) + ": </p>");
+    frame.find('.content').append("<p>" + element.element.criterias + "</p>");
     frame.appendTo("#screenBackground");
 
     timelLineLite.fromTo(frame, 0.5, {x:-$("#screenBackground").width()}, {

@@ -14,6 +14,13 @@ import { implementAnimation as ActionAssertValue } from './animations/assertionV
 import { implementAnimation as ActionProperty } from './animations/propertyAnimation';
 import { implementAnimation as ActionAssertProperty } from './animations/assertionPropertyAnimation';
 import { implementAnimation as ActionAssertPropertyCount } from './animations/assertionPropertyCountAnimation';
+import { implementAnimationStart as ActionTextStart } from './animations/textAnimation';
+import { implementAnimationEnd as ActionTextEnd } from './animations/textAnimation';
+import { implementAnimation as ActionJavascript } from './animations/javascriptAnimation';
+import { implementAnimation as ActionMouse } from './animations/mouseAnimation';
+import { implementAnimation as ActionWindowState } from './animations/windowStateAnimation';
+import { implementAnimation as ActionWindowSwitch } from './animations/windowSwitchAnimation';
+import { implementAnimation as ActionElementNotFound } from './animations/elementNotFoundAnimation';
 
 //#region objets du DOM
 export var progressSlider = $("#progressSlider");
@@ -44,6 +51,7 @@ export var timelLineLite;
 export var currentUID; 
 export var atsvUrl = "https://github.com/pierrehub2b/actiontestscript";
 export var chapterExpanded = true;
+export var isTextAnimation = false;
 //#endregion
 
 // enum sur les différents types d'objets dans allData
@@ -457,7 +465,7 @@ export function resultSetup(result, percent) {
     if(element.images) {
       for (let i = 0; i < element.images.length; i++) {
         var previousValues = allData.filter(_ => _.timeLine == element.timeLine && _.type === elementType.IMAGE);
-        if(previousValues.length == 0) {
+        if(previousValues.length == 0 || element.type == "com.ats.script.actions.ActionText") {
           const img = element.images[i];
           var bytes = new Uint8Array(img);
           var imgPreview = document.createElement('img');
@@ -547,53 +555,61 @@ export function animate(currentElement, index) {
         display: "none"
       }); 
     }
-    
-    //implement animations
-    switch(currentElement.element.type) {
-      case "com.ats.script.actions.ActionGotoUrl":
-        ActionGotoUrl(currentElement.element);
-        break
-      case "com.ats.script.actions.ActionChannelStart":
-        ActionChannelStart(currentElement.element);
-        break;
-      case "com.ats.script.actions.ActionChannelClose":
-        ActionChannelClose(currentElement.element);
-        break;
-      case "com.ats.script.actions.ActionMouseKey":
-        ActionMouseKey(currentElement.element, currentElement.img.id);
-        break;
-      case "com.ats.script.actions.ActionMouseScroll":
-        ActionMouseScroll(currentElement.element);
-        break;
-      case "com.ats.script.actions.ActionComment":
-        ActionComment(currentElement.element);
-        break;
-      case "com.ats.script.actions.ActionText":
-        //ActionMouseScroll(currentElement.element);
-        break;
-      case "com.ats.script.actions.ActionAssertCount":
-        ActionAssertPropertyCount(currentElement.element);
-        break;
-      case "com.ats.script.actions.ActionAssertProperty":
-        ActionAssertProperty(currentElement.element);
-        break;
-      case "com.ats.script.actions.ActionAssertValue":
-        ActionAssertValue(currentElement.element);
-        break;
-      case "com.ats.script.actions.ActionJavascript":
-        //ActionMouseScroll(currentElement.element);
-        break;
-      case "com.ats.script.actions.ActionMouse":
-        //ActionMouseScroll(currentElement.element);
-        break;
-      case "com.ats.script.actions.ActionProperty":
-        ActionProperty(currentElement.element);
-        break;
-      case "com.ats.script.actions.ActionWindowState":
-        //ActionMouseScroll(currentElement.element);
-        break;
-      case "com.ats.script.actions.ActionWindowSwitch":
-        //ActionMouseScroll(currentElement.element);
-        break;
+
+    if(!isTextAnimation && currentElement.element.error != -1) {
+      switch(currentElement.element.type) {
+        case "com.ats.script.actions.ActionText":
+          isTextAnimation = true;
+          ActionTextStart(currentElement.element);
+          break;
+        case "com.ats.script.actions.ActionGotoUrl":
+          ActionGotoUrl(currentElement.element);
+          break
+        case "com.ats.script.actions.ActionChannelStart":
+          ActionChannelStart(currentElement.element);
+          break;
+        case "com.ats.script.actions.ActionChannelClose":
+          ActionChannelClose(currentElement.element);
+          break;
+        case "com.ats.script.actions.ActionMouseKey":
+          ActionMouseKey(currentElement.element, currentElement.img.id);
+          break;
+        case "com.ats.script.actions.ActionMouseScroll":
+          ActionMouseScroll(currentElement.element);
+          break;
+        case "com.ats.script.actions.ActionComment":
+          ActionComment(currentElement.element);
+          break;
+        case "com.ats.script.actions.ActionAssertCount":
+          ActionAssertPropertyCount(currentElement.element);
+          break;
+        case "com.ats.script.actions.ActionAssertProperty":
+          ActionAssertProperty(currentElement.element);
+          break;
+        case "com.ats.script.actions.ActionAssertValue":
+          ActionAssertValue(currentElement.element);
+          break;
+        case "com.ats.script.actions.ActionJavascript":
+          ActionJavascript(currentElement.element);
+          break;
+        case "com.ats.script.actions.ActionMouse":
+          ActionMouse(currentElement.element);
+          break;
+        case "com.ats.script.actions.ActionProperty":
+          ActionProperty(currentElement.element);
+          break;
+        case "com.ats.script.actions.ActionWindowState":
+          ActionWindowState(currentElement.element);
+          break;
+        case "com.ats.script.actions.ActionWindowSwitch":
+          ActionWindowSwitch(currentElement.element);
+          break;
+      }
+    } else if(currentElement.element.error == -1) {
+      ActionElementNotFound(currentElement.element);
+    } else {
+      isTextAnimation = false;
+      ActionTextEnd(images[index-1].element);
     }
+
 }

@@ -7,7 +7,7 @@ export function implementAnimation(element) {
     var divId = "channelStart" + element.timeLine;
     var frame = $(base.templateFrame);
     frame.attr("id", divId);
-    frame.find('.popup').children("h2").append(app.replaceLocal({name:"STARTCHANNEL"}) + ":");
+    frame.find('.popup').children("h2").append(app.replaceLocal({name:"STARTCHANNEL"}));
     frame.find('.popup').children("img").attr("src", base.pathToAssets + "layers_go.png");
     frame.find('.content').append('<p id="channelName"><span class="textBolder">'+app.replaceLocal({name:"CHANNELNAME"}) + ': </span>' + element.channelName+'</p>')
     frame.find('.content').append('<p id="channelApplication"><span class="textBolder">'+app.replaceLocal({name:"CHANNELAPPLICATION"}) + ': </span>' + element.data+'</p>')
