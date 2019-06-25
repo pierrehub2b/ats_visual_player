@@ -2,6 +2,7 @@ $agilitestOrange: #FABA00;
 $agilitestBlack: #11171B;
 $agilitestWhite: #FCFCFC;
 $agilitestGrey: #EEE;
+$agilitestBlue: #8A9FFF;
 $fontSize: 15px;
 
 body {
@@ -153,12 +154,12 @@ input[type=range]::-moz-range-thumb {
     background: $agilitestOrange;
   }
 
-  .bolder {
+  .bolder, .textBolder {
       font-weight: bold;
   }
 
   .popup {
-      background-color: $agilitestOrange;
+      background-color: $agilitestBlue;
   }
 
   .popup h2 {
@@ -168,4 +169,12 @@ input[type=range]::-moz-range-thumb {
   .popup .content {
       background-color: $agilitestWhite;
       color: $agilitestBlack;
+  }
+
+  #left-side,#bottom-side,#top-side,#right-side   {
+    background: $agilitestBlue;
+  }
+
+  .circle, .inner {
+    background-color : $agilitestBlue;
   }

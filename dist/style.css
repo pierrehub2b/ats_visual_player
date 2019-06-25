@@ -12,7 +12,6 @@
 
 .popup {
   margin: auto;
-  border-radius: 5px;
   position: relative;
   transition: all 5s ease-in-out;
   height: fit-content;
@@ -20,23 +19,88 @@
   bottom: 0;
   left: 0;
   right: 0;
-  border: 1px solid black;
   box-shadow: 4px 4px 8px 8px rgba(0, 0, 0, 0.4); }
+
+.positioned {
+  height: auto;
+  top: initial;
+  bottom: initial;
+  left: initial;
+  right: initial;
+  position: absolute; }
 
 .popup h2 {
   padding: 10px 40px 10px 30px;
   margin: 0;
-  font-family: Tahoma, Arial, sans-serif; }
+  font-family: Tahoma, Arial, sans-serif;
+  display: inline-block; }
 
 .popup .content {
   max-height: 30%;
   overflow: auto;
   padding: 5px 40px 10px 30px; }
 
-.pointerAction {
+.scrollAction {
+  font-size: 4em;
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 10px; }
+
+.box {
+  position: absolute;
+  padding: 0;
+  margin: 0; }
+
+.box span {
+  position: absolute;
   z-index: 5;
+  background: none transparent;
+  width: 0px;
+  height: 0px; }
+
+#left-side {
+  left: 0;
+  bottom: 0; }
+
+#top-side {
+  top: 0;
+  left: 0; }
+
+#right-side {
+  right: 0;
+  top: 0; }
+
+#bottom-side {
+  bottom: 0;
+  right: 0; }
+
+.circle, .inner {
+  position: absolute;
+  border-radius: 50%;
+  width: 0;
+  height: 0;
+  z-index: 10; }
+
+.inner {
+  background-color: transparent; }
+
+.pointerAction, .scrollAction {
+  z-index: 8;
   opacity: 0;
-  position: absolute; }
+  position: absolute;
+  width: 32px;
+  height: 32px; }
+
+.animationImg {
+  display: flex !important;
+  opacity: 1 !important; }
+
+.popup .animationImg {
+  position: relative !important;
+  left: 6px !important;
+  top: 0 !important;
+  margin-left: 10px !important;
+  float: left !important;
+  top: 24px !important; }
 html, body {
   height: 100%;
   font-size: 15px; }

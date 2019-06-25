@@ -1,17 +1,17 @@
 var $ = require('jQuery');
 import { timelLineLite } from '../uploader';
 var app = require('../app');
-import { TimelineMax, TweenMax } from "gsap/TweenMax";
-
-export var templateFrame = '<div class="overlay"><div class="popup"><h2></h2><div class="content"></div></div></div>';
+var base = require('./baseAnimation');
 
 export function implementAnimation(element) {
-    var divId = "goToUrl" + element.timeLine;
-    var frame = $(templateFrame);
+    var divId = "comment" + element.timeLine;
+    var frame = $(base.templateFrame);
     frame.attr("id", divId);
-    frame.find('.popup').children("h2").append(app.replaceLocal({name:"GOTOURL"}) + ":");
-    frame.find('.content').append(app.replaceLocal({name:"URLLABEL"}) + ": " + element.value);
+    frame.find('.popup').children("h2").append(app.replaceLocal({name:"COMMENT"}) + ":");
+    frame.find('.popup').children("img").attr("src", base.pathToAssets + "comment.png")
+    frame.find('.content').append('<p id="applicationComment">'+element.data+'</p>')
     frame.appendTo("#screenBackground");
+
     timelLineLite.fromTo(frame, 0.5, {x:-$("#screenBackground").width()}, {
         x: 0,
         opacity: 1,

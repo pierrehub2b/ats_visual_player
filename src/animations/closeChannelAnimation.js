@@ -1,21 +1,22 @@
 var $ = require('jQuery');
 import { timelLineLite } from '../uploader';
 var app = require('../app');
-import { TimelineMax, TweenMax } from "gsap/TweenMax";
+var base = require('./baseAnimation');
 
 export var templateFrame = '<div class="overlay"><div class="popup"><h2></h2><div class="content">'+
 '<p id="channelName"></p><p id="channelApplication"></p><p id="channelPosition"></p><p id="channelSize"></p></div></div></div>';
 
 export function implementAnimation(element) {
     var divId = "stopChannel" + element.timeLine;
-    var frame = $(templateFrame);
+    var frame = $(base.templateFrame);
     frame.attr("id", divId);
     frame.find('.popup').children("h2").append(app.replaceLocal({name:"CLOSECHANNEL"}) + ":");
-    frame.find('.content').children("#channelName").append(app.replaceLocal({name:"CHANNELNAME"}) + ": " + element.channelName);
-    frame.find('.content').children("#channelApplication").append(app.replaceLocal({name:"CHANNELAPPLICATION"}) + ": " + element.data);
-    frame.find('.content').children("#channelPosition").append(app.replaceLocal({name:"CHANNELPOSITION"}) + ": " + element.channelBound.x + " x " + element.channelBound.y);
-    frame.find('.content').children("#channelSize").append(app.replaceLocal({name:"CHANNELSIZE"}) + ": " + element.channelBound.width + " x " + element.channelBound.height);
+    frame.find('.popup').children("img").attr("src", base.pathToAssets + "layers_close.png");
+    frame.find('.content').append('<p id="channelName"><span class="textBolder">'+app.replaceLocal({name:"CHANNELNAME"}) + ':</span> ' + element.channelName+'</p>')
+    frame.find('.content').append('<p id="channelPosition"><span class="textBolder">'+app.replaceLocal({name:"CHANNELPOSITION"}) + ': </span>' + element.channelBound.x + " x " + element.channelBound.y +'</p>')
+    frame.find('.content').append('<p id="channelSize"><span class="textBolder">'+app.replaceLocal({name:"CHANNELSIZE"}) + ':</span> ' + element.channelBound.width + " x " + element.channelBound.height +'</p>')
     frame.appendTo("#screenBackground");
+
     timelLineLite.fromTo(frame, 0.5, {x:-$("#screenBackground").width()}, {
         x: 0,
         opacity: 1,

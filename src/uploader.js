@@ -9,6 +9,11 @@ import { implementAnimation as ActionChannelStart } from './animations/channelSt
 import { implementAnimation as ActionMouseScroll } from './animations/mouseScrollAnimation';
 import { implementAnimation as ActionChannelClose } from './animations/closeChannelAnimation';
 import { implementAnimation as ActionMouseKey } from './animations/mouseKeyAnimation';
+import { implementAnimation as ActionComment } from './animations/commentAnimation';
+import { implementAnimation as ActionAssertValue } from './animations/assertionValueAnimation';
+import { implementAnimation as ActionProperty } from './animations/propertyAnimation';
+import { implementAnimation as ActionAssertProperty } from './animations/assertionPropertyAnimation';
+import { implementAnimation as ActionAssertPropertyCount } from './animations/assertionPropertyCountAnimation';
 
 //#region objets du DOM
 export var progressSlider = $("#progressSlider");
@@ -537,7 +542,6 @@ export function animate(currentElement, index) {
       timelLineLite.to(currentElement.img, 0.5, {
         opacity: 1,
         display: "inline-block",
-        delay: 1.5
       });
       timelLineLite.to(images[index-1].img, 0, {
         display: "none"
@@ -559,6 +563,36 @@ export function animate(currentElement, index) {
         ActionMouseKey(currentElement.element, currentElement.img.id);
         break;
       case "com.ats.script.actions.ActionMouseScroll":
+        ActionMouseScroll(currentElement.element);
+        break;
+      case "com.ats.script.actions.ActionComment":
+        ActionComment(currentElement.element);
+        break;
+      case "com.ats.script.actions.ActionText":
+        //ActionMouseScroll(currentElement.element);
+        break;
+      case "com.ats.script.actions.ActionAssertCount":
+        ActionAssertPropertyCount(currentElement.element);
+        break;
+      case "com.ats.script.actions.ActionAssertProperty":
+        ActionAssertProperty(currentElement.element);
+        break;
+      case "com.ats.script.actions.ActionAssertValue":
+        ActionAssertValue(currentElement.element);
+        break;
+      case "com.ats.script.actions.ActionJavascript":
+        //ActionMouseScroll(currentElement.element);
+        break;
+      case "com.ats.script.actions.ActionMouse":
+        //ActionMouseScroll(currentElement.element);
+        break;
+      case "com.ats.script.actions.ActionProperty":
+        ActionProperty(currentElement.element);
+        break;
+      case "com.ats.script.actions.ActionWindowState":
+        //ActionMouseScroll(currentElement.element);
+        break;
+      case "com.ats.script.actions.ActionWindowSwitch":
         //ActionMouseScroll(currentElement.element);
         break;
     }

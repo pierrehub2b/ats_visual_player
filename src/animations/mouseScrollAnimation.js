@@ -1,24 +1,28 @@
 var $ = require('jQuery');
 import { timelLineLite } from '../uploader';
-var app = require('../app');
-import { TimelineMax, TweenMax } from "gsap/TweenMax";
-
-export var templateFrame = '<div class="overlay"><div class="popup"><h2>Démarrage d\'un channel:</h2><div class="content"></div></div></div>';
+var base = require('./baseAnimation');
 
 export function implementAnimation(element) {
-    var divId = "channelStart" + element.timeLine;
-    var frame = $(templateFrame);
+    var divId = "scrollEvent" + element.timeLine;
+    var frame = $(base.arrowUp);
     frame.attr("id", divId);
-    frame.find('.content').html(element.data);
     frame.appendTo("#screenBackground");
-    timelLineLite.to(frame, 0.5, {
-        opacity: 1,
-        display: "flex",
-        delay: 1.5
-    });
-    timelLineLite.to(frame, 0.5, {
+
+    if(element.element.vpos == 'bottom' || element.value > 0) {
+        frame.children("img").attr("src", base.arrowDown);
+    }
+
+    timelLineLite.fromTo(frame, 0.5, {
         opacity: 0,
-        display: "none",
-        delay: 1.5
+        display: "flex",
+        x: 0,
+        y: $("#screenBackground").height() / 2,
+    },
+    {
+        opacity: 1,
+        repeat:5,
+    });
+    timelLineLite.to(frame, 0.2, {
+        opacity: 0
     });
 }

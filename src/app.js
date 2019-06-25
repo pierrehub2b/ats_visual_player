@@ -4,7 +4,7 @@ if (module.hot) {
 
 import './style/app.scss';
 import './style/custom.scss';
-import './style/animation.scss';
+import './style/styleAnimation.scss';
 import AMF from 'amf-js';
 var $ = require('jQuery');
 import { setupScreen, create_UUID, progressSlider } from './uploader';

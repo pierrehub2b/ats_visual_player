@@ -25,7 +25,7 @@ module.exports = merge(common, {
         })
       },
       {
-        test: /animation\.scss$/,
+        test: /styleAnimation\.scss$/,
         use: appCSS.extract({
           fallback: 'style-loader',
           use: ['css-loader', 'sass-loader']

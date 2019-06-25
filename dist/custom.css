@@ -113,11 +113,11 @@ input[type=range]::-moz-range-thumb {
   width: 10px;
   background: #FABA00; }
 
-.bolder {
+.bolder, .textBolder {
   font-weight: bold; }
 
 .popup {
-  background-color: #FABA00; }
+  background-color: #8A9FFF; }
 
 .popup h2 {
   color: #FCFCFC; }
@@ -125,3 +125,9 @@ input[type=range]::-moz-range-thumb {
 .popup .content {
   background-color: #FCFCFC;
   color: #11171B; }
+
+#left-side, #bottom-side, #top-side, #right-side {
+  background: #8A9FFF; }
+
+.circle, .inner {
+  background-color: #8A9FFF; }
