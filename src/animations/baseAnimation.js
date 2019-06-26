@@ -1,7 +1,7 @@
 var $ = require('jQuery');
 import { timelLineLite } from '../uploader';
 
-export var pathToAssets = "../assets/icons/32/";
+export var pathToAssets = "./assets/icons/32/";
 export var box = '<div class="box"><span id="left-side"></span><span id="top-side"></span><span id="right-side"></span><span id="bottom-side"></span></div>';
 export var clickEffectElement = '<div class="circle"><div class="inner"></div></div>';
 export var templateFrame = '<div class="overlay"><div class="popup"><img class="animationImg" /><h2></h2><div class="content"></div></div></div>';
@@ -10,7 +10,7 @@ export var keyboardPointer = "<div class='pointerAction'><img class='animationIm
 export var arrowUp = "<div class='pointerAction'><img class='animationImg' src='"+pathToAssets+"mouse_select_scroll_up.png' /></div>";
 export var arrowDown = ""+pathToAssets+"mouse_select_scroll_down.png";
 
-export var borderSize = 4;
+export var borderSize = 3;
 
 export function calculPositions(element) {
     //calcul position
@@ -19,8 +19,8 @@ export function calculPositions(element) {
     var origin = clientWidth - (clientWidth/2);
     var x = -origin + (element.element.bound.x*ratio) - 3;
     var y = element.element.bound.y*ratio - 3;
-    var xMouse = x + (element.element.bound.width/4);
-    var yMouse = y + (element.element.bound.height/4);
+    var xMouse = x + (element.element.bound.width * ratio);
+    var yMouse = y + (element.element.bound.height * ratio);
     return {x: x, y:y, xMouse: xMouse, yMouse:yMouse, ratio: ratio};
 }
 

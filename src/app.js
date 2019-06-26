@@ -367,9 +367,9 @@ export function getFile(url) {
       crossDomain: true,
       success: function (data, textStatus, xhr) {
         if(id == currentReportId) {
-          upload.openfile(null, null);
           var encodedData = new AMF.Deserializer(data);
           upload.repeat(encodedData, true);
+          upload.openfile(null,null);
         } 
       },
       error: function( req, status, err ) {

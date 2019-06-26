@@ -22,7 +22,7 @@ export function implementAnimation(element) {
         opacity: 1,
         display: "flex"
     });
-    base.createBox(element.timeLine, positions.x,positions.y,element.element.bound.width * positions.ratio, element.element.bound.height * positions.ratio,0.3);
+    base.createBox(element.timeLine, positions.x,positions.y,element.element.bound.width * positions.ratio, element.element.bound.height * positions.ratio,0.2);
     timelLineLite.to(frame, 0.2, {
         x: positions.xMouse + 2, 
         y: positions.yMouse + 2,

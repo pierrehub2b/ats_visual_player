@@ -18,6 +18,12 @@ body {
   width: 100px;
   background-position: center; }
 
+.playerState {
+  color: #FCFCFC;
+  transition: 1s;
+  opacity: 1;
+  font-size: 4em; }
+
 #flashReport {
   background-color: black;
   border-radius: 6px;
@@ -51,11 +57,14 @@ body {
   background-color: #FCFCFC;
   border: #11171B 1px solid; }
 
-#playLabel, #pauseLabel, #restart, #fullScreen, #infoLabel {
+#playButton, #pauseButton, #nextButton, #previousButton, #infoLabel {
   color: #FCFCFC; }
 
 #rangePointer {
   color: #FABA00; }
+
+.nav {
+  background-color: #11171B; }
 
 #player {
   background-color: #11171B; }

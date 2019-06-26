@@ -22,7 +22,7 @@ export function implementAnimationStart(element) {
         opacity: 1,
         display: "flex"
     });
-    base.createBox(element.timeLine, positions.x-5,positions.y-5,element.element.bound.width * positions.ratio+10, element.element.bound.height * positions.ratio+10,0.3);
+    base.createBox(element.timeLine, positions.x,positions.y,element.element.bound.width * positions.ratio, element.element.bound.height * positions.ratio, 0.2);
 }
 
 export function implementAnimationEnd(element) {

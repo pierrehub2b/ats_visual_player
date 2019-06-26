@@ -20,6 +20,8 @@ body {
   min-width: 50px;
   min-height: 50px;
   opacity: 0;
+  transition: 0.5s;
+  z-index: 15;
 }
 
 #flashReport div {
@@ -39,7 +41,7 @@ body {
   text-align: center;
   position: relative;
   width: 100%;
-  height: 93vh;
+  height: 100vh;
   background-repeat: no-repeat;
   background-attachment: inherit;
   background-position: center;
@@ -73,12 +75,16 @@ body {
 
 //nav panel
 .nav {
-  display: inline-block;
-  position: relative;
+  position: absolute;
   padding: 7px 0 0 20px;
   width: 100%;
   text-align: center;
   transition: 0.5s;
+  bottom: 0;
+  height: 7vh;
+  //animation: ease-in 2s linear forwards;
+  display: block;
+  opacity: 0;
 }
 
 #navButtons, #navSlider, #navDisplay {
@@ -140,8 +146,13 @@ body {
 }
 
 //player
-#playLabel, #pauseLabel, #restart, #fullScreen, #infoLabel {
+#playButton, #nextButton, #previousButton, #infoLabel {
   display: inline-block;
+  margin: 0 3px;
+}
+
+#pauseButton {
+  display: none;
   margin: 0 3px;
 }
 
@@ -165,9 +176,9 @@ body {
   overflow: hidden;
 }
 
-.watermark {
+.watermark, .playerState {
   position: absolute;
-  z-index: 10;
+  z-index: 20;
   text-align: center;
   display: none;
   background-repeat: no-repeat;

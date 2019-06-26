@@ -28,9 +28,10 @@ export var navSlider = $("#navSlider");
 export var screenBackground = $("#screenBackground");
 export var imgToolTip = $("#imgToolTip");
 export var rangePointer = $("#rangePointer");
-export var playLabelBtn = $("#playLabel");
-export var pauseLabelBtn = $("#pauseLabel");
-export var restartBtn = $("#restart");
+export var playBtn = $("#playButton");
+export var pauseBtn = $("#pauseButton");
+export var nextBtn = $("#nextButton");
+export var prevBtn = $("#previousButton");
 export var output = $("#output");
 export var spinner = $("#spinner");
 export var loadingCheckmark = $("#loadingCheckmark");
@@ -39,6 +40,7 @@ export var chapterTitle = $("#chapterTitle");
 export var menu = $("#menu");
 export var loadingPercent = $("#loadingPercent");
 export var scriptName = $("#scriptName");
+export var navBar = $(".nav");
 //#endregion
 
 //#region variables globales
@@ -77,27 +79,70 @@ export function setupScreen() {
   
   progressSlider.on("change", update);
 
-  playLabelBtn.on("click", function(event) {
+  playBtn.on("click", function(event) {
     event.stopPropagation();
+    playBtn.css("display","none");
+    pauseBtn.css("display","inline-block");
+    $(".playerState").html("<i class='fas fa-play'></i>");
+    $(".playerState").css("opacity", "0");
+    $(".playerState").html("");
+
     timelLineLite.play();
-    setTimeout(() => {
-      flashReport.fadeTo(500,0);
-    }, 500);
   });
 
-  restartBtn.on("click", function(event) {
-    event.stopPropagation();
-    timelLineLite.restart();
+  $(document).keydown(function(event) {
+    if(event.keyCode == 32) {
+      if(playBtn.css("display") == "none") {
+        pauseBtn.click();
+      } else {
+        playBtn.click();
+      }
+    } 
+    if(event.keyCode == 37) {
+      prevBtn.click();
+    } 
+    if(event.keyCode == 39) {
+      nextBtn.click();
+    }
   });
 
-  pauseLabelBtn.on("click", function(event) {
+  player.mouseover(function(event) {
+    flashReport.css("opacity","0.8");
+    navBar.css("opacity","0.8");
+  });
+
+  player.mouseleave(function(event) {
+    flashReport.css("opacity","0");
+    navBar.css("opacity","0");
+  });
+
+  nextBtn.on("click", function(event) {
     event.stopPropagation();
+    var progress = timelLineLite.progress();
+    var imgNumber = Math.ceil((((images.length -1) / 100) * (progress * 100))) + 1;
+    updateByVal(imgNumber/images.length-1);
+    timelLineLite.play();
+  });
+
+  prevBtn.on("click", function(event) {
+    event.stopPropagation();
+    var progress = timelLineLite.progress();
+    var imgNumber = Math.ceil((((images.length -1) / 100) * (progress * 100))) - 1;
+    updateByVal(imgNumber/images.length-1);
+    timelLineLite.play();
+  });
+
+  pauseBtn.on("click", function(event) {
+    event.stopPropagation();
+    playBtn.css("display","inline-block");
+    pauseBtn.css("display","none");
     timelLineLite.pause();
   });
 
   progressSlider.on("mousemove", function(event) {
     updateTooltipImg(event);
   });
+
   progressSlider.on("mouseleave", function() {
     imgToolTip.css("display", "none");
   });
@@ -449,8 +494,8 @@ export function resultSetup(result, percent) {
     "<div>"+ replaceLocal({ name: "SCRIPTGROUPS"}) +": {groups}</div>",frData);
 
     flashReport.append(output);
-    flashReport.fadeTo(500,0.8);
     allData.push({timeLine: flashReportObject.timeLine, element: flashReportObject.element, type: elementType.FLASHREPORT, img: null});
+    playBtn.click(); 
   }
 
   var imgCounter = allData.filter(_ => _.type === elementType.IMAGE).length;

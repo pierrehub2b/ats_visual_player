@@ -19,7 +19,7 @@ export function implementAnimation(element) {
 
     var positions = base.calculPositions(element);
 
-    base.createBox(element.timeLine, positions.x-5,positions.y-5,element.element.bound.width, element.element.bound.height,0.3);
+    base.createBox(element.timeLine, positions.x,positions.y,element.element.bound.width * positions.ratio, element.element.bound.height * positions.ratio,0.2);
     timelLineLite.to(frame.children(".popup"), 0.5, {
         x: element.element.bound.x + element.element.bound.height,
         y: positions.yMouse + 40
@@ -39,5 +39,5 @@ export function implementAnimation(element) {
         x: 0,
         y: 0
     });
-    base.hideBox(element.timeLine, 0.3);
+    base.hideBox(element.timeLine, 0.2);
 }

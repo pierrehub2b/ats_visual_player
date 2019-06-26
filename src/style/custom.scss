@@ -29,6 +29,13 @@ body {
     background-position: center;
 }
 
+.playerState {
+    color: $agilitestWhite;
+    transition: 1s;
+    opacity: 1;
+    font-size: 4em;
+}
+
 #flashReport {
     background-color: black;
     border-radius: 6px;
@@ -70,12 +77,16 @@ body {
     border: $agilitestBlack 1px solid;
 }
 
-#playLabel, #pauseLabel, #restart, #fullScreen, #infoLabel {
+#playButton, #pauseButton, #nextButton, #previousButton, #infoLabel {
     color: $agilitestWhite;
 }
 
 #rangePointer {
     color: $agilitestOrange;
+}
+
+.nav {
+    background-color: $agilitestBlack;
 }
 
 #player {
