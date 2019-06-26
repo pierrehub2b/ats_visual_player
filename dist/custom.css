@@ -22,7 +22,7 @@ body {
   color: #FCFCFC;
   transition: 0.5s !important;
   opacity: 1;
-  font-size: 4em;
+  font-size: 3em;
   width: 70px;
   text-align: center;
   padding: 30px;
@@ -31,6 +31,9 @@ body {
   top: 40% !important;
   /* bottom: 0; */
   height: 70px !important; }
+
+.playerState i {
+  vertical-align: sub; }
 
 #flashReport {
   background-color: black;
@@ -57,8 +60,11 @@ body {
   color: #FCFCFC; }
 
 #stopRequest {
-  font-size: 20px;
+  font-size: 17px;
   color: #FABA00;
+  position: relative;
+  top: 5px;
+  /* right: 0; */
   float: right; }
 
 #imgToolTip {
@@ -105,11 +111,8 @@ input[type=range]::-moz-range-thumb {
   background: #FCFCFC;
   color: #11171B; }
 
-.progress {
-  background: #FABA00; }
-
 #loadingLabel {
-  color: #FABA00; }
+  color: #11171B; }
 
 .hide {
   display: none; }
@@ -148,3 +151,21 @@ input[type=range]::-moz-range-thumb {
 
 .circle, .inner {
   background-color: #8A9FFF; }
+
+.progressDownload::-webkit-progress-bar {
+  background-color: #EEE; }
+
+.progressDownload::-webkit-progress-value {
+  background-color: #FABA00; }
+
+.progressDownload::-moz-progress-bar {
+  background-color: #FABA00; }
+
+.downloadOver::-webkit-progress-bar {
+  background-color: transparent; }
+
+.downloadOver::-webkit-progress-value {
+  background-color: transparent; }
+
+.downloadOver::-moz-progress-bar {
+  background-color: transparent; }

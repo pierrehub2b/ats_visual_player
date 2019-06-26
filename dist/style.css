@@ -376,12 +376,24 @@ input[type=range]::-moz-range-thumb {
 #addLibrary:hover, #addFiles:hover {
   font-weight: bolder; }
 
-.progress {
-  display: block;
-  height: 2px;
-  transition: width .3s;
-  width: 0px;
-  margin-top: 10px; }
+.progressDownload, .downloadOver {
+  margin-top: 2px;
+  text-align: left;
+  height: 20px;
+  width: 90%;
+  -webkit-appearance: none;
+  border: none;
+  /* Set the progressbar to relative */
+  position: relative; }
+
+.progressDownload:before, .downloadOver::before {
+  content: attr(data-label);
+  font-size: 0.8em;
+  vertical-align: 0;
+  position: absolute;
+  left: 5px;
+  right: 0;
+  top: 2px; }
 
 #addLibrary i, #addFiles i {
   width: 30px; }
@@ -466,10 +478,6 @@ input[type=range]::-moz-range-thumb {
 
 #chapterContainer {
   font-size: 13px; }
-
-#loadingLabel {
-  display: inline-block;
-  margin-left: 10px; }
 
 .atsvList {
   list-style-type: none;

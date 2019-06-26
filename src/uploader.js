@@ -3,7 +3,7 @@ import 'babel-polyfill';
 import { TimelineMax } from "gsap/TweenMax";
 var $ = require('jQuery');
 import './simpledrag';
-import { replaceLocal, defaultLocale, currentReportId, flashReport } from './app';
+import { replaceLocal, defaultLocale, currentReportName, flashReport } from './app';
 import { implementAnimation as ActionGotoUrl } from './animations/gotuUrlAnimation';
 import { implementAnimation as ActionChannelStart } from './animations/channelStartAnimation';
 import { implementAnimation as ActionMouseScroll } from './animations/mouseScrollAnimation';
@@ -344,7 +344,7 @@ export function openfile(file, id) {
   timelLineLite.progress(0).pause();
   updaterangePointer();
 
-  if(file != null && currentReportId == id) {
+  if(file != null && currentReportName == id) {
     loadFile(file);
   } 
 }
@@ -567,10 +567,21 @@ export function resultSetup(result, percent) {
   $(".chapterProgressBar").remove();
   $("#chaptersList > li").remove();
 
-  var parent = $(".bolder").parent();
+  var atsvFiles = $("#listATSV").find(".atsvList").toArray();
+  var current = currentReportName.split("/")[currentReportName.split("/").length-1];
+  var parent = null;
+  for (let a = 0; a < atsvFiles.length; a++) {
+    var currentElement = atsvFiles[a];
+    var fileName = currentElement.children[0].innerText
+    if(fileName == current) {
+      parent = currentElement;
+    }
+  }
+
+  if(parent == null) { return; }
   var chapterContainer = $("#chapterContainer");
   $("#chapterContainer").remove();
-  parent.append(chapterContainer);
+  $(parent).append(chapterContainer);
   if(chapterContainer.css("display") == "none") {
     chapterContainer.css("display","block");
   }

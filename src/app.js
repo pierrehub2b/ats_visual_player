@@ -18,7 +18,7 @@ export var libraryTitle = $("#libraryTitle");
 export var chapterTitle = $("#chapterTitle");
 export var chaptersList = $("#chaptersList");
 export var flashReport = $("#flashReport");
-export var currentReportId = null;
+export var currentReportName = null;
 
 export var libraryExpanded = true;
 export var localeValues = null;
@@ -234,18 +234,20 @@ export function uploadFiles(event) {
   for (let i=0; i<files.length; i++) {
     if(files[i].type == "application/ats.action-test-script.visual-report") {
       var fileName = files[i].name;
-      // if(fileName.length > 45) {
-      //   fileName = fileName.substring(0,40) + " ...";
-      // }
-      
+      if(folder.find("p").toArray().filter(p => p.innerText == fileName).length > 0) {
+        console.log("Element already exist in list.")
+        continue;
+      }      
       var item = $("<i class='fas fa-film'></i><li class='atsvList'><p>"+ fileName +"</p></li>");
       item.on("click", function(event) {
         event.stopPropagation();
-        currentReportId = create_UUID();
+        if(currentReportName == item.innerText) {
+          return;
+        }
+        currentReportName = item.innerText;
         $(".atsvList > p").removeClass("bolder");
         event.target.classList.add("bolder");
-        currentReportId = create_UUID();
-        upload.openfile(files[i], currentReportId);
+        upload.openfile(files[i], currentReportName);
       });
       folder.children('div').append(item);
     }
@@ -309,6 +311,10 @@ export function JsonTraitment(obj) {
         $(".atsvList > p").removeClass("bolder");
         event.target.classList.add("bolder");
         url = event.target.parentNode.getAttribute("url");
+        if(currentReportName == url) {
+          return;
+        }
+        currentReportName = url;
         if(url) {
           if(url.startsWith("./") || url.startsWith("/")) {
             url = serverDir + url.replace('./','/')
@@ -328,14 +334,14 @@ export async function onReaderLoad(event){
 }
 
 export function getFile(url) {
-  upload.openfile(null, null);
   var id = create_UUID();
-  currentReportId = id;
   var parent = $(".bolder").parent();
   parent.children("#chapterContainer").css("display",'none');
   parent.find("#loadingLabel").parent().remove();
-  parent.append("<div id='downloadProgress"+id+"'><i id='stopRequest' class='fas fa-stop-circle'></i><div id='loadingLabel'>"+ replaceLocal({ name: "LOADING"}) +"</div><div id='progress' class='progress' value='0'></div></div>");
-  var progressBar = $("#progress");
+  var localField = replaceLocal({ name: "LOADING"});
+  parent.children("progress").remove();
+  parent.append("<progress id='progressDownload"+id+"' max='100' data-label='"+localField+"' class='progressDownload'></progress><i id='stopRequest' class='fas fa-stop-circle'></i>");
+  var progressBar = $("#progressDownload" + id);
 
   var ajxRequest = $.ajax({ 
     xhr: function () {
@@ -343,14 +349,11 @@ export function getFile(url) {
         xhr.addEventListener("progress", function (evt) {
             if (evt.lengthComputable) {
                 var percentComplete = evt.loaded / evt.total;
-                progressBar.css({
-                    width: percentComplete * 100 + '%'
-                });
+                progressBar.attr("value", percentComplete * 100);
                 if(percentComplete == 1) {
-                  $("#downloadProgress"+id).children("#loadingLabel").html(replaceLocal({ name: "LOADED"})).css("color", "green");
-                  $("#downloadProgress"+id).css("height", "30px");
-                  $("#downloadProgress"+id).children("#stopRequest").remove();
-                  $("#downloadProgress"+id).children("#progress").remove();
+                  progressBar.attr("data-label", replaceLocal({ name: "LOADED"})).css("color", "green");
+                  progressBar.addClass("downloadOver");
+                  progressBar.siblings("#stopRequest").remove();
                 }
             }
         }, false);
@@ -366,11 +369,9 @@ export function getFile(url) {
       headers: header,
       crossDomain: true,
       success: function (data, textStatus, xhr) {
-        if(id == currentReportId) {
-          var encodedData = new AMF.Deserializer(data);
-          upload.repeat(encodedData, true);
-          upload.openfile(null,null);
-        } 
+        upload.openfile(null,null);
+        var encodedData = new AMF.Deserializer(data);
+        upload.repeat(encodedData, true);
       },
       error: function( req, status, err ) {
         $("#downloadProgress"+id).remove();
