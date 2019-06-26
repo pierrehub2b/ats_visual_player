@@ -31,9 +31,17 @@ body {
 
 .playerState {
     color: $agilitestWhite;
-    transition: 1s;
+    transition: 0.5s !important;
     opacity: 1;
     font-size: 4em;
+    width: 70px;
+    text-align: center;
+    padding: 30px;
+    border-radius: 50%;
+    background-color: $agilitestBlack !important;
+    top: 40% !important;
+    /* bottom: 0; */
+    height: 70px !important;
 }
 
 #flashReport {

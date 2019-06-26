@@ -176,7 +176,8 @@ body {
   bottom: 0;
   height: 7vh;
   display: block;
-  opacity: 0; }
+  opacity: 0;
+  z-index: 20; }
 
 #navButtons, #navSlider, #navDisplay {
   display: inline-block;
@@ -250,7 +251,7 @@ body {
   z-index: 0;
   overflow: hidden; }
 
-.watermark, .playerState {
+.watermark {
   position: absolute;
   z-index: 20;
   text-align: center;

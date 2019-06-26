@@ -73,6 +73,33 @@ export function create_UUID() {
   return firstPart + secondPart;
 }
 
+export function showPlayerState(control) {
+  var playerState = $(".playerState");
+  var overlay = playerState.parent();
+  switch(control) {
+    case "play":
+      $(".playerState").html("<i class='fas fa-play'></i>");
+      break;
+      case "pause":
+          $(".playerState").html("<i class='fas fa-pause'></i>");
+          break;
+          case "previous":
+              $(".playerState").html("<i class='fas fa-step-backward'></i>");
+              break;
+              case "next":
+                  $(".playerState").html("<i class='fas fa-step-forward'></i>");
+                  break;
+  }
+  overlay.css("display", "unset");
+  setTimeout(() => {
+    $(".playerState").css("opacity", "0");
+  }, 500);
+  setTimeout(() => {
+    overlay.css("display", "none");
+    $(".playerState").css("opacity", "1");
+  }, 1000);
+}
+
 // instancie timeLineLite et met en place les eventListeners sur les boutons
 export function setupScreen() {
   timelLineLite = new TimelineMax({ paused: true, repeat: 0, onUpdate:adjustUI});
@@ -83,9 +110,8 @@ export function setupScreen() {
     event.stopPropagation();
     playBtn.css("display","none");
     pauseBtn.css("display","inline-block");
-    $(".playerState").html("<i class='fas fa-play'></i>");
-    $(".playerState").css("opacity", "0");
-    $(".playerState").html("");
+
+    showPlayerState("play");
 
     timelLineLite.play();
   });
@@ -121,6 +147,7 @@ export function setupScreen() {
     var progress = timelLineLite.progress();
     var imgNumber = Math.ceil((((images.length -1) / 100) * (progress * 100))) + 1;
     updateByVal(imgNumber/images.length-1);
+    showPlayerState("next");
     timelLineLite.play();
   });
 
@@ -129,6 +156,7 @@ export function setupScreen() {
     var progress = timelLineLite.progress();
     var imgNumber = Math.ceil((((images.length -1) / 100) * (progress * 100))) - 1;
     updateByVal(imgNumber/images.length-1);
+    showPlayerState("previous");
     timelLineLite.play();
   });
 
@@ -136,6 +164,7 @@ export function setupScreen() {
     event.stopPropagation();
     playBtn.css("display","inline-block");
     pauseBtn.css("display","none");
+    showPlayerState("pause");
     timelLineLite.pause();
   });
 
@@ -378,8 +407,8 @@ export function updateByVal(value){
 }
 
 export function updaterangePointer() {
-  if(progressSlider.val() == 0 && flashReport.css("opacity") == "0") {
-    flashReport.fadeTo(500, 0.8);
+  if(progressSlider.val() == 0) {
+    //flashReport.fadeTo(500, 0.8);
     $(".watermark").css("display", "none");
   } else if(progressSlider.val() > 0) {
     $(".watermark").css("display", "block");

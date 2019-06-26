@@ -85,6 +85,7 @@ body {
   //animation: ease-in 2s linear forwards;
   display: block;
   opacity: 0;
+  z-index: 20;
 }
 
 #navButtons, #navSlider, #navDisplay {
@@ -176,7 +177,7 @@ body {
   overflow: hidden;
 }
 
-.watermark, .playerState {
+.watermark {
   position: absolute;
   z-index: 20;
   text-align: center;
