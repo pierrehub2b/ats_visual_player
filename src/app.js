@@ -241,10 +241,10 @@ export function uploadFiles(event) {
       var item = $("<i class='fas fa-film'></i><li class='atsvList'><p>"+ fileName +"</p></li>");
       item.on("click", function(event) {
         event.stopPropagation();
-        if(currentReportName == item.innerText) {
+        if(currentReportName == item[1].innerText) {
           return;
         }
-        currentReportName = item.innerText;
+        currentReportName = item[1].innerText;
         $(".atsvList > p").removeClass("bolder");
         event.target.classList.add("bolder");
         upload.openfile(files[i], currentReportName);
