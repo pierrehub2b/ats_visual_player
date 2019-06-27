@@ -42,3 +42,4 @@ ACTION=Action
 WINDOWSWITCH=Switch window
 WINDOWSTATE=Change window state
 ELEMENTNOTFOUND=Element not found
+READING=Reading in progress

@@ -3,7 +3,7 @@ import 'babel-polyfill';
 import { TimelineMax } from "gsap/TweenMax";
 var $ = require('jQuery');
 import './simpledrag';
-import { replaceLocal, defaultLocale, currentReportName, flashReport } from './app';
+import { replaceLocal, defaultLocale, currentReportName, flashReport, clearOtherReadingState } from './app';
 import { implementAnimation as ActionGotoUrl } from './animations/gotuUrlAnimation';
 import { implementAnimation as ActionChannelStart } from './animations/channelStartAnimation';
 import { implementAnimation as ActionMouseScroll } from './animations/mouseScrollAnimation';
@@ -116,6 +116,22 @@ export function setupScreen() {
     timelLineLite.play();
   });
 
+  pauseBtn.on("click", function(event) {
+    event.stopPropagation();
+    playBtn.css("display","inline-block");
+    pauseBtn.css("display","none");
+    showPlayerState("pause");
+    timelLineLite.pause();
+  });
+
+  screenBackground.on("click", function() {
+    if(playBtn.css("display") == "none") {
+      pauseBtn.click();
+    } else {
+      playBtn.click();
+    }
+  })
+
   $(document).keydown(function(event) {
     if(event.keyCode == 32) {
       if(playBtn.css("display") == "none") {
@@ -133,7 +149,6 @@ export function setupScreen() {
   });
 
   player.mouseover(function(event) {
-    flashReport.css("opacity","0.8");
     navBar.css("opacity","0.8");
   });
 
@@ -147,8 +162,10 @@ export function setupScreen() {
     var progress = timelLineLite.progress();
     var imgNumber = Math.ceil((((images.length -1) / 100) * (progress * 100))) + 1;
     updateByVal(imgNumber/images.length-1);
-    showPlayerState("next");
-    timelLineLite.play();
+    //showPlayerState("next");
+    playBtn.css("display","inline-block");
+    pauseBtn.css("display","none");
+    timelLineLite.pause();
   });
 
   prevBtn.on("click", function(event) {
@@ -156,15 +173,9 @@ export function setupScreen() {
     var progress = timelLineLite.progress();
     var imgNumber = Math.ceil((((images.length -1) / 100) * (progress * 100))) - 1;
     updateByVal(imgNumber/images.length-1);
-    showPlayerState("previous");
-    timelLineLite.play();
-  });
-
-  pauseBtn.on("click", function(event) {
-    event.stopPropagation();
+    //showPlayerState("previous");
     playBtn.css("display","inline-block");
     pauseBtn.css("display","none");
-    showPlayerState("pause");
     timelLineLite.pause();
   });
 
@@ -476,12 +487,43 @@ export function getChapterPosition(timeline) {
   return parseFloat((((100 / images.length) * images.filter(_ => _.timeLine <= timeline).length)/100).toFixed(2));
 }
 
+export function showBottomPanel() {
+  navBar.css("opacity","0.8");
+  setTimeout(() => {
+    flashReport.css("opacity","0.8");
+  }, 1000, setTimeout(() => {
+    flashReport.css("opacity","0");
+  }, 4000), setTimeout(() => {
+    navBar.css("opacity","0");
+  }, 5000));  
+}
+
 export function resultSetup(result, percent) {
   //#region traitment
   var actions = result.filter(_ => _.type ? _.type.indexOf("com.ats") > -1 : false);
   var flashReportObject = result.filter(_ => _.type == "startVisualReport")[0];
 
+  var atsvFiles = $("#listATSV").find(".atsvList").toArray();
+  var current = currentReportName.split("/")[currentReportName.split("/").length-1];
+  var parent = null;
+  for (let a = 0; a < atsvFiles.length; a++) {
+    var currentElement = atsvFiles[a];
+    var fileName = currentElement.children[0].innerText
+    if(fileName == current) {
+      parent = currentElement;
+    }
+  }
+
+  if(parent == null) { return; }
+
   if(flashReportObject) {
+    clearOtherReadingState();
+    if($(parent).children("progress").length == 0) {
+      $(parent).append("<progress id='progressDownload"+ create_UUID() +"' max='100' data-label='"+replaceLocal({ name: "READING"})+"' class='progressDownload downloadOver'></progress>");
+    }
+    $(parent).children("progress").css("color", "blue");
+    $(parent).children("progress").attr("data-label", replaceLocal({ name: "READING"}));
+
     flashReport.html("");
     $("#output").css("display", "block");
     scriptName.html(flashReportObject.name);
@@ -525,6 +567,7 @@ export function resultSetup(result, percent) {
     flashReport.append(output);
     allData.push({timeLine: flashReportObject.timeLine, element: flashReportObject.element, type: elementType.FLASHREPORT, img: null});
     playBtn.click(); 
+    showBottomPanel();
   }
 
   var imgCounter = allData.filter(_ => _.type === elementType.IMAGE).length;
@@ -567,18 +610,6 @@ export function resultSetup(result, percent) {
   $(".chapterProgressBar").remove();
   $("#chaptersList > li").remove();
 
-  var atsvFiles = $("#listATSV").find(".atsvList").toArray();
-  var current = currentReportName.split("/")[currentReportName.split("/").length-1];
-  var parent = null;
-  for (let a = 0; a < atsvFiles.length; a++) {
-    var currentElement = atsvFiles[a];
-    var fileName = currentElement.children[0].innerText
-    if(fileName == current) {
-      parent = currentElement;
-    }
-  }
-
-  if(parent == null) { return; }
   var chapterContainer = $("#chapterContainer");
   $("#chapterContainer").remove();
   $(parent).append(chapterContainer);

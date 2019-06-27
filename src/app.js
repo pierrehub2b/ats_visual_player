@@ -314,14 +314,13 @@ export function JsonTraitment(obj) {
         if(currentReportName == url) {
           return;
         }
-        currentReportName = url;
         if(url) {
           if(url.startsWith("./") || url.startsWith("/")) {
             url = serverDir + url.replace('./','/')
           }
           getFile(url);
         }
-
+        currentReportName = url;
       });
       currentFolder.children('div').append(item);
     }
@@ -331,6 +330,17 @@ export function JsonTraitment(obj) {
 export async function onReaderLoad(event){
   var obj = JSON.parse(event.target.result);
   JsonTraitment(obj);
+}
+
+export function clearOtherReadingState() {
+  var atsvFiles = $("#listATSV").find(".progressDownload").toArray();
+  for (let a = 0; a < atsvFiles.length; a++) {
+    var currentElement = atsvFiles[a];
+    if($(currentElement).attr("data-label") == replaceLocal({ name: "READING"})) {
+      $(currentElement).attr("data-label", replaceLocal({ name: "LOADED"}));
+      $(currentElement).css("color", "green");
+    }
+  }
 }
 
 export function getFile(url) {
@@ -369,13 +379,16 @@ export function getFile(url) {
       headers: header,
       crossDomain: true,
       success: function (data, textStatus, xhr) {
+        if(currentReportName != url) {
+          return;
+        }
         upload.openfile(null,null);
         var encodedData = new AMF.Deserializer(data);
         upload.repeat(encodedData, true);
       },
       error: function( req, status, err ) {
-        $("#downloadProgress"+id).remove();
-        $("#output").css("display", "none");
+        parent.children("progress").remove();
+        parent.children("i").remove();
       }
   });
 
@@ -383,8 +396,8 @@ export function getFile(url) {
   stopButton.on("click", function(event) {
     event.stopPropagation();
     ajxRequest.abort();
-    $("#downloadProgress"+id).remove();
-    $("#output").css("display", "none");
+    parent.children("progress").remove();
+    parent.children("i").remove();
   });
 }
 

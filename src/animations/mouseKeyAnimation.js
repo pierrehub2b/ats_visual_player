@@ -16,7 +16,7 @@ export function implementAnimation(element) {
 
     var positions = base.calculPositions(element);
 
-    timelLineLite.fromTo(frame, 0.5, {y: $("#screenBackground").height()}, {
+    timelLineLite.fromTo(frame, 0.5, {y: base.previousMousePosition.y, x: base.previousMousePosition}, {
         x: positions.xMouse, 
         y: positions.yMouse,
         opacity: 1,
@@ -34,8 +34,9 @@ export function implementAnimation(element) {
     });
     base.hideBox(element.timeLine ,0.2);
     timelLineLite.to(frame, 0.5, {
-        y: $("#screenBackground").height() ,
         opacity: 0,
         display: "none"
     });
+    base.previousMousePosition.x = positions.xMouse;
+    base.previousMousePosition.y = positions.yMouse;
 }

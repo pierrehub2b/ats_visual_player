@@ -10,6 +10,7 @@ export var keyboardPointer = "<div class='pointerAction'><img class='animationIm
 export var arrowUp = "<div class='pointerAction'><img class='animationImg' src='"+pathToAssets+"mouse_select_scroll_up.png' /></div>";
 export var arrowDown = ""+pathToAssets+"mouse_select_scroll_down.png";
 
+export var previousMousePosition = {x: 0, y: $("#screenBackground").height()};
 export var borderSize = 3;
 
 export function calculPositions(element) {

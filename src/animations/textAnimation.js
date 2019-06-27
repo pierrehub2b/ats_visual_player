@@ -16,7 +16,7 @@ export function implementAnimationStart(element) {
 
     var positions = base.calculPositions(element);
 
-    timelLineLite.fromTo(frame, 0.5, {y: $("#screenBackground").height()}, {
+    timelLineLite.fromTo(frame, 0.5, {y: positions.yMouse + element.element.bound.height * positions.ratio, x: positions.xMouse}, {
         x: positions.xMouse, 
         y: positions.yMouse + element.element.bound.height * positions.ratio,
         opacity: 1,
@@ -29,7 +29,6 @@ export function implementAnimationEnd(element) {
     var frame = $("#textEvent"+element.timeLine);
     base.hideBox(element.timeLine ,0.2);
     timelLineLite.to(frame, 0.5, {
-        y: $("#screenBackground").height() ,
         opacity: 0,
         display: "none"
     });
