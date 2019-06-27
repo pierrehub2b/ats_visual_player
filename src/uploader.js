@@ -14,13 +14,13 @@ import { implementAnimation as ActionAssertValue } from './animations/assertionV
 import { implementAnimation as ActionProperty } from './animations/propertyAnimation';
 import { implementAnimation as ActionAssertProperty } from './animations/assertionPropertyAnimation';
 import { implementAnimation as ActionAssertPropertyCount } from './animations/assertionPropertyCountAnimation';
-import { implementAnimationStart as ActionTextStart } from './animations/textAnimation';
-import { implementAnimationEnd as ActionTextEnd } from './animations/textAnimation';
+import { implementAnimation as ActionText } from './animations/textAnimation';
 import { implementAnimation as ActionJavascript } from './animations/javascriptAnimation';
 import { implementAnimation as ActionMouse } from './animations/mouseAnimation';
 import { implementAnimation as ActionWindowState } from './animations/windowStateAnimation';
 import { implementAnimation as ActionWindowSwitch } from './animations/windowSwitchAnimation';
 import { implementAnimation as ActionElementNotFound } from './animations/elementNotFoundAnimation';
+import { implementAnimation as ActionDragDrop } from './animations/dragDropAnimation';
 
 //#region objets du DOM
 export var progressSlider = $("#progressSlider");
@@ -47,13 +47,18 @@ export var navBar = $(".nav");
 export var allData = [];
 export var images = [];
 export var deferred = $.Deferred();
-export var duration;
+export var duration = new Date();
 export var results = [];
 export var timelLineLite;
 export var currentUID; 
 export var atsvUrl = "https://github.com/pierrehub2b/actiontestscript";
 export var chapterExpanded = true;
-export var isTextAnimation = false;
+export var frameForAction = 1;
+export var currentFrameAction = 1;
+export var isDrag = true;
+export var tick = 0;
+export var dateTime = new Date();
+export var timer;
 //#endregion
 
 // enum sur les différents types d'objets dans allData
@@ -80,24 +85,24 @@ export function showPlayerState(control) {
     case "play":
       $(".playerState").html("<i class='fas fa-play'></i>");
       break;
-      case "pause":
-          $(".playerState").html("<i class='fas fa-pause'></i>");
-          break;
-          case "previous":
-              $(".playerState").html("<i class='fas fa-step-backward'></i>");
-              break;
-              case "next":
-                  $(".playerState").html("<i class='fas fa-step-forward'></i>");
-                  break;
+    case "pause":
+      $(".playerState").html("<i class='fas fa-pause'></i>");
+      break;
+    case "previous":
+      $(".playerState").html("<i class='fas fa-step-backward'></i>");
+      break;
+    case "next":
+      $(".playerState").html("<i class='fas fa-step-forward'></i>");
+      break;
   }
   overlay.css("display", "unset");
   setTimeout(() => {
     $(".playerState").css("opacity", "0");
-  }, 500);
+  }, 300);
   setTimeout(() => {
     overlay.css("display", "none");
     $(".playerState").css("opacity", "1");
-  }, 1000);
+  }, 500);
 }
 
 // instancie timeLineLite et met en place les eventListeners sur les boutons
@@ -112,7 +117,7 @@ export function setupScreen() {
     pauseBtn.css("display","inline-block");
 
     showPlayerState("play");
-
+    timer = setInterval(startTimer, 1000);
     timelLineLite.play();
   });
 
@@ -121,6 +126,7 @@ export function setupScreen() {
     playBtn.css("display","inline-block");
     pauseBtn.css("display","none");
     showPlayerState("pause");
+    clearInterval(timer);
     timelLineLite.pause();
   });
 
@@ -243,9 +249,9 @@ export function toAMFObjects(data) {
 export function traitmentDone() {
   spinner.addClass("loadingDone");
   var v = parseFloat(progressSlider.val()) * 100;
-  rangePointer.html(v.toFixed());
+  //rangePointer.html(v.toFixed());
   loadingCheckmark.css("display", "block");
-  output.css("display", "none");
+  //output.css("display", "none");
   var comments = allData.filter(_ => _.type === elementType.CHAPTER);
   for (let comm = 0; comm < comments.length; comm++) {
     const commentaire = comments[comm];
@@ -267,15 +273,13 @@ export function traitmentDone() {
       updateByVal(getChapterPosition(commentaire.timeLine));
     });
   }
-
-  var dt = new Date();
-  dt.setHours(0,0,0,duration);
-  $("#duration").html(replaceLocal({name: "SCRIPTDURATION"}) + ": " + getDuration(dt));
+  var tlDuration = timelLineLite.duration()
+  duration.setHours(0,0,tlDuration,0);
+  $("#duration").html(replaceLocal({name: "SCRIPTDURATION"}) + ": " + getDuration(duration));
 }
 
 export function getDuration(date) {
-  var str = (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + 
-  ":" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) + 
+  var str = (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) + 
   ":" + (date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds());
   return str;
 } 
@@ -348,12 +352,15 @@ export function openfile(file, id) {
   flashReport.html("");
   loadingCheckmark.css("display", "none");
   chapterTitle.css("display", "none");
-  output.css("display", "inline-block");
+  //output.css("display", "inline-block");
   $(".chapterProgressBar").remove();
   $("#menu > li").remove();
-  duration = 0;
   timelLineLite.progress(0).pause();
   updaterangePointer();
+  duration.setHours(0,0,0,0);
+  tick = 0;
+  clearInterval(timer);
+  timer = null;
 
   if(file != null && currentReportName == id) {
     loadFile(file);
@@ -402,19 +409,25 @@ export function encode (input) {
 
 //#region maj de l'UI en fonction de l'avancée du slider
 export function adjustUI() {
+  tick = timelLineLite.duration() * progressSlider.val();
   progressSlider.val(timelLineLite.progress());
   updaterangePointer();
 }
 
 export function update(){
-  timelLineLite.progress(parseFloat(progressSlider.val())).pause();
+  timelLineLite.progress(parseFloat(progressSlider.val()));
+  tick = timelLineLite.duration() * progressSlider.val();
+  startTimer();
   updaterangePointer();
+  pauseBtn.click();
 }
 
 export function updateByVal(value){
-  timelLineLite.pause();
   timelLineLite.progress(value);
+  tick = timelLineLite.duration() * progressSlider.val();
+  startTimer();
   updaterangePointer();
+  pauseBtn.click();
 }
 
 export function updaterangePointer() {
@@ -425,8 +438,9 @@ export function updaterangePointer() {
     $(".watermark").css("display", "block");
   }
 
-  var v = parseFloat(progressSlider.val()) * 100;
-  rangePointer.html(v.toFixed());
+  if(progressSlider.val() == 100) {
+    clearInterval(timer);
+  }
 
   var val = (parseFloat(progressSlider.val()) - progressSlider.attr("min") / (progressSlider.attr("max") - progressSlider.attr("min")));
   var percent = val * 100;
@@ -525,7 +539,7 @@ export function resultSetup(result, percent) {
     $(parent).children("progress").attr("data-label", replaceLocal({ name: "READING"}));
 
     flashReport.html("");
-    $("#output").css("display", "block");
+    //$("#output").css("display", "block");
     scriptName.html(flashReportObject.name);
     $('head title', window.parent.document).text(flashReportObject.name);
     scriptName.css("display", "inline-block");
@@ -566,7 +580,7 @@ export function resultSetup(result, percent) {
 
     flashReport.append(output);
     allData.push({timeLine: flashReportObject.timeLine, element: flashReportObject.element, type: elementType.FLASHREPORT, img: null});
-    playBtn.click(); 
+    playBtn.click();
     showBottomPanel();
   }
 
@@ -581,18 +595,15 @@ export function resultSetup(result, percent) {
     }
     if(element.images) {
       for (let i = 0; i < element.images.length; i++) {
-        var previousValues = allData.filter(_ => _.timeLine == element.timeLine && _.type === elementType.IMAGE);
-        if(previousValues.length == 0 || element.type == "com.ats.script.actions.ActionText") {
-          const img = element.images[i];
-          var bytes = new Uint8Array(img);
-          var imgPreview = document.createElement('img');
-          imgPreview.src = "data:image/"+ element.imageType +";base64,"+ encode(bytes);
-          imgPreview.id = "sliderImg"+ imgCounter;
-          imgCounter++;
-          allData.push({timeLine: element.timeLine, element: element, type: elementType.IMAGE, img: imgPreview });
-          currentImgs.push({timeLine: element.timeLine, element: element, type: elementType.IMAGE, img: imgPreview });
-          screenBackground.append(imgPreview);
-        } 
+        const img = element.images[i];
+        var bytes = new Uint8Array(img);
+        var imgPreview = document.createElement('img');
+        imgPreview.src = "data:image/"+ element.imageType +";base64,"+ encode(bytes);
+        imgPreview.id = "sliderImg"+ imgCounter;
+        imgCounter++;
+        allData.push({timeLine: element.timeLine, element: element, type: elementType.IMAGE, img: imgPreview });
+        currentImgs.push({timeLine: element.timeLine, element: element, type: elementType.IMAGE, img: imgPreview });
+        screenBackground.append(imgPreview);
       }
     }
   }
@@ -612,6 +623,9 @@ export function resultSetup(result, percent) {
 
   var chapterContainer = $("#chapterContainer");
   $("#chapterContainer").remove();
+
+
+
   $(parent).append(chapterContainer);
   if(chapterContainer.css("display") == "none") {
     chapterContainer.css("display","block");
@@ -650,10 +664,16 @@ export function resultSetup(result, percent) {
   images = allData.filter(_ => _.type === elementType.IMAGE);
   for (let currentImgIndex = 0; currentImgIndex < currentImgs.length; currentImgIndex++) {
     const element = currentImgs[currentImgIndex];
-    duration += element.element.duration;
     animate(element, images.length-currentImgs.length+currentImgIndex);
   }
   //#endregion   
+}
+
+export function startTimer() {
+  var d = new Date();
+  tick++;
+  d.setHours(0,0,tick,0);
+  rangePointer.html(getDuration(d) + " / " + getDuration(duration));
 }
 
 export function animate(currentElement, index) {
@@ -672,60 +692,121 @@ export function animate(currentElement, index) {
       }); 
     }
 
-    if(!isTextAnimation && currentElement.element.error != -1) {
+    if(currentElement.element.error != -1) {
       switch(currentElement.element.type) {
         case "com.ats.script.actions.ActionText":
-          isTextAnimation = true;
-          ActionTextStart(currentElement.element);
+          //OK
+          frameForAction = 2;
+          ActionText(currentElement.element, currentFrameAction);
+          currentFrameAction++;
+          if(currentFrameAction > frameForAction) {
+            currentFrameAction = 1;
+          }
           break;
         case "com.ats.script.actions.ActionGotoUrl":
-          ActionGotoUrl(currentElement.element);
-          break
+          //OK
+          frameForAction = 2;
+          ActionGotoUrl(currentElement.element, currentFrameAction);
+          currentFrameAction++;
+          if(currentFrameAction > frameForAction) {
+            currentFrameAction = 1;
+          }
+          break;
         case "com.ats.script.actions.ActionChannelStart":
+          //OK
           ActionChannelStart(currentElement.element);
           break;
         case "com.ats.script.actions.ActionChannelClose":
+          //OK
           ActionChannelClose(currentElement.element);
           break;
         case "com.ats.script.actions.ActionMouseKey":
-          ActionMouseKey(currentElement.element, currentElement.img.id);
+          //OK
+          frameForAction = 2;
+          ActionMouseKey(currentElement.element, currentFrameAction);
+          currentFrameAction++;
+          if(currentFrameAction > frameForAction) {
+            currentFrameAction = 1;
+          }
           break;
         case "com.ats.script.actions.ActionMouseScroll":
-          ActionMouseScroll(currentElement.element);
+          //OK
+          frameForAction = 3;
+          ActionMouseScroll(currentElement.element, currentFrameAction);
+          currentFrameAction++;
+          if(currentFrameAction > frameForAction) {
+            currentFrameAction = 1;
+          }
           break;
         case "com.ats.script.actions.ActionComment":
+          //OK
           ActionComment(currentElement.element);
           break;
         case "com.ats.script.actions.ActionAssertCount":
+          //OK
           ActionAssertPropertyCount(currentElement.element);
           break;
         case "com.ats.script.actions.ActionAssertProperty":
+          //OK
           ActionAssertProperty(currentElement.element);
           break;
         case "com.ats.script.actions.ActionAssertValue":
+          //OK
           ActionAssertValue(currentElement.element);
           break;
         case "com.ats.script.actions.ActionJavascript":
-          ActionJavascript(currentElement.element);
+          //OK
+          frameForAction = 2;
+          ActionJavascript(currentElement.element, currentFrameAction);
+          currentFrameAction++;
+          if(currentFrameAction > frameForAction) {
+            currentFrameAction = 1;
+          }
           break;
         case "com.ats.script.actions.ActionMouse":
-          ActionMouse(currentElement.element);
+          //OK
+          frameForAction = 2;
+          ActionMouse(currentElement.element, currentFrameAction);
+          currentFrameAction++;
+          if(currentFrameAction > frameForAction) {
+            currentFrameAction = 1;
+          }
           break;
         case "com.ats.script.actions.ActionProperty":
+          //OK
           ActionProperty(currentElement.element);
           break;
         case "com.ats.script.actions.ActionWindowState":
-          ActionWindowState(currentElement.element);
+          //OK
+          frameForAction = 2;
+          ActionWindowState(currentElement.element, currentFrameAction);
+          currentFrameAction++;
+          if(currentFrameAction > frameForAction) {
+            currentFrameAction = 1;
+          }
           break;
         case "com.ats.script.actions.ActionWindowSwitch":
-          ActionWindowSwitch(currentElement.element);
+          //OK
+          frameForAction = 2;
+          ActionWindowSwitch(currentElement.element, currentFrameAction);
+          currentFrameAction++;
+          if(currentFrameAction > frameForAction) {
+            currentFrameAction = 1;
+          }
+          break;
+        case "com.ats.script.actions.ActionMouseDragDrop":
+          //OK
+          frameForAction = 2;
+          ActionDragDrop(currentElement.element, currentFrameAction, isDrag);
+          currentFrameAction++;
+          isDrag = !isDrag;
+          if(currentFrameAction > frameForAction) {
+            currentFrameAction = 1;
+          }
           break;
       }
     } else if(currentElement.element.error == -1) {
+      //OK
       ActionElementNotFound(currentElement.element);
-    } else {
-      isTextAnimation = false;
-      ActionTextEnd(images[index-1].element);
     }
-
 }

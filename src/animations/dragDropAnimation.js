@@ -3,23 +3,30 @@ import { timelLineLite } from '../uploader';
 var app = require('../app');
 var base = require('./baseAnimation');
 
-export function implementAnimation(element, frameCounter) {
-    if(frameCounter ==1) {
-        implementAnimationStart(element);
+export function implementAnimation(element, frameCounter, isDrag) {
+    if(frameCounter == 1) {
+        implementAnimationStart(element, isDrag);
     } else {
-        implementAnimationEnd(element);
+        implementAnimationEnd(element)
     }
 }
 
-export function implementAnimationStart(element) {
+export function implementAnimationStart(element, isDrag) {
     var divId = "mouse" + element.timeLine;
     var frame = $(base.templateFrame);
     var box = $(base.box);
     box.attr("id", "box" + element.timeLine);
-    frame.attr("id", divId);
-    frame.find('.popup').children("h2").append(app.replaceLocal({name:"MOUSEANIMATION"}));
+    frame.attr("id", divId); 
     frame.find('.popup').addClass("positioned");
-    frame.find('.popup').children("img").attr("src", base.pathToAssets + "mouse_over.png")
+    var imgPath = "drag_start.png";
+    var localField = app.replaceLocal({name:"MOUSEDRAG"});
+    if(!isDrag) {
+        var imgPath = "drag_drop.png";   
+        localField = app.replaceLocal({name:"MOUSEDROP"});
+    }
+    frame.find('.popup').children("h2").append(localField);
+    frame.find('.popup').children("img").attr("src", base.pathToAssets + imgPath)
+    
     frame.find('.content').append("<p><span class='textBolder'>" + app.replaceLocal({name:"CRITERIA"}) + ": </span>" + element.element.criterias + "</p>");
     frame.find('.content').append("<p><span class='textBolder'>" + app.replaceLocal({name:"ACTION"}) + ": </span>" + element.value + "</p>");
     frame.appendTo("#screenBackground");
@@ -42,7 +49,7 @@ export function implementAnimationStart(element) {
 export function implementAnimationEnd(element) {
     var divId = "#mouse" + element.timeLine;
     var frame = $(divId);
-
+    
     timelLineLite.fromTo(frame, 0.5, {x:0}, {
         x:-$("#screenBackground").width(),
         opacity: 0,

@@ -2,6 +2,14 @@ var $ = require('jQuery');
 import { timelLineLite } from '../uploader';
 var base = require('./baseAnimation');
 
+export function implementAnimation(element, frameCounter) {
+    if(frameCounter ==1) {
+        implementAnimationStart(element);
+    } else {
+        implementAnimationEnd(element);
+    }
+}
+
 export function implementAnimationStart(element) {
     var divId = "textEvent" + element.timeLine;
     var frame = $(base.keyboardPointer);
@@ -30,6 +38,7 @@ export function implementAnimationEnd(element) {
     base.hideBox(element.timeLine ,0.2);
     timelLineLite.to(frame, 0.5, {
         opacity: 0,
-        display: "none"
+        display: "none",
+        delay: 1
     });
 }

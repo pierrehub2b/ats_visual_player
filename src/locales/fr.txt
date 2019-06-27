@@ -43,3 +43,5 @@ WINDOWSWITCH=Changement de fenêtre
 WINDOWSTATE=Changement d'état de fenêtre
 ELEMENTNOTFOUND=Elément introuvable
 READING=Lecture en cours
+MOUSEDRAG=Glisser
+MOUSEDROP=Déposer

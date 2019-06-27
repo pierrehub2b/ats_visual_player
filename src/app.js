@@ -7,7 +7,7 @@ import './style/custom.scss';
 import './style/styleAnimation.scss';
 import AMF from 'amf-js';
 var $ = require('jQuery');
-import { setupScreen, create_UUID, progressSlider } from './uploader';
+import { setupScreen, create_UUID, progressSlider, imgToolTip } from './uploader';
 var upload = require('./uploader');
 export var addLibrary = $("#addLibrary");
 export var addFiles = $("#addFiles");
@@ -320,7 +320,6 @@ export function JsonTraitment(obj) {
           }
           getFile(url);
         }
-        currentReportName = url;
       });
       currentFolder.children('div').append(item);
     }
@@ -341,6 +340,15 @@ export function clearOtherReadingState() {
       $(currentElement).css("color", "green");
     }
   }
+}
+
+export function getUrlParameter( name, url ) {
+  if (!url) url = location.href;
+  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+  var regexS = "[\\?&]"+name+"=([^&#]*)";
+  var regex = new RegExp( regexS );
+  var results = regex.exec( url );
+  return results == null ? null : results[1];
 }
 
 export function getFile(url) {
@@ -379,9 +387,10 @@ export function getFile(url) {
       headers: header,
       crossDomain: true,
       success: function (data, textStatus, xhr) {
-        if(currentReportName != url) {
+        if(currentReportName == url) {
           return;
         }
+        currentReportName = url;
         upload.openfile(null,null);
         var encodedData = new AMF.Deserializer(data);
         upload.repeat(encodedData, true);
@@ -411,5 +420,9 @@ setupSettings().then(() => {
   getLocalization().then(_ => {
     setupScreen();
     readLocalJSON();
+    var param = getUrlParameter("url", window.location.href);
+    if(param && param != "") {
+      getFile(param);
+    }
   });
 });

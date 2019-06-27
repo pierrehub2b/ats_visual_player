@@ -2,7 +2,15 @@ var $ = require('jQuery');
 import { timelLineLite } from '../uploader';
 var base = require('./baseAnimation');
 
-export function implementAnimation(element) {
+export function implementAnimation(element, frameCounter) {
+    if(frameCounter ==1) {
+        implementAnimationStart(element);
+    } else {
+        implementAnimationEnd(element);
+    }
+}
+
+export function implementAnimationStart(element) {
     var divId = "pointerEvent" + element.timeLine;
     var frame = $(base.mousePointer);
     var box = $(base.box);
@@ -32,11 +40,17 @@ export function implementAnimation(element) {
         x: positions.xMouse, 
         y: positions.yMouse,
     });
+    base.previousMousePosition.x = positions.xMouse;
+    base.previousMousePosition.y = positions.yMouse;
+}
+
+export function implementAnimationEnd(element) {
+    var divId = "#pointerEvent" + element.timeLine;
+    var frame = $(divId);
+
     base.hideBox(element.timeLine ,0.2);
     timelLineLite.to(frame, 0.5, {
         opacity: 0,
         display: "none"
     });
-    base.previousMousePosition.x = positions.xMouse;
-    base.previousMousePosition.y = positions.yMouse;
 }
