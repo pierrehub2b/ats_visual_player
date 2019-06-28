@@ -28,7 +28,6 @@ body {
   padding: 30px;
   border-radius: 50%;
   background-color: #11171B !important;
-  top: 40% !important;
   /* bottom: 0; */
   height: 70px !important; }
 
@@ -151,21 +150,3 @@ input[type=range]::-moz-range-thumb {
 
 .circle, .inner {
   background-color: #8A9FFF; }
-
-.progressDownload::-webkit-progress-bar {
-  background-color: #EEE; }
-
-.progressDownload::-webkit-progress-value {
-  background-color: #FABA00; }
-
-.progressDownload::-moz-progress-bar {
-  background-color: #FABA00; }
-
-.downloadOver::-webkit-progress-bar {
-  background-color: transparent; }
-
-.downloadOver::-webkit-progress-value {
-  background-color: transparent; }
-
-.downloadOver::-moz-progress-bar {
-  background-color: transparent; }

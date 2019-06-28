@@ -24,24 +24,22 @@ export function implementAnimationStart(element) {
 
     var positions = base.calculPositions(element);
 
-    timelLineLite.fromTo(frame, 0.5, {y: base.previousMousePosition.y, x: base.previousMousePosition}, {
-        x: positions.xMouse, 
-        y: positions.yMouse,
+    var clickPositionX = (positions.xMouse + 1);
+    var clickPositionY = (positions.yMouse - 2);
+
+    frame.css("left", clickPositionX + "%");
+    frame.css("top", clickPositionY + "%");
+
+    timelLineLite.fromTo(frame, 0.5, {top: base.previousMousePosition.y + "%", left: base.previousMousePosition.x + "%"}, {
+        left: clickPositionX + "%",
+        top: clickPositionY + "%",
         opacity: 1,
         display: "flex"
     });
-    base.createBox(element.timeLine, positions.x,positions.y,element.element.bound.width * positions.ratio, element.element.bound.height * positions.ratio,0.2);
-    timelLineLite.to(frame, 0.2, {
-        x: positions.xMouse + 2, 
-        y: positions.yMouse + 2,
-    });
-    base.clickAnimation(element.timeLine, positions.xMouse,positions.yMouse);
-    timelLineLite.to(frame, 0.2, {
-        x: positions.xMouse, 
-        y: positions.yMouse,
-    });
-    base.previousMousePosition.x = positions.xMouse;
-    base.previousMousePosition.y = positions.yMouse;
+    base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
+    base.clickAnimation(element.timeLine, clickPositionX,clickPositionY-1);
+    base.previousMousePosition.x = clickPositionX;
+    base.previousMousePosition.y = clickPositionY;
 }
 
 export function implementAnimationEnd(element) {

@@ -39,7 +39,6 @@ body {
     padding: 30px;
     border-radius: 50%;
     background-color: $agilitestBlack !important;
-    top: 40% !important;
     /* bottom: 0; */
     height: 70px !important;
 }
@@ -199,24 +198,4 @@ input[type=range]::-moz-range-thumb {
 
   .circle, .inner {
     background-color : $agilitestBlue;
-  }
-
-  .progressDownload::-webkit-progress-bar {
-    background-color:$agilitestGrey;
-  }
-  .progressDownload::-webkit-progress-value {
-    background-color: $agilitestOrange;
-  }
-  .progressDownload::-moz-progress-bar {
-    background-color: $agilitestOrange;
-  }
-
-  .downloadOver::-webkit-progress-bar {
-    background-color: transparent;
-  }
-  .downloadOver::-webkit-progress-value {
-    background-color: transparent;
-  }
-  .downloadOver::-moz-progress-bar {
-    background-color: transparent;
   }

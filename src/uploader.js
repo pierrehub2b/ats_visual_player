@@ -95,7 +95,7 @@ export function showPlayerState(control) {
       $(".playerState").html("<i class='fas fa-step-forward'></i>");
       break;
   }
-  overlay.css("display", "unset");
+  overlay.css("display", "flex");
   setTimeout(() => {
     $(".playerState").css("opacity", "0");
   }, 300);
@@ -109,7 +109,7 @@ export function showPlayerState(control) {
 export function setupScreen() {
   timelLineLite = new TimelineMax({ paused: true, repeat: 0, onUpdate:adjustUI});
   
-  progressSlider.on("change", update);
+  progressSlider.on("click", update);
 
   playBtn.on("click", function(event) {
     event.stopPropagation();
@@ -418,16 +418,22 @@ export function update(){
   timelLineLite.progress(parseFloat(progressSlider.val()));
   tick = timelLineLite.duration() * progressSlider.val();
   startTimer();
+  clearInterval(timer);
   updaterangePointer();
-  pauseBtn.click();
+  playBtn.css("display","inline-block");
+  pauseBtn.css("display","none");
+  timelLineLite.pause();
 }
 
 export function updateByVal(value){
   timelLineLite.progress(value);
-  tick = timelLineLite.duration() * progressSlider.val();
+  tick = timelLineLite.duration() * value;
   startTimer();
+  clearInterval(timer);
   updaterangePointer();
-  pauseBtn.click();
+  playBtn.css("display","inline-block");
+  pauseBtn.css("display","none");
+  timelLineLite.pause();
 }
 
 export function updaterangePointer() {
@@ -438,7 +444,7 @@ export function updaterangePointer() {
     $(".watermark").css("display", "block");
   }
 
-  if(progressSlider.val() == 100) {
+  if(progressSlider.val() == 1) {
     clearInterval(timer);
   }
 
@@ -532,11 +538,12 @@ export function resultSetup(result, percent) {
 
   if(flashReportObject) {
     clearOtherReadingState();
-    if($(parent).children("progress").length == 0) {
-      $(parent).append("<progress id='progressDownload"+ create_UUID() +"' max='100' data-label='"+replaceLocal({ name: "READING"})+"' class='progressDownload downloadOver'></progress>");
+    if($(parent).children(".progressDownload").length == 0) {
+      var tmpl = '<div id="progressDownload'+create_UUID()+'" class="progressDownload downloadOver" data-label="'+replaceLocal({ name: "READING"})+'"><span class="value"></span></div>';
+      $(parent).append(tmpl);
     }
-    $(parent).children("progress").css("color", "blue");
-    $(parent).children("progress").attr("data-label", replaceLocal({ name: "READING"}));
+    $(parent).children(".progressDownload").css("color", "blue");
+    $(parent).children(".progressDownload").attr("data-label", replaceLocal({ name: "READING"}));
 
     flashReport.html("");
     //$("#output").css("display", "block");

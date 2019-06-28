@@ -19,25 +19,17 @@ export function implementAnimation(element) {
 
     var positions = base.calculPositions(element);
 
-    base.createBox(element.timeLine, positions.x,positions.y,element.element.bound.width * positions.ratio, element.element.bound.height * positions.ratio, 0.2);
-    timelLineLite.to(frame.children(".popup"), 0.5, {
-        x: element.element.bound.x + element.element.bound.height,
-        y: positions.yMouse + 40
-    });
-    timelLineLite.fromTo(frame, 0.5, {x:-$("#screenBackground").width()}, {
-        x: 0,
+    base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
+    timelLineLite.fromTo(frame, 0.5, {top: "50%", left: "0%"}, {
+        left: positions.xMouse + "%",
+        top: positions.yMouse + 2 + "%",
         opacity: 1,
         display: "flex"
     });
-    timelLineLite.fromTo(frame, 0.5, {x:0}, {
-        x:-$("#screenBackground").width(),
+    timelLineLite.to(frame, 0.5, {
         opacity: 0,
         display: "none",
         delay: 2
-    });
-    timelLineLite.to(frame.children(".popup"), 0.5, {
-        x: 0,
-        y: 0
     });
     base.hideBox(element.timeLine, 0.2);
 }

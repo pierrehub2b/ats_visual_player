@@ -14,23 +14,30 @@ export var previousMousePosition = {x: 0, y: $("#screenBackground").height()};
 export var borderSize = 3;
 
 export function calculPositions(element) {
-    //calcul position
-    var ratio = $("#screenBackground").height() / element.channelBound.height;
-    var clientWidth = element.channelBound.width*ratio;
-    var origin = clientWidth - (clientWidth/2);
-    var x = -origin + (element.element.bound.x*ratio) - 3;
-    var y = element.element.bound.y*ratio - 3;
-    var xMouse = x + (element.element.bound.width * ratio);
-    var yMouse = y + (element.element.bound.height * ratio);
-    return {x: x, y:y, xMouse: xMouse, yMouse:yMouse, ratio: ratio};
+    var screenHeight = $("#screenBackground").height()
+    var screenWidth = $("#screenBackground").width() - 10; // 10 = panelSeparator
+    var ratio = screenHeight / element.channelBound.height;
+    var imgClientWidth = element.channelBound.width * ratio;
+    var leftDistance = (screenWidth - imgClientWidth) / 2;
+
+    var x = (((element.element.bound.x * ratio) + leftDistance) / screenWidth) * 100;
+    var y = ((element.element.bound.y * ratio) / screenHeight) * 100;
+
+    var xMouse = (((element.element.bound.x * ratio) + leftDistance) / screenWidth) * 100;
+    var yMouse = ((((element.element.bound.y + element.element.bound.height) * ratio)) / screenHeight) * 100;
+
+    var elementWidth = ((element.element.bound.width * ratio) / screenWidth) * 100;
+    var elementHeight = ((element.element.bound.height * ratio) / screenHeight) * 100;
+
+    return {x: x, y:y, xMouse: xMouse, yMouse:yMouse, width: elementWidth, height: elementHeight};
 }
 
 export function createBox(id, x,y, width, height, duration) { 
     var box = $("#box" + id);
-    box.css("width", width);
-    box.css("height", height);
-    box.css("left", $("#screenBackground").width() / 2 + x);
-    box.css("top", y);
+    box.css("width", width + "%");
+    box.css("height", height + "%");
+    box.css("left", x + "%");
+    box.css("top", y + "%");
     var top = box.children("#top-side");
     var bottom = box.children("#bottom-side");
     var left = box.children("#left-side");
@@ -46,7 +53,7 @@ export function createBox(id, x,y, width, height, duration) {
             ease: Power0.easeNone
         }, 
         {
-            width: width
+            width: '100%'
         }
     );
 
@@ -60,7 +67,7 @@ export function createBox(id, x,y, width, height, duration) {
             ease: Power0.easeNone
         }, 
         {
-            height: height
+            height: '100%'
         }
     );
 
@@ -74,7 +81,7 @@ export function createBox(id, x,y, width, height, duration) {
             ease: Power0.easeNone
         }, 
         {
-            width: width
+            width: '100%'
         }
     );
 
@@ -88,7 +95,7 @@ export function createBox(id, x,y, width, height, duration) {
             ease: Power0.easeNone
         }, 
         {
-            height: height
+            height: '100%'
         }
     );
 };
@@ -147,10 +154,10 @@ export function hideBox(id, duration) {
 
 export function clickAnimation(id, x,y) {
     var click = $("#click" + id);
+    click.css("left", x + "%");
+    click.css("top", y + "%");
     timelLineLite.fromTo(click, 0.2, 
         {
-            x: x-4,
-            y: y-6,
             immediateRender: false,
             autoRound: false,
             ease: Power0.easeNone,

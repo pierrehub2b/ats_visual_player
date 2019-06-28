@@ -121,6 +121,7 @@ body {
 #progressSlider {
   vertical-align: baseline;
   width: 100%;
+  padding: 0;
 }
 
 #progressSlider:hover, #navButtons div, .left-pane a, #listATSV ul, #chapterTitle, #libraryTitle {
@@ -206,7 +207,7 @@ input[type=range] {
   height: 6px;
 }
 
-input[type=range]::-moz-range-track {
+input[type=range]::-moz-range-track, input[type=range]::-ms-track {
   border: none;
   background: none;
   outline: none;
@@ -219,6 +220,7 @@ input[type=range]:focus {
 
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none !important;
+  border: none;
   height: 13px;
   width: 13px;
   border-radius: 50%;
@@ -339,26 +341,26 @@ $check-thickness: 3px;
   font-weight: bolder;
 }
 
-.progressDownload, .downloadOver {
-  margin-top: 2px;
-  text-align: left;
-  height: 20px;
-  width: 90%;
-  -webkit-appearance: none;
-  border: none;
+// .progressDownload, .downloadOver {
+//   margin-top: 2px;
+//   text-align: left;
+//   height: 20px;
+//   width: 90%;
+//   -webkit-appearance: none;
+//   border: none;
   
-  /* Set the progressbar to relative */
-  position:relative;
-}
-.progressDownload:before, .downloadOver::before {
-  content: attr(data-label);
-  font-size: 0.8em;
-  vertical-align: 0;
-  position: absolute;
-  left: 5px;
-  right: 0;
-  top: 2px;
-}
+//   /* Set the progressbar to relative */
+//   position:relative;
+// }
+// .progressDownload:before, .downloadOver::before {
+//   content: attr(data-label);
+//   font-size: 0.8em;
+//   vertical-align: 0;
+//   position: absolute;
+//   left: 5px;
+//   right: 0;
+//   top: 2px;
+// }
 
 #addLibrary i, #addFiles i {
   width: 30px;
@@ -376,7 +378,7 @@ $check-thickness: 3px;
   margin-top: 5px;
   overflow-y: auto;
   padding-right: 10px;
-  height: 80vh;
+  height: 70vh;
 }
 
 #listATSV div {
@@ -472,4 +474,32 @@ $check-thickness: 3px;
 
 .atsvList p:hover {
   font-weight: bold;
+}
+
+.progressDownload {
+  height: 1.5em;
+  width: 85%;
+  position: relative;
+  display: inline-block;
+  background-color: #FCFCFC;
+}
+.progressDownload:before {
+  content: attr(data-label);
+  font-size: 0.8em;
+  position: absolute;
+  text-align: left;
+  top: 5px;
+  left: 5px;
+  right: 0;
+}
+
+.progressDownload .value {
+  display: inline-block;
+  height: 100%;
+  text-align: left;
+  background-color: #FABA00;
+}
+
+.downloadOver, .downloadOver .value {
+  background-color: transparent;
 }

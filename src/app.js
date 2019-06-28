@@ -7,7 +7,7 @@ import './style/custom.scss';
 import './style/styleAnimation.scss';
 import AMF from 'amf-js';
 var $ = require('jQuery');
-import { setupScreen, create_UUID, progressSlider, imgToolTip } from './uploader';
+import { setupScreen, create_UUID } from './uploader';
 var upload = require('./uploader');
 export var addLibrary = $("#addLibrary");
 export var addFiles = $("#addFiles");
@@ -318,7 +318,7 @@ export function JsonTraitment(obj) {
           if(url.startsWith("./") || url.startsWith("/")) {
             url = serverDir + url.replace('./','/')
           }
-          getFile(url);
+          getFile(url, event.target);
         }
       });
       currentFolder.children('div').append(item);
@@ -351,15 +351,20 @@ export function getUrlParameter( name, url ) {
   return results == null ? null : results[1];
 }
 
-export function getFile(url) {
-  var id = create_UUID();
+export function getFile(url, target) {
   var parent = $(".bolder").parent();
+  if(target) {
+    parent = $(target).parent();
+  }
+
+  var id = create_UUID();
   parent.children("#chapterContainer").css("display",'none');
   parent.find("#loadingLabel").parent().remove();
   var localField = replaceLocal({ name: "LOADING"});
-  parent.children("progress").remove();
-  parent.append("<progress id='progressDownload"+id+"' max='100' data-label='"+localField+"' class='progressDownload'></progress><i id='stopRequest' class='fas fa-stop-circle'></i>");
-  var progressBar = $("#progressDownload" + id);
+  parent.children(".progressDownload").remove();
+
+  var tmpl = '<div id="progressDownload'+id+'" class="progressDownload" data-label="'+localField+'"><span class="value"></span></div><i id="stopRequest" class="fas fa-stop-circle"></i>';
+  parent.append(tmpl);
 
   var ajxRequest = $.ajax({ 
     xhr: function () {
@@ -367,11 +372,11 @@ export function getFile(url) {
         xhr.addEventListener("progress", function (evt) {
             if (evt.lengthComputable) {
                 var percentComplete = evt.loaded / evt.total;
-                progressBar.attr("value", percentComplete * 100);
+                $("#progressDownload" + id).children(".value").css("width", (percentComplete * 100) + "%");
                 if(percentComplete == 1) {
-                  progressBar.attr("data-label", replaceLocal({ name: "LOADED"})).css("color", "green");
-                  progressBar.addClass("downloadOver");
-                  progressBar.siblings("#stopRequest").remove();
+                  $("#progressDownload" + id).parent().children("i").remove();
+                  $("#progressDownload" + id).attr("data-label", replaceLocal({ name: "LOADED"})).css("color", "green");
+                  $("#progressDownload" + id).addClass("downloadOver");
                 }
             }
         }, false);
@@ -396,8 +401,8 @@ export function getFile(url) {
         upload.repeat(encodedData, true);
       },
       error: function( req, status, err ) {
-        parent.children("progress").remove();
-        parent.children("i").remove();
+        $("#progressDownload" + id).remove();
+        $("#progressDownload" + id).siblings("i").remove();
       }
   });
 
@@ -405,8 +410,8 @@ export function getFile(url) {
   stopButton.on("click", function(event) {
     event.stopPropagation();
     ajxRequest.abort();
-    parent.children("progress").remove();
-    parent.children("i").remove();
+    $("#progressDownload" + id).remove();
+    $(event.target).remove();
   });
 }
 
@@ -416,13 +421,13 @@ addLibraryInput.on('change',function (event)
 });
 addFilesInput.on("change", uploadFiles);
 
+setupScreen();
 setupSettings().then(() => {
   getLocalization().then(_ => {
-    setupScreen();
     readLocalJSON();
     var param = getUrlParameter("url", window.location.href);
     if(param && param != "") {
-      getFile(param);
+      getFile(param, null);
     }
   });
 });

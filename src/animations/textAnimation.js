@@ -24,13 +24,14 @@ export function implementAnimationStart(element) {
 
     var positions = base.calculPositions(element);
 
-    timelLineLite.fromTo(frame, 0.5, {y: positions.yMouse + element.element.bound.height * positions.ratio, x: positions.xMouse}, {
-        x: positions.xMouse, 
-        y: positions.yMouse + element.element.bound.height * positions.ratio,
+    frame.css("left", positions.xMouse + "%");
+    frame.css("top", positions.yMouse + "%");
+
+    timelLineLite.to(frame, 0.5, {
         opacity: 1,
         display: "flex"
     });
-    base.createBox(element.timeLine, positions.x,positions.y,element.element.bound.width * positions.ratio, element.element.bound.height * positions.ratio, 0.2);
+    base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
 }
 
 export function implementAnimationEnd(element) {
