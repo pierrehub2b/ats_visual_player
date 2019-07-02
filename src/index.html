@@ -6,22 +6,21 @@
     <meta http-equiv="cache-control" content="no-cache" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="-1" />
-    <link href="./webfonts/font.css" type="text/css" rel="stylesheet"> <!--load all styles -->
   </head>
   <body>
     <div class="panes-container">
       <div class="left-pane" id="left-pane">
         <a class="closebtn">&times;</a>
         <!-- <input type="file" id="uploader" /> -->
-        <div id="addLibrary"><i class="fas fa-file-alt"></i><span name="ADDLIBRARY"></span></div>
-        <div id="addFiles"><i class="fas fa-film"></i><span name="OPENATSV"></span></div>
+        <div id="addLibrary"><img class="appIcon" src="assets/icons/32/file.png" /><span name="ADDLIBRARY"></span></div>
+        <div id="addFiles"><img class="appIcon" src="assets/icons/32/movie.png" /><span name="OPENATSV"></span></div>
         <input id="addLibraryInput" type="file" accept=".json" style="display: none"/>
         <input id="addFilesInput" type="file" accept=".atsv" style="display: none" multiple/>
-        <h4 id="libraryTitle"><i id="libraryTitleCaret" class="fas fa-caret-down"></i><span name="ATSVLIBRARY"></span>:</h4>
+        <h4 id="libraryTitle"><img  id="libraryTitleCaret" class="appIcon" src="assets/icons/32/caret_up.png" /><span name="ATSVLIBRARY"></span>:</h4>
         <input type="text" id="filterATSVFiles" placeholder="">
         <div id="listATSV"></div>
         <div id="chapterContainer">
-          <h4 id="chapterTitle"><i id="chapterTitleCaret" class="fas fa-caret-down"></i><span name="CHAPTERS"></span>:</h4>
+          <h4 id="chapterTitle"><img  id="chapterTitleCaret" class="appIcon" src="assets/icons/32/caret_up.png" /><span name="CHAPTERS"></span>:</h4>
           <div id="chaptersList"></div>
         </div>
       </div>
@@ -38,17 +37,17 @@
           
           <div class="nav">
             <div id="navButtons">
-              <div id="infoLabel"><i class="fas fa-info-circle"></i></div>
+              <div id="infoLabel"><img class="playerIcon" src="assets/icons/32/info.png" /></div>
               <div id="output">
                   <div id="spinner" class="loadingCircle">
                     <div id="loadingCheckmark" class="loadingCheckmark draw"></div>
                   </div>
                   <p id="loadingPercent"></p>
                 </div>
-              <div id="playButton"><i class="fas fa-play"></i></div>
-              <div id="pauseButton"><i class="fas fa-pause"></i></div>
-              <div id="previousButton"><i class="fas fa-step-backward"></i></div>
-              <div id="nextButton"><i class="fas fa-step-forward"></i></div>
+                <div id="playButton"><img class="playerIcon" src="assets/icons/32/play.png" /></div>
+                <div id="pauseButton"><img class="playerIcon" src="assets/icons/32/pause.png" /></div>
+                <div id="previousButton"><img class="playerIcon" src="assets/icons/32/prev.png" /></div>
+                <div id="nextButton"><img class="playerIcon" src="assets/icons/32/next.png" /></div>
             </div>
             
             <div id="navSlider">

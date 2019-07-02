@@ -9,7 +9,7 @@ export function implementAnimation(element) {
     var box = $(base.box);
     box.attr("id", "box" + element.timeLine);
     frame.attr("id", divId);
-    frame.find('.popup').children("h2").append(app.replaceLocal({name:"GETPROPERTY"}));
+    frame.find('.popup').children("h3").append(app.replaceLocal({name:"GETPROPERTY"}));
     frame.find('.popup').addClass("positioned");
     frame.find('.popup').children("img").attr("src", base.pathToAssets + "attributes_display.png")
     frame.find('.content').append("<p><span class='textBolder'>" + app.replaceLocal({name:"ELEMENT"}) + ": </span>" + element.value + "</p>");
@@ -29,7 +29,7 @@ export function implementAnimation(element) {
     timelLineLite.to(frame, 0.5, {
         opacity: 0,
         display: "none",
-        delay: 2
+        delay: base.delay
     });
     base.hideBox(element.timeLine, 0.2);
 }

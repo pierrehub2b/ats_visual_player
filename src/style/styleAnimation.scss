@@ -30,7 +30,7 @@
   position: absolute;
 }
 
-.popup h2 {
+.popup h3 {
   padding: 10px 40px 10px 30px;
   margin: 0;
   font-family: Tahoma, Arial, sans-serif;
@@ -41,6 +41,15 @@
   max-height: 30%;
   overflow: auto;
   padding: 5px 40px 10px 30px;
+}
+
+.popup img {
+  height: 28px !important;
+  width: 28px !important;
+}
+
+.content p {
+  margin: 5px !important;
 }
 
 .scrollAction {
@@ -114,5 +123,7 @@
   top: 0 !important;
   margin-left: 10px !important;
   float: left !important;
-  top: 24px !important;
+  top: 22px !important;
+  width: 26px;
+  height: 26px;
 }

@@ -24,6 +24,10 @@ module.exports = merge(common, {
             loader: 'sass-loader'
           }
         ]
+      },
+      {
+        test: /\.txt$/i,
+        use: 'raw-loader',
       }
     ]
   },
@@ -31,10 +35,10 @@ module.exports = merge(common, {
     headers: {
       'Access-Control-Allow-Origin': '*'
     }
-	},
+  },
+  target:'node',
   plugins: [
     new CopyPlugin([
-      { from: 'src/webfonts', to: 'webfonts' },
       { from: 'src/assets', to: 'assets' },
       { from: 'src/library.json', to: '' },
       { from: 'src/settings.txt', to: '' },

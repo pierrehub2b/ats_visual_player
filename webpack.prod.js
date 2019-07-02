@@ -31,12 +31,15 @@ module.exports = merge(common, {
           use: ['css-loader', 'sass-loader']
         })
       },
+      {
+        test: /\.txt$/i,
+        use: 'raw-loader',
+      }
     ]
   },
   plugins: [
     appCSS, customCSS,
     new CopyWebpackPlugin([
-      { from: 'src/webfonts', to: 'webfonts' },
       { from: 'src/assets', to: 'assets' },
       { from: 'src/settings.txt', to: '' },
       { from: 'src/locales', to: 'locales' },

@@ -3,7 +3,7 @@ import 'babel-polyfill';
 import { TimelineMax } from "gsap/TweenMax";
 var $ = require('jQuery');
 import './simpledrag';
-import { replaceLocal, defaultLocale, currentReportName, flashReport, clearOtherReadingState } from './app';
+import { replaceLocal, currentLocale, currentReportName, flashReport, clearOtherReadingState, uploadFiles } from './app';
 import { implementAnimation as ActionGotoUrl } from './animations/gotuUrlAnimation';
 import { implementAnimation as ActionChannelStart } from './animations/channelStartAnimation';
 import { implementAnimation as ActionMouseScroll } from './animations/mouseScrollAnimation';
@@ -41,6 +41,8 @@ export var menu = $("#menu");
 export var loadingPercent = $("#loadingPercent");
 export var scriptName = $("#scriptName");
 export var navBar = $(".nav");
+export var addLibraryInput = $("#addLibraryInput");
+export var addFilesInput = $("#addFilesInput");
 //#endregion
 
 //#region variables globales
@@ -83,16 +85,16 @@ export function showPlayerState(control) {
   var overlay = playerState.parent();
   switch(control) {
     case "play":
-      $(".playerState").html("<i class='fas fa-play'></i>");
+      $(".playerState").html("<img class='stateIcon' src='assets/icons/32/play.png' />");
       break;
     case "pause":
-      $(".playerState").html("<i class='fas fa-pause'></i>");
+      $(".playerState").html("<img class='stateIcon' src='assets/icons/32/pause.png' />");
       break;
     case "previous":
-      $(".playerState").html("<i class='fas fa-step-backward'></i>");
+      $(".playerState").html("<img class='stateIcon' src='assets/icons/32/prev.png' />");
       break;
     case "next":
-      $(".playerState").html("<i class='fas fa-step-forward'></i>");
+      $(".playerState").html("<img class='stateIcon' src='assets/icons/32/next.png' />");
       break;
   }
   overlay.css("display", "flex");
@@ -107,6 +109,12 @@ export function showPlayerState(control) {
 
 // instancie timeLineLite et met en place les eventListeners sur les boutons
 export function setupScreen() {
+  addLibraryInput.on('change',function (event)
+    {
+      importLibrary(event)
+    });
+    addFilesInput.on("change", uploadFiles);
+
   timelLineLite = new TimelineMax({ paused: true, repeat: 0, onUpdate:adjustUI});
   
   progressSlider.on("click", update);
@@ -552,7 +560,7 @@ export function resultSetup(result, percent) {
     scriptName.css("display", "inline-block");
 
     var locale = "";
-    switch(defaultLocale) {
+    switch(currentLocale) {
       case 'fr':
         locale = 'fr-FR';
         break;
@@ -643,9 +651,9 @@ export function resultSetup(result, percent) {
     $('#chaptersList').slideToggle(200);
     chapterExpanded = !chapterExpanded;
     if(chapterExpanded) {
-      $("#chapterTitleCaret").removeClass("fa-caret-right").addClass("fa-caret-down");
+      $("#chapterTitleCaret").attr("src", "assets/icons/32/caret_up.png");
     } else {
-      $("#chapterTitleCaret").removeClass("fa-caret-down").addClass("fa-caret-right");
+      $("#chapterTitleCaret").attr("src", "assets/icons/32/caret_down.png");
     }
   });
 

@@ -5,10 +5,34 @@ if (module.hot) {
 import './style/app.scss';
 import './style/custom.scss';
 import './style/styleAnimation.scss';
+import { setupScreen, create_UUID } from './uploader';
 import AMF from 'amf-js';
 var $ = require('jQuery');
-import { setupScreen, create_UUID } from './uploader';
 var upload = require('./uploader');
+
+import en from './locales/en.txt'; 
+import fr from './locales/fr.txt'; 
+var currentLocalValues = null;
+export var currentLocale = "en";
+import settings from './settings.txt';
+import local from './locales/locale.json';
+switch(local.defaultLocale) {
+  case 'en':
+    waitingCoefficient = 0.5;
+    currentLocalValues = en;
+    break;
+  case 'fr':
+    waitingCoefficient = 0.5;
+    currentLocale = "fr";
+    currentLocalValues = fr;
+    break;
+  default:
+    waitingCoefficient = 0.5;
+    currentLocalValues = en;
+    break;
+}
+import library from './library.json';
+
 export var addLibrary = $("#addLibrary");
 export var addFiles = $("#addFiles");
 export var addLibraryInput = $("#addLibraryInput");
@@ -22,53 +46,44 @@ export var currentReportName = null;
 
 export var libraryExpanded = true;
 export var localeValues = null;
-export var defaultLocale = null;
 export var waitingCoefficient = 1;
 export var jsonLibraryUrl = '/library.json';
 export var header = { 
-  "Access-Control-Allow-Origin" : "*",
-  'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT'
+  "accept": "application/json",
+   "Access-Control-Allow-Origin":"*"
 };
 
 var loc = window.location.pathname;
 var serverDir = loc.substring(0, loc.lastIndexOf('/'));
 
-export async function setupSettings() {
-  await $.ajax({
-    type: "GET",
-    url: serverDir + '/settings.txt',
-    data: {},
-    crossDomain:true,
-    headers: header,
-    success: function(data) {
-      var values = [];
-      data = data.split("\n");
-      for (let index = 0; index < data.length; index++) {
-        const val = data[index];
-        var keyValuePair = val.split("=");
-        if(keyValuePair.length == 2) {
-          values.push({ name: keyValuePair[0], value: keyValuePair[1]})
-        }
-      }
-      for (let index = 0; index < values.length; index++) {
-        const v = values[index];
-        switch(v.name) {
-          case 'IMGWATERMARK':
-            $("#watermarkImg").attr("src", serverDir + v.value);
-            break;
-          case 'URLWATERMARK':
-            $("#watermarklink").attr("href", v.value);
-            break;
-          case 'IMGBACKGROUND':
-            $("#screenBackground").css("background-image", 'url('+serverDir + v.value+')')
-            break;
-          case 'ATSVLIBRARY':
-            jsonLibraryUrl = v.value;
-            break;
-        }
-      }
+export function setupSettings() {
+  var data = settings;
+  var values = [];
+  data = data.split("\n");
+  for (let index = 0; index < data.length; index++) {
+    const val = data[index];
+    var keyValuePair = val.split("=");
+    if(keyValuePair.length == 2) {
+      values.push({ name: keyValuePair[0], value: keyValuePair[1]})
     }
-  }); 
+  }
+  for (let index = 0; index < values.length; index++) {
+    const v = values[index];
+    switch(v.name) {
+      case 'IMGWATERMARK':
+        $("#watermarkImg").attr("src", serverDir + v.value);
+        break;
+      case 'URLWATERMARK':
+        $("#watermarklink").attr("href", v.value);
+        break;
+      case 'IMGBACKGROUND':
+        $("#screenBackground").css("background-image", 'url('+serverDir + v.value+')')
+        break;
+      case 'ATSVLIBRARY':
+        jsonLibraryUrl = v.value;
+        break;
+    }
+  }
 }
 
 export function replaceLocal(token) {
@@ -85,49 +100,19 @@ export function replaceLocal(token) {
   return "";
 }
 
-export async function getLocalization() {
-  await $.ajax({
-    type: "GET",
-    url: serverDir + '/locales/locale.json',
-    data: {},
-    crossDomain:true,
-    headers: header,
-    success: function(data) {
-      defaultLocale = data.defaultLocale;
-      switch(defaultLocale) {
-        case 'fr':
-          waitingCoefficient = 0.5;
-          break;
-        case 'en':
-          waitingCoefficient = 0.5;
-          break;
-      }
-      return getLocalizationValues(defaultLocale);
+export async function setLocalizationValues() {
+  var data = currentLocalValues;
+  var values = [];
+  data = data.split("\n");
+  for (let index = 0; index < data.length; index++) {
+    const val = data[index];
+    var keyValuePair = val.split("=");
+    if(keyValuePair.length == 2) {
+      values.push({ name: keyValuePair[0], value: keyValuePair[1]})
     }
-  }); 
-}
-
-export async function getLocalizationValues(locale) {
-  await $.ajax({
-    type: "GET",
-    url: serverDir + '/locales/'+locale+'.txt',
-    data: {},
-    crossDomain:true,
-    headers: header,
-    success: function(data) {
-      var values = [];
-      data = data.split("\n");
-      for (let index = 0; index < data.length; index++) {
-        const val = data[index];
-        var keyValuePair = val.split("=");
-        if(keyValuePair.length == 2) {
-          values.push({ name: keyValuePair[0], value: keyValuePair[1]})
-        }
-      }
-      localeValues = values;
-      setupLocalization();
-    }
-  }); 
+  }
+  localeValues = values;
+  setupLocalization();
 }
 
 export async function setupLocalization() {
@@ -154,9 +139,9 @@ libraryTitle.on("click", function(event) {
   $('#filterATSVFiles').slideToggle(200);
   libraryExpanded = !libraryExpanded;
   if(libraryExpanded) {
-    $("#libraryTitleCaret").removeClass("fa-caret-right").addClass("fa-caret-down");
+    $("#libraryTitleCaret").attr("src", "assets/icons/32/caret_up.png")
   } else {
-    $("#libraryTitleCaret").removeClass("fa-caret-down").addClass("fa-caret-right");
+    $("#libraryTitleCaret").attr("src", "assets/icons/32/caret_down.png")
   }
 });
 
@@ -211,20 +196,18 @@ export function uploadFiles(event) {
 
   if(folders == 0) {
     //creation d'un dossier défaut 
-    var ulFolder = $("<ul id='defaultFolder'><i class='fas fa-folder-open'></i><p>"+replaceLocal({ name: "LOCALFOLDER"})+"</p><div></div></ul>");
+    var ulFolder = $("<ul id='defaultFolder'><img class='appIcon' src='assets/icons/32/folder_open.png' /><p>"+replaceLocal({ name: "LOCALFOLDER"})+"</p><div></div></ul>");
     listATSV.append(ulFolder);
     ulFolder.on("click", function(event) {
       event.stopPropagation();
       var elem = $("#" + event.target.parentNode.id);
       elem.children('div').slideToggle(200);
       elem.children('#chapterContainer').slideToggle(200);
-      var iElem = elem.children('i')[0];
-      if(iElem.classList.contains("fa-folder-open")) {
-        iElem.classList.remove("fa-folder-open");
-        iElem.classList.add("fa-folder");
+      var iElem = elem.children('.appIcon');
+      if(iElem.attr("src").indexOf("open") >= 0) {
+        iElem.attr("src","assets/icons/32/folder_close.png");
       } else {
-        iElem.classList.remove("fa-folder")
-        iElem.classList.add("fa-folder-open")
+        iElem.attr("src","assets/icons/32/folder_open.png");
       }
     });
   }
@@ -238,7 +221,7 @@ export function uploadFiles(event) {
         console.log("Element already exist in list.")
         continue;
       }      
-      var item = $("<i class='fas fa-film'></i><li class='atsvList'><p>"+ fileName +"</p></li>");
+      var item = $("<img class='appIcon' src='assets/icons/32/movie.png' /><li class='atsvList'><p>"+ fileName +"</p></li>");
       item.on("click", function(event) {
         event.stopPropagation();
         if(currentReportName == item[1].innerText) {
@@ -254,31 +237,12 @@ export function uploadFiles(event) {
   };
 }
 
-export function importLibrary(event) {
-  let file = event.target.files[0];
-  var reader = new FileReader();
-  reader.onload = onReaderLoad;
-  reader.readAsText(file);
-}
-
-export function readLocalJSON() {
-  $.ajax({
-    type: "GET",
-    url: serverDir + jsonLibraryUrl,
-    data: {},
-    crossDomain:true,
-    headers: header,
-    success: function(data) {
-      JsonTraitment(data);
-    }
-  });
-}
-
-export function JsonTraitment(obj) {
-  for (let i = 0; i < obj.folders.length; i++) {
-    const folder = obj.folders[i];
+export function setLibrary() {
+  var data = library;
+  for (let i = 0; i < data.folders.length; i++) {
+    const folder = data.folders[i];
     var name = folder.name;
-    var ulFolder = $("<ul id='"+name.replace(/ /g, '')+"'><i class='fas fa-folder-open'></i><p>"+name+"</p><div></div></ul>");
+    var ulFolder = $("<ul id='"+name.replace(/ /g, '')+"'><img class='appIcon' src='assets/icons/32/folder_open.png' /><p>"+name+"</p><div></div></ul>");
     listATSV.append(ulFolder);
     var currentFolder = $("#"+name.replace(/ /g, ''));
     currentFolder.on("click", function(event) {
@@ -286,13 +250,11 @@ export function JsonTraitment(obj) {
       var elem = $("#" + event.target.parentNode.id);
       elem.children('div').slideToggle(200);
       elem.children('#chapterContainer').slideToggle(200);
-      var iElem = elem.children('i')[0];
-      if(iElem.classList.contains("fa-folder-open")) {
-        iElem.classList.remove("fa-folder-open");
-        iElem.classList.add("fa-folder");
+      var iElem = elem.children('.appIcon');
+      if(iElem.attr("src").indexOf("open") >= 0) {
+        iElem.attr("src","assets/icons/32/folder_close.png");
       } else {
-        iElem.classList.remove("fa-folder")
-        iElem.classList.add("fa-folder-open")
+        iElem.attr("src","assets/icons/32/folder_open.png");
       }
     });
     var urls = folder.urls;
@@ -304,7 +266,7 @@ export function JsonTraitment(obj) {
       // if(fileName.length > 45) {
       //   fileName = fileName.substring(0,40) + " ...";
       // }
-      var item = $("<i class='fas fa-film'></i><li class='atsvList'><p>"+ fileName +"</p></li>");
+      var item = $("<img class='appIcon' src='assets/icons/32/movie.png' /><li class='atsvList'><p>"+ fileName +"</p></li>");
       item.attr("url", url);
       item.on("click", function(event) {
         event.stopPropagation();
@@ -363,7 +325,7 @@ export function getFile(url, target) {
   var localField = replaceLocal({ name: "LOADING"});
   parent.children(".progressDownload").remove();
 
-  var tmpl = '<div id="progressDownload'+id+'" class="progressDownload" data-label="'+localField+'"><span class="value"></span></div><i id="stopRequest" class="fas fa-stop-circle"></i>';
+  var tmpl = '<div id="progressDownload'+id+'" class="progressDownload" data-label="'+localField+'"><span class="value"></span></div><img id="stopRequest" class="appIcon" src="assets/icons/32/cancel.png" />';
   parent.append(tmpl);
 
   var ajxRequest = $.ajax({ 
@@ -415,19 +377,47 @@ export function getFile(url, target) {
   });
 }
 
-addLibraryInput.on('change',function (event)
+export function readTextFile(file)
 {
-    importLibrary(event)
-});
-addFilesInput.on("change", uploadFiles);
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, false);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                var allText = rawFile.responseText;
+                return allText;
+            }
+        }
+    }
+    rawFile.send(null);
+}
 
 setupScreen();
-setupSettings().then(() => {
-  getLocalization().then(_ => {
-    readLocalJSON();
-    var param = getUrlParameter("url", window.location.href);
-    if(param && param != "") {
-      getFile(param, null);
-    }
-  });
-});
+// fileStream.readFile(__dirname, 'settings.txt', {encoding: 'utf-8'}, function(err,data){
+//   if (!err) {
+//       console.log('received data: ' + data);
+//       // response.writeHead(200, {'Content-Type': 'text/html'});
+//       // response.write(data);
+//       // response.end();
+//   } else {
+//       console.log(err);
+//   }
+// });
+
+
+//var settings = readTextFile(serverDir + '/');
+// var locale = readTextFile(serverDir + '/locales/locale.json');
+// var library = readTextFile(serverDir + jsonLibraryUrl);
+
+setupSettings();
+setLocalizationValues();
+setLibrary();
+
+
+var param = getUrlParameter("url", window.location.href);
+if(param && param != "") {
+  getFile(param, null);
+}

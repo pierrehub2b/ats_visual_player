@@ -113,8 +113,22 @@ body {
   z-index: 3;
 }
 
-.fa-film {
+.appIcon {
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+  vertical-align: bottom;
   float: left;
+}
+
+.playerIcon {
+  width: 22px;
+  height: 22px;
+}
+
+.stateIcon {
+  width: 42px !important;
+  height: 42px !important;
 }
 
 //slider
@@ -403,7 +417,7 @@ $check-thickness: 3px;
   cursor: pointer;
 }
 
-.left-pane h2 {
+.left-pane h3 {
   margin: 10px 0;
   word-break: keep-all;
   width: 95%;

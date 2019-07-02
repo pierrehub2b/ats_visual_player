@@ -15,8 +15,12 @@ export function implementAnimationStart(element) {
     var divId = "stateWindow" + element.timeLine;
     var frame = $(base.templateFrame);
     frame.attr("id", divId);
-    frame.find('.popup').children("h2").append(app.replaceLocal({name:"WINDOWSTATE"}));
-    frame.find('.popup').children("img").attr("src", base.pathToAssets + "title_window.png");
+    frame.find('.popup').children("h3").append(app.replaceLocal({name:"WINDOWSTATE"}));
+    if(element.value == "reduce") {
+        frame.find('.popup').children("img").attr("src", base.pathToAssets + "reduce.png");
+    } else {
+        frame.find('.popup').children("img").attr("src", base.pathToAssets + "restore.png");
+    }
     frame.find('.content').append('<p id="channelName"><span class="textBolder">'+app.replaceLocal({name:"VALUE"}) + ': </span>' + element.value +'</p>')
     frame.appendTo("#screenBackground");
 
@@ -24,7 +28,7 @@ export function implementAnimationStart(element) {
         x: 0,
         opacity: 1,
         display: "flex",
-        delay: 1
+        delay: base.delay
     });
 }
 
@@ -35,6 +39,6 @@ export function implementAnimationEnd(element) {
         x:-$("#screenBackground").width(),
         opacity: 0,
         display: "none",
-        delay: 3
+        delay: base.delay
     });
 }

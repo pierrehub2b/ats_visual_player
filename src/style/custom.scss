@@ -1,8 +1,8 @@
 $agilitestOrange: #FABA00;
 $agilitestBlack: #11171B;
 $agilitestWhite: #FCFCFC;
-$agilitestGrey: #EEE;
-$agilitestBlue: #8A9FFF;
+$agilitestGrey: #404040;
+$agilitestBlue: #6271B3;
 $fontSize: 15px;
 
 body {
@@ -34,13 +34,13 @@ body {
     transition: 0.5s !important;
     opacity: 1;
     font-size: 3em;
-    width: 70px;
+    width: 50px;
     text-align: center;
     padding: 30px;
     border-radius: 50%;
     background-color: $agilitestBlack !important;
     /* bottom: 0; */
-    height: 70px !important;
+    height: 50px !important;
 }
 
 .playerState i {
@@ -180,16 +180,16 @@ input[type=range]::-moz-range-thumb {
   }
 
   .popup {
-      background-color: $agilitestBlue;
+      background-color: $agilitestWhite;
   }
 
-  .popup h2 {
-      color: $agilitestWhite;
+  .popup h3 {
+      color: $agilitestBlue;
   }
 
   .popup .content {
       background-color: $agilitestWhite;
-      color: $agilitestBlack;
+      color: $agilitestGrey;
   }
 
   #left-side,#bottom-side,#top-side,#right-side   {

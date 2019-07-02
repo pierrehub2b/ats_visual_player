@@ -17,7 +17,7 @@ export function implementAnimationStart(element) {
     var box = $(base.box);
     box.attr("id", "box" + element.timeLine);
     frame.attr("id", divId);
-    frame.find('.popup').children("h2").append(app.replaceLocal({name:"JAVASCRIPTANIMATION"}));
+    frame.find('.popup').children("h3").append(app.replaceLocal({name:"JAVASCRIPTANIMATION"}));
     frame.find('.popup').addClass("positioned");
     frame.find('.popup').children("img").attr("src", base.pathToAssets + "javascript.png")
     frame.find('.content').append("<p><span class='textBolder'>" + app.replaceLocal({name:"CRITERIA"}) + ": </span>" + element.element.criterias + "</p>");
@@ -43,7 +43,7 @@ export function implementAnimationEnd(element) {
     timelLineLite.to(frame, 0.5, {
         opacity: 0,
         display: "none",
-        delay: 2
+        delay: base.delay
     });
     base.hideBox(element.timeLine, 0.2);
 }

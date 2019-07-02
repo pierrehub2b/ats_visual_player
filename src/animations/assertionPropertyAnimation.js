@@ -9,11 +9,11 @@ export function implementAnimation(element) {
     var box = $(base.box);
     box.attr("id", "box" + element.timeLine);
     frame.attr("id", divId);
-    frame.find('.popup').children("h2").append(app.replaceLocal({name:"ASSERTPROPERTY"}));
+    frame.find('.popup').children("h3").append(app.replaceLocal({name:"ASSERTPROPERTY"}));
     frame.find('.popup').addClass("positioned");
     frame.find('.popup').children("img").attr("src", base.pathToAssets + "check_property.png")
     frame.find('.content').append("<p><span class='textBolder'>" + app.replaceLocal({name:"ELEMENT"}) + ": </span>" + element.value + "</p>");
-    frame.find('.content').append('<p id="egal"><i class="fas fa-equals"></i></p>')
+    frame.find('.content').append('<p id="egal"><img src="assets/icons/32/equals.png" /></p>')
     frame.find('.content').append("<p><span class='textBolder'>" + app.replaceLocal({name:"VALUE"}) + ": </span>" + element.data + "</p>");
     frame.appendTo("#screenBackground");
     box.appendTo("#screenBackground");
@@ -30,7 +30,7 @@ export function implementAnimation(element) {
     timelLineLite.to(frame, 0.5, {
         opacity: 0,
         display: "none",
-        delay: 2
+        delay: base.delay
     });
     base.hideBox(element.timeLine, 0.2);
 }

@@ -4,11 +4,12 @@ import { timelLineLite } from '../uploader';
 export var pathToAssets = "./assets/icons/32/";
 export var box = '<div class="box"><span id="left-side"></span><span id="top-side"></span><span id="right-side"></span><span id="bottom-side"></span></div>';
 export var clickEffectElement = '<div class="circle"><div class="inner"></div></div>';
-export var templateFrame = '<div class="overlay"><div class="popup"><img class="animationImg" /><h2></h2><div class="content"></div></div></div>';
+export var templateFrame = '<div class="overlay"><div class="popup"><img class="animationImg" /><h3></h3><div class="content"></div></div></div>';
 export var mousePointer = "<div class='pointerAction'><img class='animationImg' src='"+pathToAssets+"mouse.png' /></div>";
 export var keyboardPointer = "<div class='pointerAction'><img class='animationImg' src='"+pathToAssets+"keyboard.png' /></div>";
-export var arrowUp = "<div class='pointerAction'><img class='animationImg' src='"+pathToAssets+"mouse_select_scroll_up.png' /></div>";
-export var arrowDown = ""+pathToAssets+"mouse_select_scroll_down.png";
+export var arrowUp = "<div class='pointerAction'><img class='animationImg' src='"+pathToAssets+"up.png' /></div>";
+export var arrowDown = ""+pathToAssets+"down.png";
+export var delay = 3;
 
 export var previousMousePosition = {x: 0, y: $("#screenBackground").height()};
 export var borderSize = 3;
@@ -29,7 +30,18 @@ export function calculPositions(element) {
     var elementWidth = ((element.element.bound.width * ratio) / screenWidth) * 100;
     var elementHeight = ((element.element.bound.height * ratio) / screenHeight) * 100;
 
-    return {x: x, y:y, xMouse: xMouse, yMouse:yMouse, width: elementWidth, height: elementHeight};
+    x = x < 0 ? 0 : x;
+    y = y < 0 ? 0 : y;
+    xMouse = xMouse < 0 ? 0 : xMouse;
+    yMouse = yMouse < 0 ? 0 : yMouse;
+
+    
+    x = x > 100 ? 100 : x;
+    y = y > 100 ? 100 : y;
+    xMouse = xMouse > 80 ? 80 : xMouse;
+    yMouse = yMouse > 80 ? 80 : yMouse;
+
+    return {x: x, y:y, xMouse: xMouse, yMouse:yMouse, width: elementWidth+1, height: elementHeight+1};
 }
 
 export function createBox(id, x,y, width, height, duration) { 
@@ -174,4 +186,19 @@ export function clickAnimation(id, x,y) {
             opacity: 0
         }
     );
+}
+
+export function displayPopUp(frame) {
+    timelLineLite.fromTo(frame, 0.5, {x:-$("#screenBackground").width(), y:$("#screenBackground").height() * 0.8}, {
+        x: -$("#screenBackground").width() * 0.5,
+        opacity: 1,
+        display: "flex",
+        delay: base.delay
+    });
+    timelLineLite.to(frame, 0.5, {
+        x:-$("#screenBackground").width(),
+        opacity: 0,
+        display: "none",
+        delay: base.delay
+    });
 }

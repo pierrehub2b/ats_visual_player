@@ -40,6 +40,6 @@ export function implementAnimationEnd(element) {
     timelLineLite.to(frame, 0.5, {
         opacity: 0,
         display: "none",
-        delay: 1
+        delay: base.delay
     });
 }

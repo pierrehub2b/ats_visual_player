@@ -24,7 +24,7 @@ export function implementAnimationStart(element, isDrag) {
         var imgPath = "drag_drop.png";   
         localField = app.replaceLocal({name:"MOUSEDROP"});
     }
-    frame.find('.popup').children("h2").append(localField);
+    frame.find('.popup').children("h3").append(localField);
     frame.find('.popup').children("img").attr("src", base.pathToAssets + imgPath)
     
     frame.find('.content').append("<p><span class='textBolder'>" + app.replaceLocal({name:"CRITERIA"}) + ": </span>" + element.element.criterias + "</p>");
@@ -50,7 +50,7 @@ export function implementAnimationEnd(element) {
     timelLineLite.to(frame, 0.5, {
         opacity: 0,
         display: "none",
-        delay: 2
+        delay: base.delay
     });
     base.hideBox(element.timeLine, 0.2);
 }

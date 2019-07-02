@@ -17,9 +17,9 @@ export function implementAnimationStart(element) {
     var box = $(base.box);
     box.attr("id", "box" + element.timeLine);
     frame.attr("id", divId);
-    frame.find('.popup').children("h2").append(app.replaceLocal({name:"MOUSEANIMATION"}));
+    frame.find('.popup').children("h3").append(app.replaceLocal({name:"MOUSEANIMATION"}));
     frame.find('.popup').addClass("positioned");
-    frame.find('.popup').children("img").attr("src", base.pathToAssets + "mouse_over.png")
+    frame.find('.popup').children("img").attr("src", base.pathToAssets + "mouse.png")
     frame.find('.content').append("<p><span class='textBolder'>" + app.replaceLocal({name:"CRITERIA"}) + ": </span>" + element.element.criterias + "</p>");
     frame.find('.content').append("<p><span class='textBolder'>" + app.replaceLocal({name:"ACTION"}) + ": </span>" + element.value + "</p>");
     frame.appendTo("#screenBackground");
@@ -43,7 +43,7 @@ export function implementAnimationEnd(element) {
     timelLineLite.to(frame, 0.5, {
         opacity: 0,
         display: "none",
-        delay: 2
+        delay: base.delay
     });
     base.hideBox(element.timeLine, 0.2);
 }
