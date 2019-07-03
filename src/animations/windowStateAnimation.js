@@ -12,33 +12,36 @@ export function implementAnimation(element, frameCounter) {
 }
 
 export function implementAnimationStart(element) {
-    var divId = "stateWindow" + element.timeLine;
-    var frame = $(base.templateFrame);
-    frame.attr("id", divId);
-    frame.find('.popup').children("h3").append(app.replaceLocal({name:"WINDOWSTATE"}));
-    if(element.value == "reduce") {
-        frame.find('.popup').children("img").attr("src", base.pathToAssets + "reduce.png");
-    } else {
-        frame.find('.popup').children("img").attr("src", base.pathToAssets + "restore.png");
-    }
-    frame.find('.content').append('<p id="channelName"><span class="textBolder">'+app.replaceLocal({name:"VALUE"}) + ': </span>' + element.value +'</p>')
-    frame.appendTo("#screenBackground");
+    var frameId = "stateWindowFrame" + element.timeLine;
+    var titleId = "stateWindowTitle" + element.timeLine;
+    var contentId = "stateWindowContent" + element.timeLine;
+    
+    var frame = $(base.frameBackground);
+    var frameTitle = $(base.frameTitle);
+    var frameContent = $(base.frameContent);
 
-    timelLineLite.fromTo(frame, 0.5, {x:-$("#screenBackground").width()}, {
-        x: 0,
-        opacity: 1,
-        display: "flex",
-        delay: base.delay
-    });
+    frame.attr("id", frameId);
+    frameTitle.attr("id", titleId);
+    frameContent.attr("id", contentId);
+  
+    if(element.value == "reduce") {
+        frame.children("img").attr("src", base.pathToAssets + "reduce.png");
+    } else {
+        frame.children("img").attr("src", base.pathToAssets + "restore.png");
+    }
+    frameTitle.html(app.replaceLocal({name:"WINDOWSTATE"}));
+    frameContent.append('<p id="channelName"><span class="textBolder">'+app.replaceLocal({name:"VALUE"}) + ': </span>' + element.value +'</p>')
+
+    $("#screenBackground").append(frame);
+    frame.append(frameTitle);
+    frame.append(frameContent);
+
+    base.displayPopUp(frame, frameTitle, frameContent, 3);
 }
 
 export function implementAnimationEnd(element) {
-    var divId = "#stateWindow" + element.timeLine;
-    var frame = $(divId);
-    timelLineLite.fromTo(frame, 0.5, {x:0}, {
-        x:-$("#screenBackground").width(),
-        opacity: 0,
-        display: "none",
-        delay: base.delay
-    });
+    var frame = $("#stateWindowFrame" + element.timeLine);
+    var frameTitle = $("#stateWindowTitle" + element.timeLine);
+    var frameContent = $("#stateWindowContent" + element.timeLine);
+    base.hidePopUp(frame, frameTitle, frameContent, 3);
 }

@@ -4,7 +4,9 @@ import { timelLineLite } from '../uploader';
 export var pathToAssets = "./assets/icons/32/";
 export var box = '<div class="box"><span id="left-side"></span><span id="top-side"></span><span id="right-side"></span><span id="bottom-side"></span></div>';
 export var clickEffectElement = '<div class="circle"><div class="inner"></div></div>';
-export var templateFrame = '<div class="overlay"><div class="popup"><img class="animationImg" /><h3></h3><div class="content"></div></div></div>';
+export var frameBackground = '<div class="popupFrame"><img class="imgFrame" /></div>';
+export var frameTitle = '<h3 class="popupTitle"></h3>';
+export var frameContent = '<div class="popupContent"></div>';
 export var mousePointer = "<div class='pointerAction'><img class='animationImg' src='"+pathToAssets+"mouse.png' /></div>";
 export var keyboardPointer = "<div class='pointerAction'><img class='animationImg' src='"+pathToAssets+"keyboard.png' /></div>";
 export var arrowUp = "<div class='pointerAction'><img class='animationImg' src='"+pathToAssets+"up.png' /></div>";
@@ -188,17 +190,46 @@ export function clickAnimation(id, x,y) {
     );
 }
 
-export function displayPopUp(frame) {
-    timelLineLite.fromTo(frame, 0.5, {x:-$("#screenBackground").width(), y:$("#screenBackground").height() * 0.8}, {
-        x: -$("#screenBackground").width() * 0.5,
+export function displayPopUp(frame, title, content, delay) {
+    var d = delay ? delay : 0;
+    timelLineLite.fromTo(frame, 0.5, {left: -$("#screenBackground").width()}, {
+        left: 0,
+        opacity: 0.9,
+        display: "flex",
+        delay: d
+    });
+
+    timelLineLite.fromTo(content, 0.3, {left: -$("#screenBackground").width()}, {
+        left: ($("#screenBackground").width() / 100) * 10,
+        opacity: 1,
+        display: "flex"
+    });
+
+    timelLineLite.fromTo(title, 0.3, {left: -$("#screenBackground").width()}, {
+        left: ($("#screenBackground").width() / 100) * 5,
+        opacity: 1,
+        display: "flex"
+    });
+}
+
+export function hidePopUp(frame, title, content, delay) {
+    var d = delay ? delay : 0;
+    timelLineLite.to(title, 0.2, {
+        left: -$("#screenBackground").width(),
         opacity: 1,
         display: "flex",
-        delay: base.delay
+        delay: d
     });
-    timelLineLite.to(frame, 0.5, {
-        x:-$("#screenBackground").width(),
-        opacity: 0,
-        display: "none",
-        delay: base.delay
+
+    timelLineLite.to(content, 0.2, {
+        left: -$("#screenBackground").width(),
+        opacity: 1,
+        display: "flex"
+    });
+
+    timelLineLite.to(frame, 0.2, {
+        left: -$("#screenBackground").width(),
+        opacity: 1,
+        display: "flex"
     });
 }

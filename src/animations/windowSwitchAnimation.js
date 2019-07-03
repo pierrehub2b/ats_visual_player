@@ -12,29 +12,32 @@ export function implementAnimation(element, frameCounter) {
 }
 
 export function implementAnimationStart(element) {
-    var divId = "switchWindow" + element.timeLine;
-    var frame = $(base.templateFrame);
-    frame.attr("id", divId);
-    frame.find('.popup').children("h3").append(app.replaceLocal({name:"WINDOWSWITCH"}));
-    frame.find('.popup').children("img").attr("src", base.pathToAssets + "switch_windows.png");
-    frame.find('.content').append('<p id="channelName"><span class="textBolder">'+app.replaceLocal({name:"VALUE"}) + ': </span>' + element.value +'</p>')
-    frame.appendTo("#screenBackground");
+    var frameId = "switchWindowFrame" + element.timeLine;
+    var titleId = "switchWindowTitle" + element.timeLine;
+    var contentId = "switchWindowContent" + element.timeLine;
+    
+    var frame = $(base.frameBackground);
+    var frameTitle = $(base.frameTitle);
+    var frameContent = $(base.frameContent);
 
-    timelLineLite.fromTo(frame, 0.5, {x:-$("#screenBackground").width()}, {
-        x: 0,
-        opacity: 1,
-        display: "flex",
-        delay: base.delay
-    });
+    frame.attr("id", frameId);
+    frameTitle.attr("id", titleId);
+    frameContent.attr("id", contentId);
+  
+    frame.children("img").attr("src", base.pathToAssets + "switch_windows.png");
+    frameTitle.html(app.replaceLocal({name:"WINDOWSWITCH"}));
+    frameContent.append('<p id="channelName"><span class="textBolder">'+app.replaceLocal({name:"VALUE"}) + ': </span>' + element.value +'</p>')
+
+    $("#screenBackground").append(frame);
+    frame.append(frameTitle);
+    frame.append(frameContent);
+
+    base.displayPopUp(frame, frameTitle, frameContent, 3);
 }
 
-export function implementAnimatioEnd(element) {
-    var divId = "#switchWindow" + element.timeLine;
-    var frame = $(divId);
-    timelLineLite.fromTo(frame, 0.5, {x:0}, {
-        x:-$("#screenBackground").width(),
-        opacity: 0,
-        display: "none",
-        delay: base.delay
-    });
+export function implementAnimationEnd(element) {
+    var frame = $("#switchWindowFrame" + element.timeLine);
+    var frameTitle = $("#switchWindowTitle" + element.timeLine);
+    var frameContent = $("#switchWindowContent" + element.timeLine);
+    base.hidePopUp(frame, frameTitle, frameContent, 3);
 }

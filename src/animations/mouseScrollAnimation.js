@@ -35,18 +35,6 @@ export function implementAnimationStart(element) {
 }
 
 export function implementAnimationIntermediaire(element) {
-    // var divId = "#scrollEvent" + element.timeLine;
-    // var frame = $(divId);
-    // timelLineLite.fromTo(frame, 0.5, {
-    //     opacity: 0,
-    //     display: "flex",
-    //     x: 0,
-    //     y: $("#screenBackground").height() / 2,
-    // },
-    // {
-    //     opacity: 1,
-    //     repeat:5,
-    // });
 }
 
 export function implementAnimationEnd(element) {

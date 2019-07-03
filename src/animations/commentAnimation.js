@@ -1,27 +1,28 @@
 var $ = require('jQuery');
-import { timelLineLite } from '../uploader';
 var app = require('../app');
 var base = require('./baseAnimation');
 
 export function implementAnimation(element) {
-    var divId = "comment" + element.timeLine;
-    var frame = $(base.templateFrame);
-    frame.attr("id", divId);
-    frame.find('.popup').children("h3").append(app.replaceLocal({name:"COMMENT"}));
-    frame.find('.popup').children("img").attr("src", base.pathToAssets + "comment.png")
-    frame.find('.content').append('<p id="applicationComment">'+element.data+'</p>')
-    frame.appendTo("#screenBackground");
+    var frameId = "commentFrame" + element.timeLine;
+    var titleId = "commentTitle" + element.timeLine;
+    var contentId = "commentContent" + element.timeLine;
+    
+    var frame = $(base.frameBackground);
+    var frameTitle = $(base.frameTitle);
+    var frameContent = $(base.frameContent);
 
-    timelLineLite.fromTo(frame, 0.5, {x:-$("#screenBackground").width()}, {
-        x: 0,
-        opacity: 1,
-        display: "flex",
-        delay: base.delay
-    });
-    timelLineLite.fromTo(frame, 0.5, {x:0}, {
-        x:-$("#screenBackground").width(),
-        opacity: 0,
-        display: "none",
-        delay: base.delay
-    });
+    frame.attr("id", frameId);
+    frameTitle.attr("id", titleId);
+    frameContent.attr("id", contentId);
+
+    frame.children("img").attr("src", base.pathToAssets + "comment.png");
+    frameTitle.html(app.replaceLocal({name:"COMMENT"}));
+
+    frameContent.append('<p id="applicationComment">'+element.data+'</p>');
+
+    $("#screenBackground").append(frame);
+    frame.append(frameTitle);
+    frame.append(frameContent);
+    base.displayPopUp(frame, frameTitle, frameContent, 3);
+    base.hidePopUp(frame, frameTitle, frameContent, 3);
 }

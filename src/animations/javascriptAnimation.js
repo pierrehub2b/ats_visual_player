@@ -1,5 +1,4 @@
 var $ = require('jQuery');
-import { timelLineLite } from '../uploader';
 var app = require('../app');
 var base = require('./baseAnimation');
 
@@ -12,38 +11,42 @@ export function implementAnimation(element, frameCounter) {
 }
 
 export function implementAnimationStart(element) {
-    var divId = "javascript" + element.timeLine;
-    var frame = $(base.templateFrame);
+    var frameId = "javascriptFrame" + element.timeLine;
+    var titleId = "javascriptTitle" + element.timeLine;
+    var contentId = "javascriptContent" + element.timeLine;
+
     var box = $(base.box);
     box.attr("id", "box" + element.timeLine);
-    frame.attr("id", divId);
-    frame.find('.popup').children("h3").append(app.replaceLocal({name:"JAVASCRIPTANIMATION"}));
-    frame.find('.popup').addClass("positioned");
-    frame.find('.popup').children("img").attr("src", base.pathToAssets + "javascript.png")
-    frame.find('.content').append("<p><span class='textBolder'>" + app.replaceLocal({name:"CRITERIA"}) + ": </span>" + element.element.criterias + "</p>");
-    frame.find('.content').append("<p><span class='textBolder'>" + app.replaceLocal({name:"ACTION"}) + ": </span>" + element.value + "</p>");
-    frame.appendTo("#screenBackground");
     box.appendTo("#screenBackground");
 
     var positions = base.calculPositions(element);
+    
+    var frame = $(base.frameBackground);
+    var frameTitle = $(base.frameTitle);
+    var frameContent = $(base.frameContent);
+
+    frame.attr("id", frameId);
+    frameTitle.attr("id", titleId);
+    frameContent.attr("id", contentId);
+
+    frame.children("img").attr("src", base.pathToAssets + "javascript.png");
+    frameTitle.html(app.replaceLocal({name:"JAVASCRIPTANIMATION"}));
+
+    frameContent.append("<p><span class='textBolder'>" + app.replaceLocal({name:"CRITERIA"}) + ": </span>" + element.element.criterias + "</p>")
+    frameContent.append("<p><span class='textBolder'>" + app.replaceLocal({name:"ACTION"}) + ": </span>" + element.value + "</p>")
+
+    $("#screenBackground").append(frame);
+    frame.append(frameTitle);
+    frame.append(frameContent);
 
     base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
-    timelLineLite.fromTo(frame, 0.5, {top: "50%", left: "0%"}, {
-        left: positions.xMouse + "%",
-        top: positions.yMouse + 2 + "%",
-        opacity: 1,
-        display: "flex"
-    });
+    base.displayPopUp(frame, frameTitle, frameContent, 3);
 }
 
 export function implementAnimationEnd(element) {
-    var divId = "#javascript" + element.timeLine;
-    var frame = $(divId);
-
-    timelLineLite.to(frame, 0.5, {
-        opacity: 0,
-        display: "none",
-        delay: base.delay
-    });
+    var frame = $("#javascriptFrame" + element.timeLine);
+    var frameTitle = $("#javascriptTitle" + element.timeLine);
+    var frameContent = $("#javascriptContent" + element.timeLine);
+    base.hidePopUp(frame, frameTitle, frameContent, 3);
     base.hideBox(element.timeLine, 0.2);
 }

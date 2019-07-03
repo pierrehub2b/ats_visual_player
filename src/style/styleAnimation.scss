@@ -5,20 +5,10 @@
   left: 0;
   right: 0;
   background: transparent;
-  transition: opacity 500ms;
+  transition: none;
   display: none;
-  opacity: 0;
-  z-index: 5;
-}
-
-.popup {
-  margin: auto;
-  position: relative;
-  transition: all 5s ease-in-out;
-  left: 0;
-  right: 0;
-  box-shadow: 4px 4px 8px 8px rgba(0, 0, 0, 0.4);
-  display: inline-table;
+  opacity: 1;
+  z-index: 12;
 }
 
 .positioned {
@@ -30,26 +20,52 @@
   position: absolute;
 }
 
-.popup h3 {
-  padding: 10px 40px 10px 30px;
-  margin: 0;
-  font-family: Tahoma, Arial, sans-serif;
-  display: inline-block;
+.popupFrame, .imgFrame, .popupContent, .popupTitle {
+  opacity: 1;
+  position: absolute;
+  display: flex;
+  z-index: 10;
 }
 
-.popup .content {
-  max-height: 30%;
-  overflow: auto;
-  padding: 5px 40px 10px 30px;
+.popupFrame {
+  width:100%;
+  height:100px;
+  opacity: 0.9;
+  bottom:10vh;
+  border-top: 1px solid grey;
+  left:0;
+  box-shadow: 0 4px 2px 2px rgba(0, 0, 0, 0.5);
 }
 
-.popup img {
-  height: 28px !important;
-  width: 28px !important;
+.imgFrame {
+  width: 32px;
+  height: 32px;
+  right: 2vw;
+  top: 0;
+  bottom: 0;
+  margin: auto;
 }
 
-.content p {
-  margin: 5px !important;
+.popupContent {
+  position: relative;
+  opacity: 1;
+  width: 80%;
+  left: 14vw;
+  opacity: 0; 
+  margin: auto;
+}
+
+.popupTitle {
+  position: relative;
+  opacity: 0; 
+  width: 5%;
+  opacity: 0;
+  left: 5vw;
+  margin: auto;
+}
+
+.popupContent p {
+  margin: auto 1vw;
 }
 
 .scrollAction {
@@ -115,15 +131,4 @@
 .animationImg {
   display: flex !important;
   opacity: 1 !important;
-}
-
-.popup .animationImg {
-  position: relative !important;
-  left: 6px !important;
-  top: 0 !important;
-  margin-left: 10px !important;
-  float: left !important;
-  top: 22px !important;
-  width: 26px;
-  height: 26px;
 }

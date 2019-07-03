@@ -1,5 +1,4 @@
 var $ = require('jQuery');
-import { timelLineLite } from '../uploader';
 var app = require('../app');
 var base = require('./baseAnimation');
 
@@ -12,29 +11,33 @@ export function implementAnimation(element, frameCounter) {
 }
 
 export function implementAnimationStart(element) {
-    var divId = "goToUrl" + element.timeLine;
-    var frame = $(base.templateFrame);
-    frame.attr("id", divId);
-    frame.find('.popup').children("h3").append(app.replaceLocal({name:"GOTOURL"}));
-    frame.find('.popup').children("img").attr("src", base.pathToAssets + "link_go.png");
-    frame.find('.content').append("<span class='textBolder'>" + app.replaceLocal({name:"URLLABEL"}) + ":</span> " + element.value);
-    frame.appendTo("#screenBackground");
+    var frameId = "goToUrlFrame" + element.timeLine;
+    var titleId = "goToUrlTitle" + element.timeLine;
+    var contentId = "goToUrlContent" + element.timeLine;
+    
+    var frame = $(base.frameBackground);
+    var frameTitle = $(base.frameTitle);
+    var frameContent = $(base.frameContent);
 
-    timelLineLite.fromTo(frame, 0.5, {x:-$("#screenBackground").width()}, {
-        x: 0,
-        opacity: 1,
-        display: "flex",
-        delay: base.delay
-    });
+    frame.attr("id", frameId);
+    frameTitle.attr("id", titleId);
+    frameContent.attr("id", contentId);
+
+    frame.children("img").attr("src", base.pathToAssets + "link_go.png");
+    frameTitle.html(app.replaceLocal({name:"GOTOURL"}));
+
+    frameContent.append("<span class='textBolder'>" + app.replaceLocal({name:"URLLABEL"}) + ":</span> " + element.value)
+
+    $("#screenBackground").append(frame);
+    frame.append(frameTitle);
+    frame.append(frameContent);
+
+    base.displayPopUp(frame, frameTitle, frameContent, 3);
 }
 
 export function implementAnimationEnd(element) {
-    var divId = "#goToUrl" + element.timeLine;
-    var frame = $(divId);
-    timelLineLite.fromTo(frame, 0.5, {x:0}, {
-        x:-$("#screenBackground").width(),
-        opacity: 0,
-        display: "none",
-        delay: base.delay
-    });
+    var frame = $("#goToUrlFrame" + element.timeLine);
+    var frameTitle = $("#goToUrlTitle" + element.timeLine);
+    var frameContent = $("#goToUrlContent" + element.timeLine);
+    base.hidePopUp(frame, frameTitle, frameContent, 3);
 }
