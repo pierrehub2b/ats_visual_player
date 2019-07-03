@@ -47,7 +47,8 @@
   width: 80%;
   left: 14vw;
   opacity: 0;
-  margin: auto; }
+  margin: auto;
+  align-items: center; }
 
 .popupTitle {
   position: relative;
@@ -55,7 +56,8 @@
   width: 5%;
   opacity: 0;
   left: 5vw;
-  margin: auto; }
+  margin: auto;
+  align-items: center; }
 
 .popupContent p {
   margin: auto 1vw; }

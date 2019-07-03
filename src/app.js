@@ -10,29 +10,6 @@ import AMF from 'amf-js';
 var $ = require('jQuery');
 var upload = require('./uploader');
 
-import en from './locales/en.txt'; 
-import fr from './locales/fr.txt'; 
-var currentLocalValues = null;
-export var currentLocale = "en";
-import settings from './settings.txt';
-import local from './locales/locale.json';
-switch(local.defaultLocale) {
-  case 'en':
-    waitingCoefficient = 0.5;
-    currentLocalValues = en;
-    break;
-  case 'fr':
-    waitingCoefficient = 0.5;
-    currentLocale = "fr";
-    currentLocalValues = fr;
-    break;
-  default:
-    waitingCoefficient = 0.5;
-    currentLocalValues = en;
-    break;
-}
-import library from './library.json';
-
 export var addLibrary = $("#addLibrary");
 export var addFiles = $("#addFiles");
 export var addLibraryInput = $("#addLibraryInput");
@@ -46,6 +23,7 @@ export var currentReportName = null;
 
 export var libraryExpanded = true;
 export var localeValues = null;
+export var currentLocale = "en";
 export var waitingCoefficient = 1;
 export var jsonLibraryUrl = '/library.json';
 export var header = { 
@@ -56,34 +34,87 @@ export var header = {
 var loc = window.location.pathname;
 var serverDir = loc.substring(0, loc.lastIndexOf('/'));
 
-export function setupSettings() {
-  var data = settings;
-  var values = [];
-  data = data.split("\n");
-  for (let index = 0; index < data.length; index++) {
-    const val = data[index];
-    var keyValuePair = val.split("=");
-    if(keyValuePair.length == 2) {
-      values.push({ name: keyValuePair[0], value: keyValuePair[1]})
+export async function setupSettings() {
+  await $.ajax({
+    type: "GET",
+    url: serverDir + '/settings.txt',
+    data: {},
+    crossDomain:true,
+    headers: header,
+    success: function(data) {
+      var values = [];
+      data = data.split("\n");
+      for (let index = 0; index < data.length; index++) {
+        const val = data[index];
+        var keyValuePair = val.split("=");
+        if(keyValuePair.length == 2) {
+          values.push({ name: keyValuePair[0], value: keyValuePair[1]})
+        }
+      }
+      for (let index = 0; index < values.length; index++) {
+        const v = values[index];
+        switch(v.name) {
+          case 'IMGWATERMARK':
+            $("#watermarkImg").attr("src", serverDir + v.value);
+            break;
+          case 'URLWATERMARK':
+            $("#watermarklink").attr("href", v.value);
+            break;
+          case 'IMGBACKGROUND':
+            $("#screenBackground").css("background-image", 'url('+serverDir + v.value+')')
+            break;
+          case 'ATSVLIBRARY':
+            jsonLibraryUrl = v.value;
+            break;
+        }
+      }
     }
-  }
-  for (let index = 0; index < values.length; index++) {
-    const v = values[index];
-    switch(v.name) {
-      case 'IMGWATERMARK':
-        $("#watermarkImg").attr("src", serverDir + v.value);
-        break;
-      case 'URLWATERMARK':
-        $("#watermarklink").attr("href", v.value);
-        break;
-      case 'IMGBACKGROUND':
-        $("#screenBackground").css("background-image", 'url('+serverDir + v.value+')')
-        break;
-      case 'ATSVLIBRARY':
-        jsonLibraryUrl = v.value;
-        break;
+  });
+}
+
+export async function getLocalization() {
+  await $.ajax({
+    type: "GET",
+    url: serverDir + '/locales/locale.json',
+    data: {},
+    crossDomain:true,
+    headers: header,
+    success: function(data) {
+      currentLocale = data.defaultLocale;
+      switch(currentLocale) {
+        case 'fr':
+          waitingCoefficient = 0.5;
+          break;
+        case 'en':
+          waitingCoefficient = 0.5;
+          break;
+      }
+      return getLocalizationValues(currentLocale);
     }
-  }
+  }); 
+}
+
+export async function getLocalizationValues(locale) {
+  await $.ajax({
+    type: "GET",
+    url: serverDir + '/locales/'+locale+'.txt',
+    data: {},
+    crossDomain:true,
+    headers: header,
+    success: function(data) {
+      var values = [];
+      data = data.split("\n");
+      for (let index = 0; index < data.length; index++) {
+        const val = data[index];
+        var keyValuePair = val.split("=");
+        if(keyValuePair.length == 2) {
+          values.push({ name: keyValuePair[0], value: keyValuePair[1]})
+        }
+      }
+      localeValues = values;
+      setupLocalization();
+    }
+  });
 }
 
 export function replaceLocal(token) {
@@ -98,6 +129,26 @@ export function replaceLocal(token) {
     return localValue.value;
   }
   return "";
+}
+
+export function importLibrary(event) {
+  let file = event.target.files[0];
+  var reader = new FileReader();
+  reader.onload = onReaderLoad;
+  reader.readAsText(file);
+}
+
+export function readLocalJSON() {
+  $.ajax({
+    type: "GET",
+    url: serverDir + jsonLibraryUrl,
+    data: {},
+    crossDomain:true,
+    headers: header,
+    success: function(data) {
+      setLibrary(data);
+    }
+  });
 }
 
 export async function setLocalizationValues() {
@@ -237,8 +288,7 @@ export function uploadFiles(event) {
   };
 }
 
-export function setLibrary() {
-  var data = library;
+export function setLibrary(data) {
   for (let i = 0; i < data.folders.length; i++) {
     const folder = data.folders[i];
     var name = folder.name;
@@ -336,7 +386,7 @@ export function getFile(url, target) {
                 var percentComplete = evt.loaded / evt.total;
                 $("#progressDownload" + id).children(".value").css("width", (percentComplete * 100) + "%");
                 if(percentComplete == 1) {
-                  $("#progressDownload" + id).parent().children("i").remove();
+                  $("#progressDownload" + id).parent().children("#stopRequest").remove();
                   $("#progressDownload" + id).attr("data-label", replaceLocal({ name: "LOADED"})).css("color", "green");
                   $("#progressDownload" + id).addClass("downloadOver");
                 }
@@ -364,7 +414,7 @@ export function getFile(url, target) {
       },
       error: function( req, status, err ) {
         $("#progressDownload" + id).remove();
-        $("#progressDownload" + id).siblings("i").remove();
+        $("#progressDownload" + id).siblings("#stopRequest").remove();
       }
   });
 
@@ -396,25 +446,15 @@ export function readTextFile(file)
 }
 
 setupScreen();
-// fileStream.readFile(__dirname, 'settings.txt', {encoding: 'utf-8'}, function(err,data){
-//   if (!err) {
-//       console.log('received data: ' + data);
-//       // response.writeHead(200, {'Content-Type': 'text/html'});
-//       // response.write(data);
-//       // response.end();
-//   } else {
-//       console.log(err);
-//   }
-// });
-
-
-//var settings = readTextFile(serverDir + '/');
-// var locale = readTextFile(serverDir + '/locales/locale.json');
-// var library = readTextFile(serverDir + jsonLibraryUrl);
-
-setupSettings();
-setLocalizationValues();
-setLibrary();
+setupSettings().then(() => {
+  getLocalization().then(_ => {
+    readLocalJSON();
+    var param = getUrlParameter("url", window.location.href);
+    if(param && param != "") {
+      getFile(param, null);
+    }
+  });
+});
 
 
 var param = getUrlParameter("url", window.location.href);
