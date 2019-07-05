@@ -26,7 +26,8 @@ export function implementAnimationStart(element) {
     frame.children("img").attr("src", base.pathToAssets + "link_go.png");
     frameTitle.html(app.replaceLocal({name:"GOTOURL"}));
 
-    frameContent.append("<span class='textBolder'>" + app.replaceLocal({name:"URLLABEL"}) + ":</span> " + element.value)
+    var text = base.format(app.replaceLocal({name:"GOTOURLTEXT"}), element.value);
+    frameContent.append("<p>" + text + "</p>");
 
     $("#screenBackground").append(frame);
     frame.append(frameTitle);

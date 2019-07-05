@@ -54,6 +54,7 @@
     "promise": "^8.0.3",
     "stream": "0.0.2",
     "string_decoder": "^1.2.0",
+    "textsplitr": "^0.1.1",
     "videoshow": "^0.1.11"
   }
 }

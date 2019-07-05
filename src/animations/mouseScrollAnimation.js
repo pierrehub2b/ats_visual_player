@@ -16,6 +16,7 @@ export function implementAnimationStart(element) {
     var divId = "scrollEvent" + element.timeLine;
     var frame = $(base.arrowUp);
     frame.attr("id", divId);
+    frame.addClass("scrollIcon");
     frame.appendTo("#screenBackground");
 
     if(element.element.vpos == 'bottom' || element.value > 0) {

@@ -20,9 +20,9 @@ body {
 
 .watermark {
     opacity: 0.5;
-    color: black;
-    right: 150px;
-    bottom: 150px;
+    color: grey;
+    right: 5vw;
+    top: 5vh;
     transform: rotate(0deg);
     height: 100px;
     width: 100px;
@@ -188,6 +188,10 @@ input[type=range]::-moz-range-thumb {
 
   #left-side,#bottom-side,#top-side,#right-side   {
     background: $agilitestBlue;
+  }
+
+  .textInputAnimation {
+    border: 2px solid $agilitestBlue;
   }
 
   .circle, .inner {

@@ -117,7 +117,7 @@ export function setupScreen() {
 
   timelLineLite = new TimelineMax({ paused: true, repeat: 0, onUpdate:adjustUI});
   
-  progressSlider.on("click", update);
+  progressSlider.on("mouseup ", update);
 
   playBtn.on("click", function(event) {
     event.stopPropagation();
@@ -174,30 +174,54 @@ export function setupScreen() {
   nextBtn.on("click", function(event) {
     event.stopPropagation();
     var progress = timelLineLite.progress();
-    var imgNumber = Math.ceil((((images.length -1) / 100) * (progress * 100))) + 1;
-    updateByVal(imgNumber/images.length-1);
+    var imgNumber = Math.ceil((((images.length -1) / 100) * (progress * 100)));
+
+    var elems = $("img[id$='-f']");
+    var currentImgNumber = 0;
+    for (let index = 0; index < elems.length; index++) {
+      const i = elems[index];
+      var nb = parseInt(i.id.match(/\d+/)[0]);
+
+      if(nb > imgNumber) {
+        currentImgNumber = nb;
+        break;
+      }
+    }
+
+    updateByVal(currentImgNumber/(images.length-1));
     //showPlayerState("next");
     playBtn.css("display","inline-block");
     pauseBtn.css("display","none");
-    timelLineLite.pause();
   });
 
   prevBtn.on("click", function(event) {
     event.stopPropagation();
     var progress = timelLineLite.progress();
-    var imgNumber = Math.ceil((((images.length -1) / 100) * (progress * 100))) - 1;
-    updateByVal(imgNumber/images.length-1);
+    var imgNumber = Math.round((((images.length -1) / 100) * (progress * 100)));
+
+    var elems = $("img[id$='-f']");
+    var currentImgNumber = 0;
+    for (let index = 0; index < elems.length; index++) {
+      const i = elems[index];
+      var nb = parseInt(i.id.match(/\d+/)[0]);
+      if(nb < imgNumber) {
+        currentImgNumber = nb;
+      } else {
+        break;
+      }
+      
+    }
+    updateByVal(currentImgNumber/(images.length-1));
     //showPlayerState("previous");
     playBtn.css("display","inline-block");
     pauseBtn.css("display","none");
-    timelLineLite.pause();
   });
 
-  progressSlider.on("mousemove", function(event) {
+  navSlider.on("mousemove", function(event) {
     updateTooltipImg(event);
   });
 
-  progressSlider.on("mouseleave", function() {
+  navSlider.on("mouseleave", function() {
     imgToolTip.css("display", "none");
   });
 
@@ -329,19 +353,30 @@ export function repeat(encodedData, newClick) {
 }
 
 export function updateTooltipImg(event) {
+  imgToolTip.html("");
   var currentMouseXPos = (event.clientX - screenBackground.offset().left) - 70;
   if(images.length > 0) {
     
     var intvalue = Math.round(calcSliderPos(event));
-    var objCopy = $("#sliderImg" + intvalue).clone();
+    var objCopy = $('img[id^="sliderImg'+intvalue+'"]').clone();
+
+    var currentTick = Math.round(timelLineLite.duration() * (calcSliderPos(event)/(images.length-1)));
+    var d = new Date();
+    d.setHours(0,0,currentTick,0);
+    var currentTimer = getDuration(d);
+
+    var timerDiv = "<p class='displayTimer'>"+currentTimer+"</p>";
 
     objCopy.attr("id", "toolTipImg");
     objCopy.css("max-width", "150px");
     objCopy.css("max-height", "100px");
     objCopy.css("opacity", 1);
+    objCopy.css("position", "absolute");
+    objCopy.css("left", 0);
     objCopy.css("display", "block");
     imgToolTip.css("display", "block");
-    imgToolTip.html(objCopy);
+    imgToolTip.append(objCopy);
+    imgToolTip.append(timerDiv);
     imgToolTip.css("left", currentMouseXPos + 'px');
   }
 }
@@ -426,22 +461,23 @@ export function update(){
   timelLineLite.progress(parseFloat(progressSlider.val()));
   tick = timelLineLite.duration() * progressSlider.val();
   startTimer();
-  clearInterval(timer);
   updaterangePointer();
+  clearInterval(timer);
+  timelLineLite.pause();
   playBtn.css("display","inline-block");
   pauseBtn.css("display","none");
-  timelLineLite.pause();
 }
 
 export function updateByVal(value){
   timelLineLite.progress(value);
   tick = timelLineLite.duration() * value;
   startTimer();
-  clearInterval(timer);
   updaterangePointer();
+  clearInterval(timer);
+  timelLineLite.pause();
   playBtn.css("display","inline-block");
   pauseBtn.css("display","none");
-  timelLineLite.pause();
+ 
 }
 
 export function updaterangePointer() {
@@ -521,6 +557,7 @@ export function showBottomPanel() {
     flashReport.css("opacity","0.8");
   }, 1000, setTimeout(() => {
     flashReport.css("opacity","0");
+    playBtn.click();
   }, 4000), setTimeout(() => {
     navBar.css("opacity","0");
   }, 5000));  
@@ -595,7 +632,6 @@ export function resultSetup(result, percent) {
 
     flashReport.append(output);
     allData.push({timeLine: flashReportObject.timeLine, element: flashReportObject.element, type: elementType.FLASHREPORT, img: null});
-    playBtn.click();
     showBottomPanel();
   }
 
@@ -615,6 +651,9 @@ export function resultSetup(result, percent) {
         var imgPreview = document.createElement('img');
         imgPreview.src = "data:image/"+ element.imageType +";base64,"+ encode(bytes);
         imgPreview.id = "sliderImg"+ imgCounter;
+        if(i == element.images.length-1) {
+          imgPreview.id += "-f";
+        }
         imgCounter++;
         allData.push({timeLine: element.timeLine, element: element, type: elementType.IMAGE, img: imgPreview });
         currentImgs.push({timeLine: element.timeLine, element: element, type: elementType.IMAGE, img: imgPreview });
@@ -701,6 +740,7 @@ export function animate(currentElement, index) {
       timelLineLite.to(currentElement.img, 0.5, {
         opacity: 1,
         display: "inline-block",
+        delay: 1
       });
       timelLineLite.to(images[index-1].img, 0, {
         display: "none"
@@ -814,9 +854,9 @@ export function animate(currentElement, index) {
           frameForAction = 2;
           ActionDragDrop(currentElement.element, currentFrameAction, isDrag);
           currentFrameAction++;
-          isDrag = !isDrag;
           if(currentFrameAction > frameForAction) {
             currentFrameAction = 1;
+            isDrag = !isDrag;
           }
           break;
       }

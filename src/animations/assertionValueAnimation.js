@@ -18,9 +18,9 @@ export function implementAnimation(element) {
     frame.children("img").attr("src", base.pathToAssets + "check_value.png");
     frameTitle.html(app.replaceLocal({name:"ASSERTVALUE"}));
 
-    frameContent.append("<span class='textBolder'>" + app.replaceLocal({name:"VALUE"}) + " 1:</span> " + element.data);
-    frameContent.append('<p id="egal"><img src="assets/icons/32/equals.png" /></p>');
-    frameContent.append("<span class='textBolder'>" + app.replaceLocal({name:"VALUE"}) + " 2: </span>" + element.data);
+    var text = base.format(app.replaceLocal({name:"ASSERTTEXTVALUE"}), element.value, element.data, element.data);
+
+    frameContent.append("<p>" + text + "</p>")
 
     $("#screenBackground").append(frame);
     frame.append(frameTitle);

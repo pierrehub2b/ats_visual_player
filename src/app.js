@@ -241,6 +241,19 @@ export function filterList(event){
   }
 }
 
+export function collapseFolder(event) {
+  event.stopPropagation();
+  var elem = $("#" + event.target.parentNode.id);
+  elem.children('div').slideToggle(200);
+  elem.children('#chapterContainer').slideToggle(200);
+  var iElem = elem.children('.appIcon');
+  if(iElem.attr("src").indexOf("open") >= 0) {
+    iElem.attr("src","assets/icons/32/folder_close.png");
+  } else {
+    iElem.attr("src","assets/icons/32/folder_open.png");
+  }
+}
+
 export function uploadFiles(event) {
   let files = event.target.files;
   var folders = $("#defaultFolder").length;
@@ -249,18 +262,8 @@ export function uploadFiles(event) {
     //creation d'un dossier défaut 
     var ulFolder = $("<ul id='defaultFolder'><img class='appIcon' src='assets/icons/32/folder_open.png' /><p>"+replaceLocal({ name: "LOCALFOLDER"})+"</p><div></div></ul>");
     listATSV.append(ulFolder);
-    ulFolder.on("click", function(event) {
-      event.stopPropagation();
-      var elem = $("#" + event.target.parentNode.id);
-      elem.children('div').slideToggle(200);
-      elem.children('#chapterContainer').slideToggle(200);
-      var iElem = elem.children('.appIcon');
-      if(iElem.attr("src").indexOf("open") >= 0) {
-        iElem.attr("src","assets/icons/32/folder_close.png");
-      } else {
-        iElem.attr("src","assets/icons/32/folder_open.png");
-      }
-    });
+    ulFolder.children("p").on("click", collapseFolder);
+    ulFolder.children("img").on("click", collapseFolder);
   }
 
   var folder = $("#defaultFolder");
@@ -295,18 +298,8 @@ export function setLibrary(data) {
     var ulFolder = $("<ul id='"+name.replace(/ /g, '')+"'><img class='appIcon' src='assets/icons/32/folder_open.png' /><p>"+name+"</p><div></div></ul>");
     listATSV.append(ulFolder);
     var currentFolder = $("#"+name.replace(/ /g, ''));
-    currentFolder.on("click", function(event) {
-      event.stopPropagation();
-      var elem = $("#" + event.target.parentNode.id);
-      elem.children('div').slideToggle(200);
-      elem.children('#chapterContainer').slideToggle(200);
-      var iElem = elem.children('.appIcon');
-      if(iElem.attr("src").indexOf("open") >= 0) {
-        iElem.attr("src","assets/icons/32/folder_close.png");
-      } else {
-        iElem.attr("src","assets/icons/32/folder_open.png");
-      }
-    });
+    currentFolder.children("p").on("click", collapseFolder);
+    currentFolder.children("img").on("click", collapseFolder);
     var urls = folder.urls;
     for (let index = 0; index < urls.length; index++) {
       const url = urls[index];

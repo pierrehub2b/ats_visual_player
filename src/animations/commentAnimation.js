@@ -18,7 +18,8 @@ export function implementAnimation(element) {
     frame.children("img").attr("src", base.pathToAssets + "comment.png");
     frameTitle.html(app.replaceLocal({name:"COMMENT"}));
 
-    frameContent.append('<p id="applicationComment">'+element.data+'</p>');
+    var text = base.format(app.replaceLocal({name:"COMMENTACTIONTEXT"}), element.data);
+    frameContent.append('<p>'+text+'</p>')
 
     $("#screenBackground").append(frame);
     frame.append(frameTitle);

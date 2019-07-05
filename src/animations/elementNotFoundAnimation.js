@@ -19,8 +19,9 @@ export function implementAnimation(element) {
     frame.children("img").attr("src", base.pathToAssets + "warning.png");
     frameTitle.html(app.replaceLocal({name:"ELEMENTNOTFOUND"}));
 
-    frameContent.append("<p class='textBolder'>" + app.replaceLocal({name:"CRITERIA"}) + ": </p>");
-    frameContent.append("<p>" + element.element.criterias + "</p>");
+    var crit = element.element.criterias.split(",");
+    var text = base.format(app.replaceLocal({name:"ELEMENTNOTFOUNDTEXT"}), crit[0], crit[1]); 
+    frameContent.append("<p>" + text + "</p>");
 
     $("#screenBackground").append(frame);
     frame.append(frameTitle);

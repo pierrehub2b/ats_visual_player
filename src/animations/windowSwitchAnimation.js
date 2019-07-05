@@ -26,7 +26,10 @@ export function implementAnimationStart(element) {
   
     frame.children("img").attr("src", base.pathToAssets + "switch_windows.png");
     frameTitle.html(app.replaceLocal({name:"WINDOWSWITCH"}));
-    frameContent.append('<p id="channelName"><span class="textBolder">'+app.replaceLocal({name:"VALUE"}) + ': </span>' + element.value +'</p>')
+
+    var text = base.format(app.replaceLocal({name:"WINDOWSWITCHTEXT"}), element.value);
+    frameContent.append('<p>'+text+'</p>')
+
 
     $("#screenBackground").append(frame);
     frame.append(frameTitle);

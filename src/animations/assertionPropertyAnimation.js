@@ -24,9 +24,10 @@ export function implementAnimation(element) {
     frame.children("img").attr("src", base.pathToAssets + "check_property.png");
     frameTitle.html(app.replaceLocal({name:"ASSERTPROPERTY"}));
 
-    frameContent.append("<p><span class='textBolder'>" + app.replaceLocal({name:"ELEMENT"}) + ": </span>" + element.value + "</p>")
-    frameContent.append('<p id="egal"><img src="assets/icons/32/equals.png" /></p>')
-    frameContent.append("<p><span class='textBolder'>" + app.replaceLocal({name:"VALUE"}) + ": </span>" + element.data + "</p>")
+    var attr = element.value.split("=");
+    var text = base.format(app.replaceLocal({name:"ASSERTTEXTPROPERTY"}), attr[0], element.element.tag, attr[attr.length-1], element.data);
+
+    frameContent.append("<p>" + text + "</p>")
 
     $("#screenBackground").append(frame);
     frame.append(frameTitle);

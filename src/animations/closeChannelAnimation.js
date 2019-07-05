@@ -18,9 +18,9 @@ export function implementAnimation(element) {
     frame.children("img").attr("src", base.pathToAssets + "warning.png");
     frameTitle.html(app.replaceLocal({name:"CLOSECHANNEL"}));
 
-    frameContent.append('<p id="channelName"><span class="textBolder">'+app.replaceLocal({name:"CHANNELNAME"}) + ': </span>' + element.channelName+'</p>');
-    frameContent.append('<p id="channelPosition"><span class="textBolder">'+app.replaceLocal({name:"CHANNELPOSITION"}) + ':</span> ' + element.channelBound.x + " x " + element.channelBound.y +'</p>');
-    frameContent.append('<p id="channelSize"><span class="textBolder">'+app.replaceLocal({name:"CHANNELSIZE"}) + ':</span> ' + element.channelBound.width + " x " + element.channelBound.height +'</p>');
+    var text = base.format(app.replaceLocal({name:"CLOSECHANNELTEXT"}), element.channelName);
+
+    frameContent.append('<p>'+text+'</p>');
 
     $("#screenBackground").append(frame);
     frame.append(frameTitle);

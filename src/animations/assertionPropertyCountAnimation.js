@@ -24,10 +24,22 @@ export function implementAnimation(element) {
     frame.children("img").attr("src", base.pathToAssets + "occurence.png");
     frameTitle.html(app.replaceLocal({name:"ASSERTCOUNT"}));
 
-    frameContent.append("<p class='textBolder'>" + app.replaceLocal({name:"CRITERIA"}) + ": </p>")
-    frameContent.append("<p>" + element.element.criterias + "</p>")
-    frameContent.append("<p><span class='textBolder'>" + app.replaceLocal({name:"EXPECTEDRESULT"}) + "</span>" + element.data + "</p>")
-    frameContent.append("<p><span class='textBolder'>" + app.replaceLocal({name:"OCCURENCEFOUNDED"}) + ":</span> " + element.value + "</p>")
+var crit = element.element.criterias.split(",");
+    var operator = element.data.split(" ");
+    var opText = "";
+    switch(operator[0]) {
+        case "=":
+            opText = app.replaceLocal({name:"EQUAL"});
+            break;
+        case ">":
+            opText = app.replaceLocal({name:"SUPERIOR"});
+            break;
+        case "<":
+            opText = app.replaceLocal({name:"INFERIOR"});
+            break;
+    }
+    var text = base.format(app.replaceLocal({name:"ASSERTPROPERTYCOUNTTEXT"}), element.element.tag, crit[1], opText, operator[1], element.value);
+    frameContent.append("<p>" + text + "</p>")
 
     $("#screenBackground").append(frame);
     frame.append(frameTitle);

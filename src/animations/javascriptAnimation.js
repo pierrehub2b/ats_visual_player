@@ -32,8 +32,8 @@ export function implementAnimationStart(element) {
     frame.children("img").attr("src", base.pathToAssets + "javascript.png");
     frameTitle.html(app.replaceLocal({name:"JAVASCRIPTANIMATION"}));
 
-    frameContent.append("<p><span class='textBolder'>" + app.replaceLocal({name:"CRITERIA"}) + ": </span>" + element.element.criterias + "</p>")
-    frameContent.append("<p><span class='textBolder'>" + app.replaceLocal({name:"ACTION"}) + ": </span>" + element.value + "</p>")
+    var text = base.format(app.replaceLocal({name:"JAVASCRIPTACTIONTEXT"}), element.value, element.element.tag,  element.element.criterias.split(",")[1]);
+    frameContent.append('<p>'+text+'</p>')
 
     $("#screenBackground").append(frame);
     frame.append(frameTitle);

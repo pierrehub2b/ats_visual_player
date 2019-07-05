@@ -9,12 +9,29 @@ export var frameTitle = '<h3 class="popupTitle"></h3>';
 export var frameContent = '<div class="popupContent"></div>';
 export var mousePointer = "<div class='pointerAction'><img class='animationImg' src='"+pathToAssets+"mouse.png' /></div>";
 export var keyboardPointer = "<div class='pointerAction'><img class='animationImg' src='"+pathToAssets+"keyboard.png' /></div>";
+export var textInputAnimationFrame = "<div class='textInputAnimation'></div>";
 export var arrowUp = "<div class='pointerAction'><img class='animationImg' src='"+pathToAssets+"up.png' /></div>";
 export var arrowDown = ""+pathToAssets+"down.png";
 export var delay = 3;
 
 export var previousMousePosition = {x: 0, y: $("#screenBackground").height()};
 export var borderSize = 3;
+
+export function format(fmt, ...args) {
+    if (!fmt.match(/^(?:(?:(?:[^{}]|(?:\{\{)|(?:\}\}))+)|(?:\{[0-9]+\}))+$/)) {
+        throw new Error('invalid format string.');
+    }
+    return fmt.replace(/((?:[^{}]|(?:\{\{)|(?:\}\}))+)|(?:\{([0-9]+)\})/g, (m, str, index) => {
+        if (str) {
+            return str.replace(/(?:{{)|(?:}})/g, m => m[0]);
+        } else {
+            if (index >= args.length) {
+                throw new Error('argument index is out of range in format');
+            }
+            return args[index];
+        }
+    });
+}
 
 export function calculPositions(element) {
     var screenHeight = $("#screenBackground").height()
@@ -200,7 +217,7 @@ export function displayPopUp(frame, title, content, delay) {
     });
 
     timelLineLite.fromTo(content, 0.3, {left: -$("#screenBackground").width()}, {
-        left: ($("#screenBackground").width() / 100) * 10,
+        left: ($("#screenBackground").width() / 100) * 1,
         opacity: 1,
         display: "flex"
     });
@@ -229,7 +246,7 @@ export function hidePopUp(frame, title, content, delay) {
 
     timelLineLite.to(frame, 0.2, {
         left: -$("#screenBackground").width(),
-        opacity: 1,
+        opacity: 0,
         display: "flex"
     });
 }

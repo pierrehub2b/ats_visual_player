@@ -13,13 +13,16 @@ export function implementAnimation(element, frameCounter) {
 export function implementAnimationStart(element) {
     var divId = "pointerEvent" + element.timeLine;
     var frame = $(base.mousePointer);
+    
     var box = $(base.box);
+    box.attr("id", "box" + element.timeLine);
+    box.appendTo("#screenBackground");
+
     var clickAnim = $(base.clickEffectElement);
     frame.attr("id", divId);
-    box.attr("id", "box" + element.timeLine);
+    
     clickAnim.attr("id", "click" + element.timeLine);
     frame.appendTo("#screenBackground");
-    box.appendTo("#screenBackground");
     clickAnim.appendTo("#screenBackground");
 
     var positions = base.calculPositions(element);

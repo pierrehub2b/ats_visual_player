@@ -24,13 +24,18 @@ export function implementAnimationStart(element) {
     frameTitle.attr("id", titleId);
     frameContent.attr("id", contentId);
   
+    var localField = app.replaceLocal({name:"RESTORE"});
     if(element.value == "reduce") {
         frame.children("img").attr("src", base.pathToAssets + "reduce.png");
+        localField = app.replaceLocal({name:"REDUCE"});
     } else {
         frame.children("img").attr("src", base.pathToAssets + "restore.png");
     }
+
     frameTitle.html(app.replaceLocal({name:"WINDOWSTATE"}));
-    frameContent.append('<p id="channelName"><span class="textBolder">'+app.replaceLocal({name:"VALUE"}) + ': </span>' + element.value +'</p>')
+
+    var text = base.format(app.replaceLocal({name:"WINDOWSTATETEXT"}), localField);
+    frameContent.append('<p>'+text+'</p>')
 
     $("#screenBackground").append(frame);
     frame.append(frameTitle);
