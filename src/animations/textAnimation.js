@@ -29,13 +29,15 @@ export function implementAnimationStart(element) {
 
     var positions = base.calculPositions(element);
 
-    textInput.css("width", positions.width + "%");
-    textInput.css("height", positions.height + "%");
-    textInput.css("left", positions.x + "%");
-    textInput.css("top", positions.y + "%");
+    textInput.css("width", positions.width + "vh");
+    textInput.css("height", positions.height + "vh");
+    textInput.css("left", positions.x + "vh");
+    textInput.css("top", positions.y + "vh");
 
-    frame.css("left", (positions.x + (positions.width*0.8)) + "%");
-    frame.css("top", positions.y + "%");
+    frame.css("left", (positions.x + (positions.width*0.8)) + "vh");
+    frame.css("top", positions.y + "vh");
+    frame.children("img").css("width", 3 + "vh");
+    frame.children("img").css("height", 3 + "vh");
 
     base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
     timelLineLite.to(textInput, 0.2, {

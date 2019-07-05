@@ -12,7 +12,7 @@ export var keyboardPointer = "<div class='pointerAction'><img class='animationIm
 export var textInputAnimationFrame = "<div class='textInputAnimation'></div>";
 export var arrowUp = "<div class='pointerAction'><img class='animationImg' src='"+pathToAssets+"up.png' /></div>";
 export var arrowDown = ""+pathToAssets+"down.png";
-export var delay = 3;
+export var defaultDelay = 3;
 
 export var previousMousePosition = {x: 0, y: $("#screenBackground").height()};
 export var borderSize = 3;
@@ -40,13 +40,13 @@ export function calculPositions(element) {
     var imgClientWidth = element.channelBound.width * ratio;
     var leftDistance = (screenWidth - imgClientWidth) / 2;
 
-    var x = (((element.element.bound.x * ratio) + leftDistance) / screenWidth) * 100;
-    var y = ((element.element.bound.y * ratio) / screenHeight) * 100;
+    var x = (((element.element.bound.x * ratio) + leftDistance) / screenHeight) * 100;
+    var y = (((element.element.bound.y * ratio) / screenHeight) * 100);
 
-    var xMouse = (((element.element.bound.x * ratio) + leftDistance) / screenWidth) * 100;
+    var xMouse = (((element.element.bound.x * ratio) + leftDistance) / screenHeight) * 100;
     var yMouse = ((((element.element.bound.y + element.element.bound.height) * ratio)) / screenHeight) * 100;
 
-    var elementWidth = ((element.element.bound.width * ratio) / screenWidth) * 100;
+    var elementWidth = ((element.element.bound.width * ratio) / screenHeight) * 100;
     var elementHeight = ((element.element.bound.height * ratio) / screenHeight) * 100;
 
     x = x < 0 ? 0 : x;
@@ -60,15 +60,15 @@ export function calculPositions(element) {
     xMouse = xMouse > 80 ? 80 : xMouse;
     yMouse = yMouse > 80 ? 80 : yMouse;
 
-    return {x: x, y:y, xMouse: xMouse, yMouse:yMouse, width: elementWidth+1, height: elementHeight+1};
+    return {x: x-1, y:y-1, xMouse: xMouse, yMouse:yMouse, width: elementWidth, height: elementHeight};
 }
 
 export function createBox(id, x,y, width, height, duration) { 
     var box = $("#box" + id);
-    box.css("width", width + "%");
-    box.css("height", height + "%");
-    box.css("left", x + "%");
-    box.css("top", y + "%");
+    box.css("width", width + "vh");
+    box.css("height", height + "vh");
+    box.css("left", x + "vh");
+    box.css("top", y + "vh");
     var top = box.children("#top-side");
     var bottom = box.children("#bottom-side");
     var left = box.children("#left-side");
@@ -185,8 +185,8 @@ export function hideBox(id, duration) {
 
 export function clickAnimation(id, x,y) {
     var click = $("#click" + id);
-    click.css("left", x + "%");
-    click.css("top", y + "%");
+    click.css("left", x + "vh");
+    click.css("top", y + "vh");
     timelLineLite.fromTo(click, 0.2, 
         {
             immediateRender: false,
@@ -208,7 +208,7 @@ export function clickAnimation(id, x,y) {
 }
 
 export function displayPopUp(frame, title, content, delay) {
-    var d = delay ? delay : 0;
+    var d = delay ? delay : defaultDelay;
     timelLineLite.fromTo(frame, 0.5, {left: -$("#screenBackground").width()}, {
         left: 0,
         opacity: 0.9,
@@ -230,7 +230,7 @@ export function displayPopUp(frame, title, content, delay) {
 }
 
 export function hidePopUp(frame, title, content, delay) {
-    var d = delay ? delay : 0;
+    var d = delay ? delay : defaultDelay;
     timelLineLite.to(title, 0.2, {
         left: -$("#screenBackground").width(),
         opacity: 1,

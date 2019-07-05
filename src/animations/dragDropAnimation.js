@@ -46,7 +46,7 @@ export function implementAnimationStart(element, isDrag) {
     frame.append(frameContent);
 
     base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
-    base.displayPopUp(frame, frameTitle, frameContent, 3);
+    base.displayPopUp(frame, frameTitle, frameContent, 1);
 
 }
 
@@ -55,6 +55,6 @@ export function implementAnimationEnd(element) {
     var frameTitle = $("#mouseTitle" + element.timeLine);
     var frameContent = $("#mouseContent" + element.timeLine);
     
-    base.hidePopUp(frame, frameTitle, frameContent, 3);
+    base.hidePopUp(frame, frameTitle, frameContent, 4);
     base.hideBox(element.timeLine, 0.2);
 }

@@ -30,12 +30,12 @@ export function implementAnimationStart(element) {
     var clickPositionX = (positions.xMouse + 1);
     var clickPositionY = (positions.yMouse - 2);
 
-    frame.css("left", clickPositionX + "%");
-    frame.css("top", clickPositionY + "%");
+    frame.css("left", clickPositionX + "vh");
+    frame.css("top", clickPositionY + "vh");
 
-    timelLineLite.fromTo(frame, 0.5, {top: base.previousMousePosition.y + "%", left: base.previousMousePosition.x + "%"}, {
-        left: clickPositionX + "%",
-        top: clickPositionY + "%",
+    timelLineLite.fromTo(frame, 0.5, {top: base.previousMousePosition.y + "vh", left: base.previousMousePosition.x + "vh"}, {
+        left: clickPositionX + "vh",
+        top: clickPositionY + "vh",
         opacity: 1,
         display: "flex"
     });

@@ -41,12 +41,12 @@ export function implementAnimationStart(element) {
     frame.append(frameTitle);
     frame.append(frameContent);
 
-    base.displayPopUp(frame, frameTitle, frameContent, 3);
+    base.displayPopUp(frame, frameTitle, frameContent, 1);
 }
 
 export function implementAnimationEnd(element) {
     var frame = $("#stateWindowFrame" + element.timeLine);
     var frameTitle = $("#stateWindowTitle" + element.timeLine);
     var frameContent = $("#stateWindowContent" + element.timeLine);
-    base.hidePopUp(frame, frameTitle, frameContent, 3);
+    base.hidePopUp(frame, frameTitle, frameContent);
 }
