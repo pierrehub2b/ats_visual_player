@@ -3,9 +3,9 @@ var app = require('../app');
 var base = require('./baseAnimation');
 
 export function implementAnimation(element) {
-    var frameId = "channelStopFrame" + element.timeLine;
-    var titleId = "channelStopTitle" + element.timeLine;
-    var contentId = "channelStopContent" + element.timeLine;
+    var frameId = "channelSwitchFrame" + element.timeLine;
+    var titleId = "channelSwitchFrame" + element.timeLine;
+    var contentId = "channelSwitchFrame" + element.timeLine;
     
     var frame = $(base.frameBackground);
     var frameTitle = $(base.frameTitle);
@@ -15,12 +15,11 @@ export function implementAnimation(element) {
     frameTitle.attr("id", titleId);
     frameContent.attr("id", contentId);
 
-    frame.children("img").attr("src", base.pathToAssets + "close.png");
-    frameTitle.html(app.replaceLocal({name:"CLOSECHANNEL"}));
+    frame.children("img").attr("src", base.pathToAssets + "switch.png");
+    frameTitle.html(app.replaceLocal({name:"SWITCHCHANNEL"}));
 
-    var text = base.format(app.replaceLocal({name:"CLOSECHANNELTEXT"}), true, element.channelName);
-
-    frameContent.append('<p>'+text+'</p>');
+    var text = base.format(app.replaceLocal({name:"SWITCHCHANNELTEXT"}), true, element.channelName);
+    frameContent.append('<p>'+text+'</p>')
 
     $("#screenBackground").append(frame);
     frame.append(frameTitle);

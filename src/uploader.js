@@ -6,6 +6,7 @@ import './simpledrag';
 import { replaceLocal, currentLocale, currentReportName, flashReport, clearOtherReadingState, uploadFiles } from './app';
 import { implementAnimation as ActionGotoUrl } from './animations/gotuUrlAnimation';
 import { implementAnimation as ActionChannelStart } from './animations/channelStartAnimation';
+import { implementAnimation as ActionChannelSwitch } from './animations/channelSwitchAnimation';
 import { implementAnimation as ActionMouseScroll } from './animations/mouseScrollAnimation';
 import { implementAnimation as ActionChannelClose } from './animations/closeChannelAnimation';
 import { implementAnimation as ActionMouseKey } from './animations/mouseKeyAnimation';
@@ -482,7 +483,7 @@ export function updateByVal(value){
 
 export function updaterangePointer() {
   if(progressSlider.val() == 0) {
-    //flashReport.fadeTo(500, 0.8);
+    //flashReport.fadeTo(500, 1);
     $(".watermark").css("display", "none");
   } else if(progressSlider.val() > 0) {
     $(".watermark").css("display", "block");
@@ -554,7 +555,7 @@ export function getChapterPosition(timeline) {
 export function showBottomPanel() {
   navBar.css("opacity","0.8");
   setTimeout(() => {
-    flashReport.css("opacity","0.8");
+    flashReport.css("opacity","1");
   }, 1000, setTimeout(() => {
     flashReport.css("opacity","0");
     playBtn.click();
@@ -747,121 +748,119 @@ export function animate(currentElement, index) {
       }); 
     }
 
-    if(currentElement.element.error != -1) {
-      switch(currentElement.element.type) {
-        case "com.ats.script.actions.ActionText":
-          //OK
-          frameForAction = 2;
-          ActionText(currentElement.element, currentFrameAction);
-          currentFrameAction++;
-          if(currentFrameAction > frameForAction) {
-            currentFrameAction = 1;
-          }
-          break;
-        case "com.ats.script.actions.ActionGotoUrl":
-          //OK
-          frameForAction = 2;
-          ActionGotoUrl(currentElement.element, currentFrameAction);
-          currentFrameAction++;
-          if(currentFrameAction > frameForAction) {
-            currentFrameAction = 1;
-          }
-          break;
-        case "com.ats.script.actions.ActionChannelStart":
-          //OK
-          ActionChannelStart(currentElement.element);
-          break;
-        case "com.ats.script.actions.ActionChannelClose":
-          //OK
-          ActionChannelClose(currentElement.element);
-          break;
-        case "com.ats.script.actions.ActionMouseKey":
-          //OK
-          frameForAction = 2;
-          ActionMouseKey(currentElement.element, currentFrameAction);
-          currentFrameAction++;
-          if(currentFrameAction > frameForAction) {
-            currentFrameAction = 1;
-          }
-          break;
-        case "com.ats.script.actions.ActionMouseScroll":
-          //OK
-          frameForAction = 3;
-          ActionMouseScroll(currentElement.element, currentFrameAction);
-          currentFrameAction++;
-          if(currentFrameAction > frameForAction) {
-            currentFrameAction = 1;
-          }
-          break;
-        case "com.ats.script.actions.ActionComment":
-          //OK
-          ActionComment(currentElement.element);
-          break;
-        case "com.ats.script.actions.ActionAssertCount":
-          //OK
-          ActionAssertPropertyCount(currentElement.element);
-          break;
-        case "com.ats.script.actions.ActionAssertProperty":
-          //OK
-          ActionAssertProperty(currentElement.element);
-          break;
-        case "com.ats.script.actions.ActionAssertValue":
-          //OK
-          ActionAssertValue(currentElement.element);
-          break;
-        case "com.ats.script.actions.ActionJavascript":
-          //OK
-          frameForAction = 2;
-          ActionJavascript(currentElement.element, currentFrameAction);
-          currentFrameAction++;
-          if(currentFrameAction > frameForAction) {
-            currentFrameAction = 1;
-          }
-          break;
-        case "com.ats.script.actions.ActionMouse":
-          //OK
-          frameForAction = 2;
-          ActionMouse(currentElement.element, currentFrameAction);
-          currentFrameAction++;
-          if(currentFrameAction > frameForAction) {
-            currentFrameAction = 1;
-          }
-          break;
-        case "com.ats.script.actions.ActionProperty":
-          //OK
-          ActionProperty(currentElement.element);
-          break;
-        case "com.ats.script.actions.ActionWindowState":
-          //OK
-          frameForAction = 2;
-          ActionWindowState(currentElement.element, currentFrameAction);
-          currentFrameAction++;
-          if(currentFrameAction > frameForAction) {
-            currentFrameAction = 1;
-          }
-          break;
-        case "com.ats.script.actions.ActionWindowSwitch":
-          //OK
-          frameForAction = 2;
-          ActionWindowSwitch(currentElement.element, currentFrameAction);
-          currentFrameAction++;
-          if(currentFrameAction > frameForAction) {
-            currentFrameAction = 1;
-          }
-          break;
-        case "com.ats.script.actions.ActionMouseDragDrop":
-          //OK
-          frameForAction = 2;
-          ActionDragDrop(currentElement.element, currentFrameAction, isDrag);
-          currentFrameAction++;
-          if(currentFrameAction > frameForAction) {
-            currentFrameAction = 1;
-            isDrag = !isDrag;
-          }
-          break;
-      }
-    } else if(currentElement.element.error == -1) {
-      //OK
-      ActionElementNotFound(currentElement.element);
+    switch(currentElement.element.type) {
+      case "com.ats.script.actions.ActionText":
+        //OK
+        frameForAction = 2;
+        ActionText(currentElement.element, currentFrameAction);
+        currentFrameAction++;
+        if(currentFrameAction > frameForAction) {
+          currentFrameAction = 1;
+        }
+        break;
+      case "com.ats.script.actions.ActionGotoUrl":
+        //OK
+        frameForAction = 2;
+        ActionGotoUrl(currentElement.element, currentFrameAction);
+        currentFrameAction++;
+        if(currentFrameAction > frameForAction) {
+          currentFrameAction = 1;
+        }
+        break;
+      case "com.ats.script.actions.ActionChannelStart":
+        //OK
+        ActionChannelStart(currentElement.element);
+        break;
+      case "com.ats.script.actions.ActionChannelClose":
+        //OK
+        ActionChannelClose(currentElement.element);
+        break;
+      case "com.ats.script.actions.ActionMouseKey":
+        //OK
+        frameForAction = 2;
+        ActionMouseKey(currentElement.element, currentFrameAction);
+        currentFrameAction++;
+        if(currentFrameAction > frameForAction) {
+          currentFrameAction = 1;
+        }
+        break;
+      case "com.ats.script.actions.ActionMouseScroll":
+        //OK
+        frameForAction = 3;
+        ActionMouseScroll(currentElement.element, currentFrameAction);
+        currentFrameAction++;
+        if(currentFrameAction > frameForAction) {
+          currentFrameAction = 1;
+        }
+        break;
+      case "com.ats.script.actions.ActionComment":
+        //OK
+        ActionComment(currentElement.element);
+        break;
+      case "com.ats.script.actions.ActionAssertCount":
+        //OK
+        ActionAssertPropertyCount(currentElement.element);
+        break;
+      case "com.ats.script.actions.ActionAssertProperty":
+        //OK
+        ActionAssertProperty(currentElement.element);
+        break;
+      case "com.ats.script.actions.ActionAssertValue":
+        //OK
+        ActionAssertValue(currentElement.element);
+        break;
+      case "com.ats.script.actions.ActionJavascript":
+        //OK
+        frameForAction = 2;
+        ActionJavascript(currentElement.element, currentFrameAction);
+        currentFrameAction++;
+        if(currentFrameAction > frameForAction) {
+          currentFrameAction = 1;
+        }
+        break;
+      case "com.ats.script.actions.ActionMouse":
+        //OK
+        frameForAction = 2;
+        ActionMouse(currentElement.element, currentFrameAction);
+        currentFrameAction++;
+        if(currentFrameAction > frameForAction) {
+          currentFrameAction = 1;
+        }
+        break;
+      case "com.ats.script.actions.ActionProperty":
+        //OK
+        ActionProperty(currentElement.element);
+        break;
+      case "com.ats.script.actions.ActionWindowState":
+        //OK
+        frameForAction = 2;
+        ActionWindowState(currentElement.element, currentFrameAction);
+        currentFrameAction++;
+        if(currentFrameAction > frameForAction) {
+          currentFrameAction = 1;
+        }
+        break;
+      case "com.ats.script.actions.ActionWindowSwitch":
+        //OK
+        frameForAction = 2;
+        ActionWindowSwitch(currentElement.element, currentFrameAction);
+        currentFrameAction++;
+        if(currentFrameAction > frameForAction) {
+          currentFrameAction = 1;
+        }
+        break;
+      case "com.ats.script.actions.ActionMouseDragDrop":
+        //OK
+        frameForAction = 2;
+        ActionDragDrop(currentElement.element, currentFrameAction, isDrag);
+        currentFrameAction++;
+        if(currentFrameAction > frameForAction) {
+          currentFrameAction = 1;
+          isDrag = !isDrag;
+        }
+        break;
+      case "com.ats.script.actions.ActionChannelSwitch":
+          ActionChannelSwitch(currentElement.element);
+        break;
     }
 }

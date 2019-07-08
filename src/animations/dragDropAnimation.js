@@ -36,9 +36,9 @@ export function implementAnimationStart(element, isDrag) {
         localField = app.replaceLocal({name:"MOUSEDROP"});
     }
     frame.children("img").attr("src", base.pathToAssets + imgPath);
-    frameTitle.html(localField);
+    frameTitle.html(app.replaceLocal({name:"MOUSEANIMATION"}));
     
-    var text = base.format(app.replaceLocal({name:"DRAGDROPACTIONTEXT"}), localField, element.element.tag, element.element.criterias.split(",")[1]);
+    var text = base.format(app.replaceLocal({name:"DRAGDROPACTIONTEXT"}), true, localField, element.element.tag);
     frameContent.append('<p>'+text+'</p>')
 
     $("#screenBackground").append(frame);

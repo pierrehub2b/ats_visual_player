@@ -9,6 +9,7 @@
     {
       "name" : "Serveur de test",
       "urls" : [
+        "/ATSV/allFunctions.atsv",
         "/ATSV/inputs.DataInput.atsv",
         "/ATSV/inputs.HtmlInputs.atsv",
         "/ATSV/mouse.HoverAndDrag.atsv",

@@ -1,7 +1,7 @@
 var $ = require('jQuery');
-import { timelLineLite } from '../uploader';
 var app = require('../app');
 var base = require('./baseAnimation');
+var elemNotFound = require('./elementNotFoundAnimation');
 
 export function implementAnimation(element, frameCounter) {
     if(frameCounter ==1) {
@@ -12,6 +12,10 @@ export function implementAnimation(element, frameCounter) {
 }
 
 export function implementAnimationStart(element) {
+    if(element.error == -1) {
+        elemNotFound.implementAnimation(element, app.replaceLocal({name:"STATECHANGE"}));
+        return;
+    }
     var frameId = "stateWindowFrame" + element.timeLine;
     var titleId = "stateWindowTitle" + element.timeLine;
     var contentId = "stateWindowContent" + element.timeLine;
@@ -24,17 +28,21 @@ export function implementAnimationStart(element) {
     frameTitle.attr("id", titleId);
     frameContent.attr("id", contentId);
   
-    var localField = app.replaceLocal({name:"RESTORE"});
+    var localField = "";
     if(element.value == "reduce") {
         frame.children("img").attr("src", base.pathToAssets + "reduce.png");
         localField = app.replaceLocal({name:"REDUCE"});
-    } else {
+    } else if(element.value == "maximize") {
         frame.children("img").attr("src", base.pathToAssets + "restore.png");
+        localField = app.replaceLocal({name:"RESTORE"});
+    } else {
+        frame.children("img").attr("src", base.pathToAssets + "close.png");
+        localField = app.replaceLocal({name:"CLOSE"});
     }
 
     frameTitle.html(app.replaceLocal({name:"WINDOWSTATE"}));
 
-    var text = base.format(app.replaceLocal({name:"WINDOWSTATETEXT"}), localField);
+    var text = base.format(app.replaceLocal({name:"WINDOWSTATETEXT"}), true, localField);
     frameContent.append('<p>'+text+'</p>')
 
     $("#screenBackground").append(frame);
@@ -45,6 +53,9 @@ export function implementAnimationStart(element) {
 }
 
 export function implementAnimationEnd(element) {
+    if(element.error == -1) {
+        return;
+    }
     var frame = $("#stateWindowFrame" + element.timeLine);
     var frameTitle = $("#stateWindowTitle" + element.timeLine);
     var frameContent = $("#stateWindowContent" + element.timeLine);

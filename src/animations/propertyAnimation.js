@@ -2,8 +2,13 @@ var $ = require('jQuery');
 import { timelLineLite } from '../uploader';
 var app = require('../app');
 var base = require('./baseAnimation');
+var elemNotFound = require('./elementNotFoundAnimation');
 
 export function implementAnimation(element) {
+    if(element.error == -1) {
+        elemNotFound.implementAnimation(element, app.replaceLocal({name:"GETPROPERTY"}));
+        return;
+    }
     var frameId = "propertyFrame" + element.timeLine;
     var titleId = "propertyTitle" + element.timeLine;
     var contentId = "propertyContent" + element.timeLine;
@@ -24,7 +29,8 @@ export function implementAnimation(element) {
 
     frame.children("img").attr("src", base.pathToAssets + "attributes_display.png");
     frameTitle.html(app.replaceLocal({name:"GETPROPERTY"}));
-    var text = base.format(app.replaceLocal({name:"PROPERTYTEXT"}), element.value, element.element.tag, element.data );
+    
+    var text = base.format(app.replaceLocal({name:"PROPERTYTEXT"}), true, element.value, element.data );
     frameContent.append('<p>'+text+'</p>')
 
     $("#screenBackground").append(frame);

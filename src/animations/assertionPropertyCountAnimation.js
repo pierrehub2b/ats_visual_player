@@ -24,13 +24,10 @@ export function implementAnimation(element) {
     frame.children("img").attr("src", base.pathToAssets + "occurence.png");
     frameTitle.html(app.replaceLocal({name:"ASSERTCOUNT"}));
 
-var crit = element.element.criterias.split(",");
+    var crit = element.element.criterias.split(",");
     var operator = element.data.split(" ");
     var opText = "";
     switch(operator[0]) {
-        case "=":
-            opText = app.replaceLocal({name:"EQUAL"});
-            break;
         case ">":
             opText = app.replaceLocal({name:"SUPERIOR"});
             break;
@@ -38,7 +35,18 @@ var crit = element.element.criterias.split(",");
             opText = app.replaceLocal({name:"INFERIOR"});
             break;
     }
-    var text = base.format(app.replaceLocal({name:"ASSERTPROPERTYCOUNTTEXT"}), element.element.tag, crit[1], opText, operator[1], element.value);
+    //la vérification de {0} a {2}: {3} élément(s) {4} ayant les critères recherchés ont été trouvés
+    var text = base.format(
+        app.replaceLocal({name:"ASSERTPROPERTYCOUNTTEXT"}),
+        true,
+        "<span class='removeFormat'>" + (element.value > 0 ? app.replaceLocal({name:"ASSERTCOUNTFOUNDED"}) : app.replaceLocal({name:"ASSERTCOUNTNOTFOUNDED"})) + "</span>",
+        element.value > 0 ? element.value + " " + base.plurialManagement(app.replaceLocal({name:"ELEMENTS"}), element.value == 1) : "",
+        opText,
+        (element.error == -1 ? "<span class='red'>" + app.replaceLocal({name:"ASSERTFAIL"}) : "<span class='green'>" + app.replaceLocal({name:"ASSERTSUCCESS"})) + "</span>", 
+        element.value == 0 ? app.replaceLocal({name:"NONE"}) : element.value,
+        "<span class='removeFormat'>" + base.plurialManagement(app.replaceLocal({name:"ELEMENTS"}), element.value == 1) + "</span>",
+        crit[0]);
+
     frameContent.append("<p>" + text + "</p>")
 
     $("#screenBackground").append(frame);

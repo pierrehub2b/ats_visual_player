@@ -1,9 +1,8 @@
 var $ = require('jQuery');
-import { timelLineLite } from '../uploader';
 var app = require('../app');
 var base = require('./baseAnimation');
 
-export function implementAnimation(element) {
+export function implementAnimation(element, type) {
     var frameId = "elementNotFoundFrame" + element.timeLine;
     var titleId = "elementNotFoundTitle" + element.timeLine;
     var contentId = "elementNotFoundContent" + element.timeLine;
@@ -20,7 +19,7 @@ export function implementAnimation(element) {
     frameTitle.html(app.replaceLocal({name:"ELEMENTNOTFOUND"}));
 
     var crit = element.element.criterias.split(",");
-    var text = base.format(app.replaceLocal({name:"ELEMENTNOTFOUNDTEXT"}), crit[0], crit[1]); 
+    var text = base.format(app.replaceLocal({name:"ELEMENTNOTFOUNDTEXT"}), true, type, crit[0], crit[1]); 
     frameContent.append("<p>" + text + "</p>");
 
     $("#screenBackground").append(frame);

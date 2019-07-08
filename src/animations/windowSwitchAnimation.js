@@ -1,7 +1,7 @@
 var $ = require('jQuery');
-import { timelLineLite } from '../uploader';
 var app = require('../app');
 var base = require('./baseAnimation');
+var elemNotFound = require('./elementNotFoundAnimation');
 
 export function implementAnimation(element, frameCounter) {
     if(frameCounter ==1) {
@@ -12,6 +12,10 @@ export function implementAnimation(element, frameCounter) {
 }
 
 export function implementAnimationStart(element) {
+    if(element.error == -1) {
+        elemNotFound.implementAnimation(element, app.replaceLocal({name:"STATECHANGE"}));
+        return;
+    }
     var frameId = "switchWindowFrame" + element.timeLine;
     var titleId = "switchWindowTitle" + element.timeLine;
     var contentId = "switchWindowContent" + element.timeLine;
@@ -25,9 +29,9 @@ export function implementAnimationStart(element) {
     frameContent.attr("id", contentId);
   
     frame.children("img").attr("src", base.pathToAssets + "switch_windows.png");
-    frameTitle.html(app.replaceLocal({name:"WINDOWSWITCH"}));
+    frameTitle.html(app.replaceLocal({name:"WINDOWSTATE"}));
 
-    var text = base.format(app.replaceLocal({name:"WINDOWSWITCHTEXT"}), element.value);
+    var text = base.format(app.replaceLocal({name:"WINDOWSWITCHTEXT"}), true, element.value);
     frameContent.append('<p>'+text+'</p>')
 
 
@@ -39,6 +43,9 @@ export function implementAnimationStart(element) {
 }
 
 export function implementAnimationEnd(element) {
+    if(element.error == -1) {
+        return;
+    }
     var frame = $("#switchWindowFrame" + element.timeLine);
     var frameTitle = $("#switchWindowTitle" + element.timeLine);
     var frameContent = $("#switchWindowContent" + element.timeLine);

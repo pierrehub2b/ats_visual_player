@@ -26,7 +26,7 @@ export function implementAnimationStart(element) {
     frame.children("img").attr("src", base.pathToAssets + "link_go.png");
     frameTitle.html(app.replaceLocal({name:"GOTOURL"}));
 
-    var text = base.format(app.replaceLocal({name:"GOTOURLTEXT"}), element.value);
+    var text = base.format(app.replaceLocal({name:"GOTOURLTEXT"}), true, element.value);
     frameContent.append("<p>" + text + "</p>");
 
     $("#screenBackground").append(frame);

@@ -208,7 +208,7 @@ addFiles.click(function (event) {
 
 $("#infoLabel").on("click", function() {
   if(flashReport.css("opacity") == "0") {
-    flashReport.fadeTo(500, 0.8);
+    flashReport.fadeTo(500, 1);
   } else {
     flashReport.fadeTo(500, 0);
   }

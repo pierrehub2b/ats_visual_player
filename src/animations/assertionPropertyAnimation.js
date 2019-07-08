@@ -24,8 +24,37 @@ export function implementAnimation(element) {
     frame.children("img").attr("src", base.pathToAssets + "check_property.png");
     frameTitle.html(app.replaceLocal({name:"ASSERTPROPERTY"}));
 
+    var isRegex = false;  
+    if(element.value.indexOf("match") >= 0) {
+        isRegex = true;
+    }
+
     var attr = element.value.split("=");
-    var text = base.format(app.replaceLocal({name:"ASSERTTEXTPROPERTY"}), attr[0], element.element.tag, attr[attr.length-1], element.data);
+    var outputStatus = "";
+    if(isRegex) {
+        attr = element.value.split(" match ");
+        if(element.error == -1) {
+            outputStatus += app.replaceLocal({name:"ASSERTNOTVALID"}) + " ";
+        } else {
+            outputStatus += app.replaceLocal({name:"ASSERTVALID"}) + " ";
+        }
+        outputStatus += app.replaceLocal({name:"REGULAREXPRESSION"});
+    } else {
+        if(element.error == -1) {
+            outputStatus += app.replaceLocal({name:"ISNOTEQUALS"}) + " à";
+        } else {
+            outputStatus += app.replaceLocal({name:"ISEQUALS"}) + " à";
+        }
+    }
+
+    var text = base.format(
+        app.replaceLocal({name:"ASSERTPROPERTYTEXT"}), 
+        true,
+        attr[0], 
+        (element.error == -1 ? "<span class='red'> " + app.replaceLocal({name:"ASSERTFAIL"}) : "<span class='green'> " + app.replaceLocal({name:"ASSERTSUCCESS"})) + "</span>", 
+        "<span class='removeFormat'>" + outputStatus + "</span>",
+        attr[1]
+    );
 
     frameContent.append("<p>" + text + "</p>")
 

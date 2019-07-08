@@ -13,10 +13,10 @@ body {
   margin: 10px 25px;
   position: absolute;
   display: block;
-  bottom: 9vh;
+  bottom: 10vh;
   left: 0;
   z-index: 5;
-  padding: 15px;
+  padding: 10px;
   min-width: 50px;
   min-height: 50px;
   opacity: 0;
@@ -26,6 +26,10 @@ body {
 
 #flashReport div {
   margin: 5px;
+}
+
+#flashReport h3 {
+  margin: 10px 5px;
 }
 
 //screenBackground

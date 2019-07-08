@@ -2,6 +2,7 @@ var $ = require('jQuery');
 import { timelLineLite } from '../uploader';
 var app = require('../app');
 var base = require('./baseAnimation');
+var elemNotFound = require('./elementNotFoundAnimation');
 
 export function implementAnimation(element, frameCounter) {
     if(frameCounter ==1) {
@@ -12,43 +13,49 @@ export function implementAnimation(element, frameCounter) {
 }
 
 export function implementAnimationStart(element) {
-    var frameId = "mouseFrame" + element.timeLine;
-    var titleId = "mouseTitle" + element.timeLine;
-    var contentId = "mouseContent" + element.timeLine;
-
+    if(element.error == -1) {
+        elemNotFound.implementAnimation(element, app.replaceLocal({name:"MOUSEACTION"}));
+        return;
+    }
+    var divId = "mouseEvent" + element.timeLine;
+    var frame = $(base.mousePointer);
+    
     var box = $(base.box);
     box.attr("id", "box" + element.timeLine);
     box.appendTo("#screenBackground");
 
+    frame.attr("id", divId);
+    frame.appendTo("#screenBackground");
+
     var positions = base.calculPositions(element);
-    
-    var frame = $(base.frameBackground);
-    var frameTitle = $(base.frameTitle);
-    var frameContent = $(base.frameContent);
 
-    frame.attr("id", frameId);
-    frameTitle.attr("id", titleId);
-    frameContent.attr("id", contentId);
+    var clickPositionX = (positions.xMouse + 1);
+    var clickPositionY = (positions.yMouse - 2);
 
-    frame.children("img").attr("src", base.pathToAssets + "mouse.png");
-    frameTitle.html(app.replaceLocal({name:"MOUSEANIMATION"}));
+    frame.css("left", clickPositionX + "vh");
+    frame.css("top", clickPositionY + "vh");
 
-    var text = base.format(app.replaceLocal({name:"MOUSEACTIONTEXT"}), element.value, element.element.tag,  element.element.criterias.split(",")[1]);
-    frameContent.append('<p>'+text+'</p>')
-
-    $("#screenBackground").append(frame);
-    frame.append(frameTitle);
-    frame.append(frameContent);
-
+    timelLineLite.fromTo(frame, 0.5, {top: base.previousMousePosition.y + "vh", left: base.previousMousePosition.x + "vh"}, {
+        left: clickPositionX + "vh",
+        top: clickPositionY + "vh",
+        opacity: 1,
+        display: "flex"
+    });
     base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
-    base.displayPopUp(frame, frameTitle, frameContent, 1);
+    base.previousMousePosition.x = clickPositionX;
+    base.previousMousePosition.y = clickPositionY;
 }
 
 export function implementAnimationEnd(element) {
-    var frame = $("#mouseFrame" + element.timeLine);
-    var frameTitle = $("#mouseTitle" + element.timeLine);
-    var frameContent = $("#mouseContent" + element.timeLine);
-    
-    base.hidePopUp(frame, frameTitle, frameContent, 4);
-    base.hideBox(element.timeLine, 0.2);
+    if(element.error == -1) {
+        return;
+    }
+    var divId = "#mouseEvent" + element.timeLine;
+    var frame = $(divId);
+
+    base.hideBox(element.timeLine ,0.2);
+    timelLineLite.to(frame, 0.5, {
+        opacity: 0,
+        display: "none"
+    });
 }

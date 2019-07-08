@@ -32,7 +32,7 @@ export function implementAnimationStart(element) {
     frame.children("img").attr("src", base.pathToAssets + "javascript.png");
     frameTitle.html(app.replaceLocal({name:"JAVASCRIPTANIMATION"}));
 
-    var text = base.format(app.replaceLocal({name:"JAVASCRIPTACTIONTEXT"}), element.value, element.element.tag,  element.element.criterias.split(",")[1]);
+    var text = base.format(app.replaceLocal({name:"JAVASCRIPTACTIONTEXT"}), true, element.element.tag, element.value);
     frameContent.append('<p>'+text+'</p>')
 
     $("#screenBackground").append(frame);

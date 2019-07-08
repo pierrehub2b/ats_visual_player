@@ -18,7 +18,7 @@ export function implementAnimation(element) {
     frame.children("img").attr("src", base.pathToAssets + "layers_go.png");
     frameTitle.html(app.replaceLocal({name:"STARTCHANNEL"}));
 
-    var text = base.format(app.replaceLocal({name:"STARTCHANNELTEXT"}), element.channelName, element.data, element.channelBound.width + " x " + element.channelBound.height);
+    var text = base.format(app.replaceLocal({name:"STARTCHANNELTEXT"}), true, element.channelName, element.data, element.channelBound.width + " x " + element.channelBound.height);
     frameContent.append('<p>'+text+'</p>')
 
     $("#screenBackground").append(frame);

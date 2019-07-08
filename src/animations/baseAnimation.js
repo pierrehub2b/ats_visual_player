@@ -17,7 +17,7 @@ export var defaultDelay = 3;
 export var previousMousePosition = {x: 0, y: $("#screenBackground").height()};
 export var borderSize = 3;
 
-export function format(fmt, ...args) {
+export function format(fmt, withSpan, ...args) {
     if (!fmt.match(/^(?:(?:(?:[^{}]|(?:\{\{)|(?:\}\}))+)|(?:\{[0-9]+\}))+$/)) {
         throw new Error('invalid format string.');
     }
@@ -28,9 +28,16 @@ export function format(fmt, ...args) {
             if (index >= args.length) {
                 throw new Error('argument index is out of range in format');
             }
+            if(withSpan) {
+                return "<span class='animationVariable'>" + args[index] + "</span>";
+            }
             return args[index];
         }
     });
+}
+
+export function plurialManagement(str, isSingular) {
+    return str.replace("(s)", isSingular ? "": "s");
 }
 
 export function calculPositions(element) {

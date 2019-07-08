@@ -18,7 +18,20 @@ export function implementAnimation(element) {
     frame.children("img").attr("src", base.pathToAssets + "check_value.png");
     frameTitle.html(app.replaceLocal({name:"ASSERTVALUE"}));
 
-    var text = base.format(app.replaceLocal({name:"ASSERTTEXTVALUE"}), element.value, element.data, element.data);
+    //ASSERTTEXTVALUE=La vérification de la valeur {0} a {1}. La valeur {2} {3} {4}
+    var isRegex = false;  
+    if(element.data.indexOf("regex") >= 0) {
+        isRegex = true;
+    }
+    var text = base.format(
+        app.replaceLocal({name:"ASSERTTEXTVALUE"}), 
+        true, 
+        element.value,
+        (element.error == -1 ? "<span class='red'>" + app.replaceLocal({name:"ASSERTFAIL"}) : "<span class='green'>" + app.replaceLocal({name:"ASSERTSUCCESS"})) + "</span>",
+        "<span class='removeFormat'>" + (element.error == -1 ? app.replaceLocal({name:"ASSERTNOTVALID"}) : app.replaceLocal({name:"ASSERTVALID"})) + "</span>",
+        "<span class='removeFormat'>" + (isRegex ? app.replaceLocal({name:"REGULAREXPRESSION"}) : app.replaceLocal({name:"SEARCHEXPRESSION"})) + "</span>",
+        isRegex ? element.data.split("->")[1]: ""
+    );
 
     frameContent.append("<p>" + text + "</p>")
 

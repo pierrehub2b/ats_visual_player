@@ -3,6 +3,7 @@ $agilitestBlack: #11171B;
 $agilitestWhite: #FCFCFC;
 $agilitestGrey: #404040;
 $agilitestBlue: #6271B3;
+$agilitestDarkBlue: #006fc9;
 $fontSize: 15px;
 
 body {
@@ -46,32 +47,54 @@ body {
 }
 
 #flashReport {
-    background-color: black;
-    border-radius: 6px;
-    box-shadow: 4px 4px 8px 2px rgba(238, 238, 238, 0.3);
-    border: 1px solid rgba(238,238,238,0.5);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: rgba(140, 140, 140, 0.9);
+    box-shadow: 8px 8px 8px rgba(140,140,140, 0.4);
 }
+
+// #flashReport:after {
+//     content: "";
+
+//     width: 15px;
+//     height: 15px;
+//     margin-left: -0.5em;
+//     bottom: -28px;
+//     left: 15px;
+//     box-sizing: border-box;
+//     // border: 1em solid rgba(238,238,238,0.5);
+//     // border-color: transparent transparent rgba(99, 99, 99, 0.8) rgba(99, 99, 99, 0.8);
+//     background-color: rgba(140, 140, 140, 0.9);
+    
+//     transform-origin: 0 0;
+//     transform: rotate(-45deg);
+    
+//     box-shadow: 8px 8px 8px rgba(140,140,140, 0.4);
+// }
 
 #flashReport:after {
     content: "";
     position: absolute;
-    width: 0;
-    height: 0;
-    margin-left: -0.5em;
-    bottom: -28px;
-    left: 15px;
-    box-sizing: border-box;
-    border: 1em solid rgba(238,238,238,0.5);
-    border-color: transparent transparent black black;
-    
-    transform-origin: 0 0;
-    transform: rotate(-45deg);
-    
-    box-shadow: -3px 8px 6px 0px rgba(238, 238, 238, 0.3);
+    /* display: inline-block; */
+    /* margin: 0 5px; */
+    /* vertical-align: middle; */
+    /* width: 0px; */
+    /* height: 0px; */
+    left: 10px;
+    bottom: -20px;
+    border-top: solid 20px rgba(140, 140, 140, 0.9);
+    border-left: solid 20px transparent;
+    border-right: solid 20px transparent;
+}
+
+.animationVariable {
+    font-weight: bold;
+    color: $agilitestDarkBlue;
+    font-style: italic;
 }
 
 #flashReport a:link,#flashReport a:visited,#flashReport a:hover,#flashReport a:active, #flashReport  {
     color: $agilitestWhite;
+    text-decoration: none;
   }
 
 #stopRequest {
@@ -197,3 +220,17 @@ input[type=range]::-moz-range-thumb {
   .circle, .inner {
     background-color : $agilitestBlue;
   }
+
+.red {
+    color: red;
+}
+
+.green {
+    color: green;
+}
+
+.removeFormat {
+    color: #11171B !important;
+    font-weight: normal !important;
+    font-style: normal !important;
+}

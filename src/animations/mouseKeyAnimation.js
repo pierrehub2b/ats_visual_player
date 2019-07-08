@@ -1,6 +1,8 @@
 var $ = require('jQuery');
 import { timelLineLite } from '../uploader';
 var base = require('./baseAnimation');
+var app = require('../app');
+var elemNotFound = require('./elementNotFoundAnimation');
 
 export function implementAnimation(element, frameCounter) {
     if(frameCounter ==1) {
@@ -11,6 +13,10 @@ export function implementAnimation(element, frameCounter) {
 }
 
 export function implementAnimationStart(element) {
+    if(element.error == -1) {
+        elemNotFound.implementAnimation(element, app.replaceLocal({name:"CLICKMOUSE"}));
+        return;
+    }
     var divId = "pointerEvent" + element.timeLine;
     var frame = $(base.mousePointer);
     
@@ -46,6 +52,9 @@ export function implementAnimationStart(element) {
 }
 
 export function implementAnimationEnd(element) {
+    if(element.error == -1) {
+        return;
+    }
     var divId = "#pointerEvent" + element.timeLine;
     var frame = $(divId);
 
