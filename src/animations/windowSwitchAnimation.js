@@ -12,7 +12,7 @@ export function implementAnimation(element, frameCounter) {
 }
 
 export function implementAnimationStart(element) {
-    if(element.error == -1) {
+    if(element.error < 0) {
         elemNotFound.implementAnimation(element, app.replaceLocal({name:"STATECHANGE"}));
         return;
     }
@@ -39,11 +39,11 @@ export function implementAnimationStart(element) {
     frame.append(frameTitle);
     frame.append(frameContent);
 
-    base.displayPopUp(frame, frameTitle, frameContent, 1);
+    base.displayPopUp(frame, frameTitle, frameContent, 2);
 }
 
 export function implementAnimationEnd(element) {
-    if(element.error == -1) {
+    if(element.error < 0) {
         return;
     }
     var frame = $("#switchWindowFrame" + element.timeLine);

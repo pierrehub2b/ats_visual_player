@@ -26,6 +26,6 @@ export function implementAnimation(element, type) {
     frame.append(frameTitle);
     frame.append(frameContent);
 
-    base.displayPopUp(frame, frameTitle, frameContent, 1);
+    base.displayPopUp(frame, frameTitle, frameContent, 2);
     base.hidePopUp(frame, frameTitle, frameContent);
 }

@@ -1,60 +1,62 @@
 var $ = require('jQuery');
 var app = require('../app');
 var base = require('./baseAnimation');
+import { timelLineLite } from '../uploader';
+import { AttrPlugin } from "gsap/AttrPlugin";
 
 export function implementAnimation(element, frameCounter, isDrag) {
     if(frameCounter == 1) {
         implementAnimationStart(element, isDrag);
     } else {
-        implementAnimationEnd(element)
+        implementAnimationEnd(element, isDrag)
     }
 }
 
 export function implementAnimationStart(element, isDrag) {
-    var frameId = "mouseFrame" + element.timeLine;
-    var titleId = "mouseTitle" + element.timeLine;
-    var contentId = "mouseContent" + element.timeLine;
+    var frame = null;
+    if(isDrag) {
+        base.setCurrentDragDropTimeline(element.timeLine);
+        var divId = "mouseEvent" + element.timeLine;
+        frame = $(base.mousePointer);
+        frame.attr("id", divId);
+        frame.appendTo("#screenBackground");
+    } else {
+        frame = $("#mouseEvent" + base.currentDragDropTimeline);
+    }
 
     var box = $(base.box);
     box.attr("id", "box" + element.timeLine);
     box.appendTo("#screenBackground");
 
     var positions = base.calculPositions(element);
-    
-    var frame = $(base.frameBackground);
-    var frameTitle = $(base.frameTitle);
-    var frameContent = $(base.frameContent);
-
-    frame.attr("id", frameId);
-    frameTitle.attr("id", titleId);
-    frameContent.attr("id", contentId);
-
-    var imgPath = "drag_start.png";
-    var localField = app.replaceLocal({name:"MOUSEDRAG"});
-    if(!isDrag) {
-        var imgPath = "drag_drop.png";   
-        localField = app.replaceLocal({name:"MOUSEDROP"});
-    }
-    frame.children("img").attr("src", base.pathToAssets + imgPath);
-    frameTitle.html(app.replaceLocal({name:"MOUSEANIMATION"}));
-    
-    var text = base.format(app.replaceLocal({name:"DRAGDROPACTIONTEXT"}), true, localField, element.element.tag);
-    frameContent.append('<p>'+text+'</p>')
-
-    $("#screenBackground").append(frame);
-    frame.append(frameTitle);
-    frame.append(frameContent);
 
     base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
-    base.displayPopUp(frame, frameTitle, frameContent, 1);
-
+    timelLineLite.fromTo(frame, 1, {top: base.previousMousePosition.y + "vh", left: base.previousMousePosition.x + "%"}, {
+        left: 50 - positions.xMouse + "%",
+        top: positions.yMouse + "vh",
+        opacity: 1,
+        display: "flex",
+        onComplete: function() { 
+            if(isDrag) {
+                frame.children("img").attr("src", base.pathToAssets + "mouse_select_left.png");
+            } else {
+                frame.children("img").attr("src", base.pathToAssets + "mouse.png");
+            }
+        }
+    });
+    base.previousMousePosition.x = 50 - positions.xMouse;
+    base.previousMousePosition.y = positions.yMouse;
 }
 
-export function implementAnimationEnd(element) {
-    var frame = $("#mouseFrame" + element.timeLine);
-    var frameTitle = $("#mouseTitle" + element.timeLine);
-    var frameContent = $("#mouseContent" + element.timeLine);
-    
-    base.hidePopUp(frame, frameTitle, frameContent, 4);
-    base.hideBox(element.timeLine, 0.2);
+export function implementAnimationEnd(element, isDrag) {
+    var divId = "#mouseEvent" + base.currentDragDropTimeline;
+    var frame = $(divId);
+    base.hideBox(element.timeLine ,0.2);
+    if(!isDrag) {
+        timelLineLite.to(frame, 1, {
+            opacity: 0,
+            display: "none"
+        });
+        base.setCurrentDragDropTimeline(null);
+    }
 }

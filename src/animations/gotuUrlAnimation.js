@@ -33,7 +33,7 @@ export function implementAnimationStart(element) {
     frame.append(frameTitle);
     frame.append(frameContent);
 
-    base.displayPopUp(frame, frameTitle, frameContent, 1);
+    base.displayPopUp(frame, frameTitle, frameContent, 2);
 }
 
 export function implementAnimationEnd(element) {

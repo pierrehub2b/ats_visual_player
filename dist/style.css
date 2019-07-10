@@ -37,7 +37,7 @@
 .imgFrame {
   width: 32px;
   height: 32px;
-  right: 2vw;
+  left: 2vw;
   top: 0;
   bottom: 0;
   margin: auto; }
@@ -46,7 +46,7 @@
   position: relative;
   opacity: 1;
   width: 80%;
-  left: 14vw;
+  left: 2vw;
   opacity: 0;
   margin: auto;
   align-items: center;
@@ -65,9 +65,9 @@
 .popupTitle {
   position: relative;
   opacity: 0;
-  width: 5%;
+  width: 6vw;
   opacity: 0;
-  left: 5vw;
+  left: 4vw;
   margin: auto;
   align-items: center; }
 
@@ -119,17 +119,12 @@
 .pointerAction {
   z-index: 10;
   opacity: 0;
-  position: absolute;
-  width: 32px;
-  height: 32px; }
+  position: absolute; }
 
 .animationImg {
   display: flex !important;
-  opacity: 1 !important; }
-
-.scrollIcon img, .scrollIcon {
-  width: 48px;
-  height: 48px; }
+  opacity: 1 !important;
+  padding: 3px; }
 html, body {
   height: 100%;
   font-size: 15px; }

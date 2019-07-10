@@ -27,10 +27,10 @@ export function implementAnimation(element) {
         app.replaceLocal({name:"ASSERTTEXTVALUE"}), 
         true, 
         element.value,
-        (element.error == -1 ? "<span class='red'>" + app.replaceLocal({name:"ASSERTFAIL"}) : "<span class='green'>" + app.replaceLocal({name:"ASSERTSUCCESS"})) + "</span>",
-        "<span class='removeFormat'>" + (element.error == -1 ? app.replaceLocal({name:"ASSERTNOTVALID"}) : app.replaceLocal({name:"ASSERTVALID"})) + "</span>",
+        (element.error < 0 ? "<span class='red'>" + app.replaceLocal({name:"ASSERTFAIL"}) : "<span class='green'>" + app.replaceLocal({name:"ASSERTSUCCESS"})) + "</span>",
+        "<span class='removeFormat'>" + (element.error < 0 ? app.replaceLocal({name:"ASSERTNOTVALID"}) : app.replaceLocal({name:"ASSERTVALID"})) + "</span>",
         "<span class='removeFormat'>" + (isRegex ? app.replaceLocal({name:"REGULAREXPRESSION"}) : app.replaceLocal({name:"SEARCHEXPRESSION"})) + "</span>",
-        isRegex ? element.data.split("->")[1]: ""
+        isRegex ? element.data.split("->")[1]: element.value
     );
 
     frameContent.append("<p>" + text + "</p>")
@@ -39,6 +39,6 @@ export function implementAnimation(element) {
     frame.append(frameTitle);
     frame.append(frameContent);
 
-    base.displayPopUp(frame, frameTitle, frameContent, 1);
+    base.displayPopUp(frame, frameTitle, frameContent, 2);
     base.hidePopUp(frame, frameTitle, frameContent, 4);
 }

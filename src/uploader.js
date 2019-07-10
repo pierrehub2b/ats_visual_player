@@ -741,7 +741,7 @@ export function animate(currentElement, index) {
       timelLineLite.to(currentElement.img, 0.5, {
         opacity: 1,
         display: "inline-block",
-        delay: 1
+        delay: 2
       });
       timelLineLite.to(images[index-1].img, 0, {
         display: "none"

@@ -40,7 +40,7 @@ export function implementAnimationStart(element) {
     frame.append(frameContent);
 
     base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
-    base.displayPopUp(frame, frameTitle, frameContent, 1);
+    base.displayPopUp(frame, frameTitle, frameContent, 2);
 }
 
 export function implementAnimationEnd(element) {

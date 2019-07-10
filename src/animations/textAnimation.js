@@ -31,10 +31,10 @@ export function implementAnimationStart(element) {
 
     textInput.css("width", positions.width + "vh");
     textInput.css("height", positions.height + "vh");
-    textInput.css("left", positions.x + "vh");
+    textInput.css("left", 50 -  positions.x + "%");
     textInput.css("top", positions.y + "vh");
 
-    frame.css("left", (positions.x + (positions.width*0.8)) + "vh");
+    frame.css("left", (50 - positions.x + (positions.width*0.8)) + "%");
     frame.css("top", positions.y + "vh");
     frame.children("img").css("width", 3 + "vh");
     frame.children("img").css("height", 3 + "vh");

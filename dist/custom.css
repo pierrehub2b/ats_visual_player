@@ -36,7 +36,7 @@ body {
 #flashReport {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: rgba(140, 140, 140, 0.9);
-  box-shadow: 8px 8px 8px rgba(140, 140, 140, 0.4); }
+  box-shadow: 6px 6px 6px rgba(140, 140, 140, 0.4); }
 
 #flashReport:after {
   content: "";

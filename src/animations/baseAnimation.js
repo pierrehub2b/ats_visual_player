@@ -12,7 +12,12 @@ export var keyboardPointer = "<div class='pointerAction'><img class='animationIm
 export var textInputAnimationFrame = "<div class='textInputAnimation'></div>";
 export var arrowUp = "<div class='pointerAction'><img class='animationImg' src='"+pathToAssets+"up.png' /></div>";
 export var arrowDown = ""+pathToAssets+"down.png";
-export var defaultDelay = 3;
+export var defaultDelay = 4;
+export var currentDragDropTimeline = null;
+
+export function setCurrentDragDropTimeline(val) {
+    currentDragDropTimeline = val;
+}
 
 export var previousMousePosition = {x: 0, y: $("#screenBackground").height()};
 export var borderSize = 3;
@@ -42,16 +47,44 @@ export function plurialManagement(str, isSingular) {
 
 export function calculPositions(element) {
     var screenHeight = $("#screenBackground").height()
-    var screenWidth = $("#screenBackground").width() - 10; // 10 = panelSeparator
+    var screenWidth = $("#screenBackground").width() - 10;
     var ratio = screenHeight / element.channelBound.height;
-    var imgClientWidth = element.channelBound.width * ratio;
-    var leftDistance = (screenWidth - imgClientWidth) / 2;
+    var ratioW = screenWidth / element.channelBound.width;
 
-    var x = (((element.element.bound.x * ratio) + leftDistance) / screenHeight) * 100;
+    var channelWidthBound = element.channelBound.width * ratio;
+    var xBound = element.element.bound.x * ratio;
+    var widthBound = element.element.bound.width * ratio;
+
+    var xRelativeToCenter = (((channelWidthBound/2) - xBound) / screenWidth) * (ratioW * 100);
+    
+    var yMouse = (((element.element.bound.y * ratio) + ((element.element.bound.height / 2) * ratio)) / screenHeight) * 100;
+    var xMouse = xRelativeToCenter - (((widthBound/2) / screenWidth) * 100);
+
+    // Mouse calculation depends of vpos and hpos 
+    if(element.element.vposValue != 0) {
+        switch(element.element.vpos) {
+            case "top":
+                yMouse = ((((element.element.bound.y + element.element.vposValue) * ratio)) / screenHeight) * 100;
+                break;
+            case "bottom":
+                yMouse = ((((element.element.bound.y + element.element.bound.height - element.element.vposValue) * ratio)) / screenHeight) * 100;
+                break;
+        }
+    }
+
+    if(element.element.hposValue != 0) {
+        switch(element.element.hpos) {
+            case "left":
+                xMouse = xRelativeToCenter - (((element.element.hposValue * ratio) / screenWidth) * 100);
+                break;
+            case "right":
+                xMouse = xRelativeToCenter - ((widthBound - (element.element.hposValue * ratio)) / screenWidth) * 100;
+                break;
+        }
+    }
+
+    var x = xRelativeToCenter;
     var y = (((element.element.bound.y * ratio) / screenHeight) * 100);
-
-    var xMouse = (((element.element.bound.x * ratio) + leftDistance) / screenHeight) * 100;
-    var yMouse = ((((element.element.bound.y + element.element.bound.height) * ratio)) / screenHeight) * 100;
 
     var elementWidth = ((element.element.bound.width * ratio) / screenHeight) * 100;
     var elementHeight = ((element.element.bound.height * ratio) / screenHeight) * 100;
@@ -61,12 +94,6 @@ export function calculPositions(element) {
     xMouse = xMouse < 0 ? 0 : xMouse;
     yMouse = yMouse < 0 ? 0 : yMouse;
 
-    
-    x = x > 100 ? 100 : x;
-    y = y > 100 ? 100 : y;
-    xMouse = xMouse > 80 ? 80 : xMouse;
-    yMouse = yMouse > 80 ? 80 : yMouse;
-
     return {x: x-1, y:y-1, xMouse: xMouse, yMouse:yMouse, width: elementWidth, height: elementHeight};
 }
 
@@ -74,7 +101,7 @@ export function createBox(id, x,y, width, height, duration) {
     var box = $("#box" + id);
     box.css("width", width + "vh");
     box.css("height", height + "vh");
-    box.css("left", x + "vh");
+    box.css("left", 50 - x + "%");
     box.css("top", y + "vh");
     var top = box.children("#top-side");
     var bottom = box.children("#bottom-side");
@@ -88,7 +115,8 @@ export function createBox(id, x,y, width, height, duration) {
             height: borderSize,
             immediateRender: false,
             autoRound: false,
-            ease: Power0.easeNone
+            ease: Power0.easeNone,
+            delay: 1
         }, 
         {
             width: '100%'
@@ -152,7 +180,8 @@ export function hideBox(id, duration) {
             immediateRender: false,
             width: borderSize,
             autoRound: false,
-            ease: Power0.easeNone
+            ease: Power0.easeNone,
+            delay: 1
         }
     );
 
@@ -192,14 +221,14 @@ export function hideBox(id, duration) {
 
 export function clickAnimation(id, x,y) {
     var click = $("#click" + id);
-    click.css("left", x + "vh");
+    click.css("left", 50 - x + "%");
     click.css("top", y + "vh");
     timelLineLite.fromTo(click, 0.2, 
         {
             immediateRender: false,
             autoRound: false,
             ease: Power0.easeNone,
-            opacity: 0,
+            opacity: 0
         },
         {
             opacity: 0.8,
@@ -216,21 +245,21 @@ export function clickAnimation(id, x,y) {
 
 export function displayPopUp(frame, title, content, delay) {
     var d = delay ? delay : defaultDelay;
-    timelLineLite.fromTo(frame, 0.5, {left: -$("#screenBackground").width()}, {
-        left: 0,
+    timelLineLite.fromTo(frame, 0.5, {xPercent: -200}, {
+        xPercent: 0,
         opacity: 0.9,
         display: "flex",
         delay: d
     });
 
-    timelLineLite.fromTo(content, 0.3, {left: -$("#screenBackground").width()}, {
-        left: ($("#screenBackground").width() / 100) * 1,
+    timelLineLite.fromTo(content, 0.3, {xPercent: -200}, {
+        xPercent: 2,
         opacity: 1,
         display: "flex"
     });
 
-    timelLineLite.fromTo(title, 0.3, {left: -$("#screenBackground").width()}, {
-        left: ($("#screenBackground").width() / 100) * 5,
+    timelLineLite.fromTo(title, 0.3, {xPercent: -200}, {
+        xPercent: 4,
         opacity: 1,
         display: "flex"
     });
@@ -239,20 +268,20 @@ export function displayPopUp(frame, title, content, delay) {
 export function hidePopUp(frame, title, content, delay) {
     var d = delay ? delay : defaultDelay;
     timelLineLite.to(title, 0.2, {
-        left: -$("#screenBackground").width(),
-        opacity: 1,
+        xPercent: -200,
+        opacity: 0,
         display: "flex",
         delay: d
     });
 
     timelLineLite.to(content, 0.2, {
-        left: -$("#screenBackground").width(),
-        opacity: 1,
+        xPercent: -200,
+        opacity: 0,
         display: "flex"
     });
 
     timelLineLite.to(frame, 0.2, {
-        left: -$("#screenBackground").width(),
+        xPercent: -200,
         opacity: 0,
         display: "flex"
     });

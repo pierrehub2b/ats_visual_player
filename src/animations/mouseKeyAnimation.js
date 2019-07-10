@@ -13,7 +13,7 @@ export function implementAnimation(element, frameCounter) {
 }
 
 export function implementAnimationStart(element) {
-    if(element.error == -1) {
+    if(element.error < 0) {
         elemNotFound.implementAnimation(element, app.replaceLocal({name:"CLICKMOUSE"}));
         return;
     }
@@ -33,26 +33,27 @@ export function implementAnimationStart(element) {
 
     var positions = base.calculPositions(element);
 
-    var clickPositionX = (positions.xMouse + 1);
-    var clickPositionY = (positions.yMouse - 2);
-
-    frame.css("left", clickPositionX + "vh");
-    frame.css("top", clickPositionY + "vh");
-
-    timelLineLite.fromTo(frame, 0.5, {top: base.previousMousePosition.y + "vh", left: base.previousMousePosition.x + "vh"}, {
-        left: clickPositionX + "vh",
-        top: clickPositionY + "vh",
-        opacity: 1,
-        display: "flex"
-    });
     base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
-    base.clickAnimation(element.timeLine, clickPositionX,clickPositionY-1);
-    base.previousMousePosition.x = clickPositionX;
-    base.previousMousePosition.y = clickPositionY;
+    timelLineLite.fromTo(frame, 1, {top: base.previousMousePosition.y + "vh", left: base.previousMousePosition.x + "%"}, {
+        left: 50 - positions.xMouse + "%",
+        top: positions.yMouse + "vh",
+        opacity: 1,
+        display: "flex",
+        onComplete: function() { 
+            if(isDrag) {
+                frame.children("img").attr("src", base.pathToAssets + "mouse_select_left.png");
+            } else {
+                frame.children("img").attr("src", base.pathToAssets + "mouse.png");
+            }
+        }
+    });
+    base.clickAnimation(element.timeLine, positions.xMouse,positions.yMouse-1);
+    base.previousMousePosition.x = 50 - positions.xMouse;
+    base.previousMousePosition.y = positions.yMouse;
 }
 
 export function implementAnimationEnd(element) {
-    if(element.error == -1) {
+    if(element.error < 0) {
         return;
     }
     var divId = "#pointerEvent" + element.timeLine;

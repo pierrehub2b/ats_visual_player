@@ -35,17 +35,40 @@ export function implementAnimation(element) {
             opText = app.replaceLocal({name:"INFERIOR"});
             break;
     }
-    //la vérification de {0} a {2}: {3} élément(s) {4} ayant les critères recherchés ont été trouvés
+
+    //ASSERTPROPERTYCOUNTTEXT=La vérification de {0} {1} {2} a {3}:<br /> {4} {5} {6} {7}
+
     var text = base.format(
         app.replaceLocal({name:"ASSERTPROPERTYCOUNTTEXT"}),
         true,
-        "<span class='removeFormat'>" + (element.value > 0 ? app.replaceLocal({name:"ASSERTCOUNTFOUNDED"}) : app.replaceLocal({name:"ASSERTCOUNTNOTFOUNDED"})) + "</span>",
+        element.value > 0 ? app.replaceLocal({name:"ASSERTCOUNTFOUNDED"}) : app.replaceLocal({name:"ASSERTCOUNTNOTFOUNDED"}),
         element.value > 0 ? element.value + " " + base.plurialManagement(app.replaceLocal({name:"ELEMENTS"}), element.value == 1) : "",
         opText,
-        (element.error == -1 ? "<span class='red'>" + app.replaceLocal({name:"ASSERTFAIL"}) : "<span class='green'>" + app.replaceLocal({name:"ASSERTSUCCESS"})) + "</span>", 
+        (element.error < 0 ? "<span class='red'>" + app.replaceLocal({name:"ASSERTFAIL"}) : "<span class='green'>" + app.replaceLocal({name:"ASSERTSUCCESS"})) + "</span>", 
         element.value == 0 ? app.replaceLocal({name:"NONE"}) : element.value,
         "<span class='removeFormat'>" + base.plurialManagement(app.replaceLocal({name:"ELEMENTS"}), element.value == 1) + "</span>",
-        crit[0]);
+        crit[0],
+        element.error < 0 ?
+            (
+                "<span class='removeFormat'>" + (element.value == 1 ? 
+                    app.replaceLocal({name:"ISNOTFOUND"}) + " " + app.replaceLocal({name:"ONCRITERIA"})
+                    :
+                    app.replaceLocal({name:"ARENOTFOUND"}) + " " + app.replaceLocal({name:"ONCRITERIA"})
+                ) + "</span><span class='animationVariable'>" + crit[1] + "</span>"
+            )
+            :
+            (
+                "<span class='removeFormat'>" + (element.value == 1 ? 
+                    app.replaceLocal({name:"ISFOUND"})
+                    :
+                    (element.value == 0 ? 
+                        app.replaceLocal({name:"ISNOTFOUND"})
+                        :
+                        app.replaceLocal({name:"AREFOUND"})
+                    )
+                ) + "</span>"
+            )
+    );
 
     frameContent.append("<p>" + text + "</p>")
 
@@ -54,7 +77,7 @@ export function implementAnimation(element) {
     frame.append(frameContent);
 
     base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
-    base.displayPopUp(frame, frameTitle, frameContent, 1);
+    base.displayPopUp(frame, frameTitle, frameContent, 2);
     base.hidePopUp(frame, frameTitle, frameContent, 5);
     base.hideBox(element.timeLine, 0.2);
 }

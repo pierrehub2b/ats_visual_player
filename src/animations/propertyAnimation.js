@@ -5,7 +5,7 @@ var base = require('./baseAnimation');
 var elemNotFound = require('./elementNotFoundAnimation');
 
 export function implementAnimation(element) {
-    if(element.error == -1) {
+    if(element.error < 0) {
         elemNotFound.implementAnimation(element, app.replaceLocal({name:"GETPROPERTY"}));
         return;
     }
@@ -30,7 +30,7 @@ export function implementAnimation(element) {
     frame.children("img").attr("src", base.pathToAssets + "attributes_display.png");
     frameTitle.html(app.replaceLocal({name:"GETPROPERTY"}));
     
-    var text = base.format(app.replaceLocal({name:"PROPERTYTEXT"}), true, element.value, element.data );
+    var text = base.format(app.replaceLocal({name:"PROPERTYTEXT"}), true, element.value, element.element.tag, element.data );
     frameContent.append('<p>'+text+'</p>')
 
     $("#screenBackground").append(frame);
@@ -38,7 +38,7 @@ export function implementAnimation(element) {
     frame.append(frameContent);
 
     base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
-    base.displayPopUp(frame, frameTitle, frameContent, 1);
+    base.displayPopUp(frame, frameTitle, frameContent, 2);
     base.hidePopUp(frame, frameTitle, frameContent, 4);
     base.hideBox(element.timeLine, 0.2);
 }

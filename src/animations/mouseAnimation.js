@@ -13,49 +13,58 @@ export function implementAnimation(element, frameCounter) {
 }
 
 export function implementAnimationStart(element) {
-    if(element.error == -1) {
+    if(element.error < 0) {
         elemNotFound.implementAnimation(element, app.replaceLocal({name:"MOUSEACTION"}));
         return;
     }
+
+    var frame = null;
     var divId = "mouseEvent" + element.timeLine;
-    var frame = $(base.mousePointer);
+    if(base.currentDragDropTimeline != null) {
+        //drag and drop context
+        frame = $("#mouseEvent" + base.currentDragDropTimeline);
+    } else {
+        frame = $(base.mousePointer);
+        frame.attr("id", divId);
+        frame.appendTo("#screenBackground");
+    }
+
     
     var box = $(base.box);
     box.attr("id", "box" + element.timeLine);
     box.appendTo("#screenBackground");
 
-    frame.attr("id", divId);
-    frame.appendTo("#screenBackground");
-
     var positions = base.calculPositions(element);
 
-    var clickPositionX = (positions.xMouse + 1);
-    var clickPositionY = (positions.yMouse - 2);
-
-    frame.css("left", clickPositionX + "vh");
-    frame.css("top", clickPositionY + "vh");
-
-    timelLineLite.fromTo(frame, 0.5, {top: base.previousMousePosition.y + "vh", left: base.previousMousePosition.x + "vh"}, {
-        left: clickPositionX + "vh",
-        top: clickPositionY + "vh",
-        opacity: 1,
-        display: "flex"
-    });
     base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
-    base.previousMousePosition.x = clickPositionX;
-    base.previousMousePosition.y = clickPositionY;
+    timelLineLite.fromTo(frame, 1, {top: base.previousMousePosition.y + "vh", left: base.previousMousePosition.x + "%"}, {
+        left: 50 - positions.xMouse + "%",
+        top: positions.yMouse + "vh",
+        opacity: 1,
+        display: "flex",
+        onComplete: function() { 
+            if(isDrag) {
+                frame.children("img").attr("src", base.pathToAssets + "mouse_select_left.png");
+            } else {
+                frame.children("img").attr("src", base.pathToAssets + "mouse.png");
+            }
+        }
+    });
+    base.previousMousePosition.x = 50 - positions.xMouse;
+    base.previousMousePosition.y = positions.yMouse;
 }
 
 export function implementAnimationEnd(element) {
-    if(element.error == -1) {
+    if(element.error < 0) {
         return;
     }
-    var divId = "#mouseEvent" + element.timeLine;
-    var frame = $(divId);
-
     base.hideBox(element.timeLine ,0.2);
-    timelLineLite.to(frame, 0.5, {
-        opacity: 0,
-        display: "none"
-    });
+    if(base.currentDragDropTimeline == null) {
+        var divId = "#mouseEvent" + element.timeLine;
+        var frame = $(divId);
+        timelLineLite.to(frame, 0.5, {
+            opacity: 0,
+            display: "none"
+        });
+    }
 }

@@ -33,27 +33,27 @@ export function implementAnimation(element) {
     var outputStatus = "";
     if(isRegex) {
         attr = element.value.split(" match ");
-        if(element.error == -1) {
+        if(element.error < 0) {
             outputStatus += app.replaceLocal({name:"ASSERTNOTVALID"}) + " ";
+            outputStatus += app.replaceLocal({name:"REGULAREXPRESSION"}) + " <span class='animationVariable'>" + attr[1] + "</span>";
         } else {
-            outputStatus += app.replaceLocal({name:"ASSERTVALID"}) + " ";
+            outputStatus += app.replaceLocal({name:"ASSERTVALID"}) + " " + app.replaceLocal({name:"REGULAREXPRESSION"});
         }
-        outputStatus += app.replaceLocal({name:"REGULAREXPRESSION"});
     } else {
-        if(element.error == -1) {
-            outputStatus += app.replaceLocal({name:"ISNOTEQUALS"}) + " à";
+        if(element.error < 0) {
+            outputStatus += app.replaceLocal({name:"ISNOTEQUALS"}) + " à <span class='animationVariable'>" + attr[1] + "</span>";
         } else {
-            outputStatus += app.replaceLocal({name:"ISEQUALS"}) + " à";
+            outputStatus += app.replaceLocal({name:"ISEQUALS"}) + " à <span class='animationVariable'>" + attr[1] + "</span>";
         }
     }
-
+//La comparaison de la propriété {0} sur le tag {1} a {2}:<br /> la valeur {} {3}
     var text = base.format(
         app.replaceLocal({name:"ASSERTPROPERTYTEXT"}), 
         true,
-        attr[0], 
-        (element.error == -1 ? "<span class='red'> " + app.replaceLocal({name:"ASSERTFAIL"}) : "<span class='green'> " + app.replaceLocal({name:"ASSERTSUCCESS"})) + "</span>", 
-        "<span class='removeFormat'>" + outputStatus + "</span>",
-        attr[1]
+        attr[0],
+        element.element.tag,
+        (element.error < 0 ? "<span class='red'> " + app.replaceLocal({name:"ASSERTFAIL"}) : "<span class='green'> " + app.replaceLocal({name:"ASSERTSUCCESS"})) + "</span>", 
+        "<span class='removeFormat'>" + outputStatus + "</span>"
     );
 
     frameContent.append("<p>" + text + "</p>")
@@ -63,7 +63,7 @@ export function implementAnimation(element) {
     frame.append(frameContent);
 
     base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
-    base.displayPopUp(frame, frameTitle, frameContent, 1);
+    base.displayPopUp(frame, frameTitle, frameContent, 2);
     base.hidePopUp(frame, frameTitle, frameContent, 4);
     base.hideBox(element.timeLine, 0.2);
 }
