@@ -198,7 +198,7 @@ export function setupScreen() {
   prevBtn.on("click", function(event) {
     event.stopPropagation();
     var progress = timelLineLite.progress();
-    var imgNumber = Math.round((((images.length -1) / 100) * (progress * 100)));
+    var imgNumber = Math.floor((((images.length -1) / 100) * (progress * 100)));
 
     var elems = $("img[id$='-f']");
     var currentImgNumber = 0;
@@ -652,7 +652,7 @@ export function resultSetup(result, percent) {
         var imgPreview = document.createElement('img');
         imgPreview.src = "data:image/"+ element.imageType +";base64,"+ encode(bytes);
         imgPreview.id = "sliderImg"+ imgCounter;
-        if(i == element.images.length-1) {
+        if(i == 0) {
           imgPreview.id += "-f";
         }
         imgCounter++;

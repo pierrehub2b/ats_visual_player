@@ -33,22 +33,20 @@ export function implementAnimationStart(element) {
 
     var positions = base.calculPositions(element);
 
-    base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
+    var screenHeight = $("#screenBackground").height()
+    var screenWidth = $("#screenBackground").width() - 10;
+    var ratio = screenHeight / element.channelBound.height;
+    var widthPadding = (((element.element.bound.width * ratio) / 3) / screenWidth) * 100;
+
+    base.createBox(element.timeLine, positions.x - widthPadding,positions.y,positions.width, positions.height,0.2);
     timelLineLite.fromTo(frame, 1, {top: base.previousMousePosition.y + "vh", left: base.previousMousePosition.x + "%"}, {
-        left: 50 - positions.xMouse + "%",
+        left: 50 - (positions.xMouse - widthPadding) + "%",
         top: positions.yMouse + "vh",
         opacity: 1,
-        display: "flex",
-        onComplete: function() { 
-            if(isDrag) {
-                frame.children("img").attr("src", base.pathToAssets + "mouse_select_left.png");
-            } else {
-                frame.children("img").attr("src", base.pathToAssets + "mouse.png");
-            }
-        }
+        display: "flex"
     });
-    base.clickAnimation(element.timeLine, positions.xMouse,positions.yMouse-1);
-    base.previousMousePosition.x = 50 - positions.xMouse;
+    base.clickAnimation(element.timeLine, positions.xMouse - widthPadding,positions.yMouse-1);
+    base.previousMousePosition.x = 50 - (positions.xMouse - widthPadding);
     base.previousMousePosition.y = positions.yMouse;
 }
 
