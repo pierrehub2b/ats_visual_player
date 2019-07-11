@@ -45,29 +45,28 @@ export function plurialManagement(str, isSingular) {
     return str.replace("(s)", isSingular ? "": "s");
 }
 
-export function calculPositions(element) {
-    var screenHeight = $("#screenBackground").height()
-    var screenWidth = $("#screenBackground").width() - 10;
-    var ratio = screenHeight / element.channelBound.height;
-    var ratioW = screenWidth / element.channelBound.width;
+export function calculPositions(element, imgId) {
+    var frame = document.getElementById(imgId);
+    var ratio       = $("#screenBackground").height() / element.channelBound.height;
+    // var offsetLeft  = ($("#screenBackground").width() - (element.channelBound.height * ratio)) / 2;
+    var ratioWidth  = element.element.bound.width * ratio;
+    var ratioHeight = element.element.bound.height * ratio;
+    var ratioX      = element.element.bound.x * ratio;
+    var ratioY      = element.element.bound.y * ratio;
 
-    var channelWidthBound = element.channelBound.width * ratio;
-    var xBound = element.element.bound.x * ratio;
-    var widthBound = element.element.bound.width * ratio;
+    var x = frame.offsetLeft + ratioX - (ratio * 10);
+    var y = ratioY - (ratio * 10);
 
-    var xRelativeToCenter = (((channelWidthBound/2) - xBound) / screenWidth) * (ratioW * 100);
-    
-    var yMouse = (((element.element.bound.y * ratio) + ((element.element.bound.height / 2) * ratio)) / screenHeight) * 100;
-    var xMouse = xRelativeToCenter - (((widthBound/2) / screenWidth) * 100);
+    var xMouse = x + (ratioWidth / 4);
+    var yMouse = y + (ratioHeight / 4);
 
-    // Mouse calculation depends of vpos and hpos 
     if(element.element.vposValue != 0) {
         switch(element.element.vpos) {
             case "top":
-                yMouse = ((((element.element.bound.y + element.element.vposValue) * ratio)) / screenHeight) * 100;
+                yMouse = y + (element.element.vposValue * ratio);
                 break;
             case "bottom":
-                yMouse = ((((element.element.bound.y + element.element.bound.height - element.element.vposValue) * ratio)) / screenHeight) * 100;
+                yMouse = y + ratioHeight - (element.element.vposValue * ratio);
                 break;
         }
     }
@@ -75,34 +74,72 @@ export function calculPositions(element) {
     if(element.element.hposValue != 0) {
         switch(element.element.hpos) {
             case "left":
-                xMouse = xRelativeToCenter - (((element.element.hposValue * ratio) / screenWidth) * 100);
+                xMouse = x + (element.element.hposValue * ratio);
                 break;
             case "right":
-                xMouse = xRelativeToCenter - ((widthBound - (element.element.hposValue * ratio)) / screenWidth) * 100;
+                xMouse = x + ratioWidth - (element.element.hposValue * ratio);
                 break;
         }
     }
 
-    var x = xRelativeToCenter;
-    var y = (((element.element.bound.y * ratio) / screenHeight) * 100);
+    return {x: x, y:y, xMouse: xMouse, yMouse:yMouse, width: ratioWidth, height: ratioHeight};
 
-    var elementWidth = ((element.element.bound.width * ratio) / screenHeight) * 100;
-    var elementHeight = ((element.element.bound.height * ratio) / screenHeight) * 100;
 
-    x = x < 0 ? 0 : x;
-    y = y < 0 ? 0 : y;
-    xMouse = xMouse < 0 ? 0 : xMouse;
-    yMouse = yMouse < 0 ? 0 : yMouse;
+    // var screenHeight = $("#screenBackground").height()
+    // var screenWidth = $("#screenBackground").width() - 10;
+    // var ratio = screenHeight / element.channelBound.height;
+    // var ratioW = screenWidth / element.channelBound.width;
 
-    return {x: x-1, y:y-1, xMouse: xMouse, yMouse:yMouse, width: elementWidth, height: elementHeight};
+    // var channelWidthBound = element.channelBound.width * ratio;
+    // var xBound = element.element.bound.x * ratio;
+    // var widthBound = element.element.bound.width * ratio;
+
+    // var xRelativeToCenter = (((channelWidthBound/2) - xBound) / screenWidth) * (ratioW * 100);
+    
+    // var yMouse = (((element.element.bound.y * ratio) + ((element.element.bound.height / 2) * ratio)) / screenHeight) * 100;
+    // var xMouse = xRelativeToCenter - (((widthBound/2) / screenWidth) * 100);
+
+    // // Mouse calculation depends of vpos and hpos 
+    // if(element.element.vposValue != 0) {
+    //     switch(element.element.vpos) {
+    //         case "top":
+    //             yMouse = ((((element.element.bound.y + element.element.vposValue) * ratio)) / screenHeight) * 100;
+    //             break;
+    //         case "bottom":
+    //             yMouse = ((((element.element.bound.y + element.element.bound.height - element.element.vposValue) * ratio)) / screenHeight) * 100;
+    //             break;
+    //     }
+    // }
+
+    // if(element.element.hposValue != 0) {
+    //     switch(element.element.hpos) {
+    //         case "left":
+    //             xMouse = xRelativeToCenter - (((element.element.hposValue * ratio) / screenWidth) * 100);
+    //             break;
+    //         case "right":
+    //             xMouse = xRelativeToCenter - ((widthBound - (element.element.hposValue * ratio)) / screenWidth) * 100;
+    //             break;
+    //     }
+    // }
+
+    // var x = xRelativeToCenter;
+    // var y = (((element.element.bound.y * ratio) / screenHeight) * 100);
+
+    // var elementWidth = ((element.element.bound.width * ratio) / screenHeight) * 100;
+    // var elementHeight = ((element.element.bound.height * ratio) / screenHeight) * 100;
+
+    // x = x < 0 ? 0 : x;
+    // y = y < 0 ? 0 : y;
+    // xMouse = xMouse < 0 ? 0 : xMouse;
+    // yMouse = yMouse < 0 ? 0 : yMouse;
 }
 
 export function createBox(id, x,y, width, height, duration) { 
     var box = $("#box" + id);
-    box.css("width", width + "vh");
-    box.css("height", height + "vh");
-    box.css("left", 50 - x + "%");
-    box.css("top", y + "vh");
+    box.css("width", width + "px");
+    box.css("height", height + "px");
+    box.css("left", x + "px");
+    box.css("top", y + "px");
     var top = box.children("#top-side");
     var bottom = box.children("#bottom-side");
     var left = box.children("#left-side");
@@ -219,10 +256,10 @@ export function hideBox(id, duration) {
         );
 };
 
-export function clickAnimation(id, x,y) {
+export function clickAnimation(id, x,y, imgId) {
     var click = $("#click" + id);
-    click.css("left", 50 - x + "%");
-    click.css("top", y + "vh");
+    click.css("left", x + "px");
+    click.css("top", y + "px");
     timelLineLite.fromTo(click, 0.2, 
         {
             immediateRender: false,
@@ -234,12 +271,12 @@ export function clickAnimation(id, x,y) {
             opacity: 0.8,
             width: 25,
             height: 25
-        }
+        }, imgId + "-1"
     );
     timelLineLite.to(click, 0.2, 
         {
             opacity: 0
-        }
+        }, imgId + "-2"
     );
 }
 

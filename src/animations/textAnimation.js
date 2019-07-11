@@ -3,15 +3,15 @@ import { timelLineLite } from '../uploader';
 var base = require('./baseAnimation');
 import TextPlugin from "gsap/TextPlugin";
 
-export function implementAnimation(element, frameCounter) {
+export function implementAnimation(element, frameCounter, imgId) {
     if(frameCounter ==1) {
-        implementAnimationStart(element);
+        implementAnimationStart(element, imgId);
     } else {
         implementAnimationEnd(element);
     }
 }
 
-export function implementAnimationStart(element) {
+export function implementAnimationStart(element, imgId) {
     var divId = "textEvent" + element.timeLine;
     var frame = $(base.keyboardPointer);
     var box = $(base.box);
@@ -27,17 +27,39 @@ export function implementAnimationStart(element) {
     frame.appendTo("#screenBackground");
     //clickAnim.appendTo("#screenBackground");
 
-    var positions = base.calculPositions(element);
+    var positions = base.calculPositions(element, imgId);
 
-    textInput.css("width", positions.width + "vh");
-    textInput.css("height", positions.height + "vh");
-    textInput.css("left", 50 -  positions.x + "%");
-    textInput.css("top", positions.y + "vh");
+    timelLineLite.to(frame, 0, {
+        onComplete: function() { 
+            positions = base.calculPositions(element, imgId);
 
-    frame.css("left", (50 - positions.x + (positions.width*0.8)) + "%");
-    frame.css("top", positions.y + "vh");
-    frame.children("img").css("width", 3 + "vh");
-    frame.children("img").css("height", 3 + "vh");
+            var box = $("#box" + element.timeLine);
+            box.css("width", positions.width + "px");
+            box.css("height", positions.height + "px");
+            box.css("left", positions.x + "px");
+            box.css("top", positions.y + "px");
+            
+            textInput.css("width", positions.width + "px");
+            textInput.css("height", positions.height + "px");
+            textInput.css("left", positions.x + "px");
+            textInput.css("top", positions.y + "px");
+        
+            frame.css("left", (positions.x + (positions.width*0.8)) + "px");
+            frame.css("top", positions.y + "px");
+            frame.children("img").css("width", 3 + "px");
+            frame.children("img").css("height", 3 + "px");
+        }
+    });
+
+    textInput.css("width", positions.width + "px");
+    textInput.css("height", positions.height + "px");
+    textInput.css("left", positions.x + "px");
+    textInput.css("top", positions.y + "px");
+
+    frame.css("left", (positions.x + (positions.width*0.8)) + "px");
+    frame.css("top", positions.y + "px");
+    frame.children("img").css("width", 3 + "px");
+    frame.children("img").css("height", 3 + "px");
 
     base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
     timelLineLite.to(textInput, 0.2, {

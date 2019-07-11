@@ -4,7 +4,7 @@ var app = require('../app');
 var base = require('./baseAnimation');
 var elemNotFound = require('./elementNotFoundAnimation');
 
-export function implementAnimation(element) {
+export function implementAnimation(element, imgId) {
     if(element.error < 0) {
         elemNotFound.implementAnimation(element, app.replaceLocal({name:"GETPROPERTY"}));
         return;
@@ -17,7 +17,7 @@ export function implementAnimation(element) {
     box.attr("id", "box" + element.timeLine);
     box.appendTo("#screenBackground");
 
-    var positions = base.calculPositions(element);
+    var positions = base.calculPositions(element, imgId);
     
     var frame = $(base.frameBackground);
     var frameTitle = $(base.frameTitle);
@@ -36,6 +36,17 @@ export function implementAnimation(element) {
     $("#screenBackground").append(frame);
     frame.append(frameTitle);
     frame.append(frameContent);
+
+    timelLineLite.to(frame, 0, {
+        onComplete: function() { 
+            positions = base.calculPositions(element, imgId);
+            var box = $("#box" + element.timeLine);
+            box.css("width", positions.width + "px");
+            box.css("height", positions.height + "px");
+            box.css("left", positions.x + "px");
+            box.css("top", positions.y + "px");
+        }
+    });
 
     base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
     base.displayPopUp(frame, frameTitle, frameContent, 2);

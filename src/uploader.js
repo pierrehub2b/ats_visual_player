@@ -752,7 +752,7 @@ export function animate(currentElement, index) {
       case "com.ats.script.actions.ActionText":
         //OK
         frameForAction = 2;
-        ActionText(currentElement.element, currentFrameAction);
+        ActionText(currentElement.element, currentFrameAction, currentElement.img.id);
         currentFrameAction++;
         if(currentFrameAction > frameForAction) {
           currentFrameAction = 1;
@@ -778,7 +778,7 @@ export function animate(currentElement, index) {
       case "com.ats.script.actions.ActionMouseKey":
         //OK
         frameForAction = 2;
-        ActionMouseKey(currentElement.element, currentFrameAction);
+        ActionMouseKey(currentElement.element, currentFrameAction, currentElement.img.id);
         currentFrameAction++;
         if(currentFrameAction > frameForAction) {
           currentFrameAction = 1;
@@ -799,20 +799,20 @@ export function animate(currentElement, index) {
         break;
       case "com.ats.script.actions.ActionAssertCount":
         //OK
-        ActionAssertPropertyCount(currentElement.element);
+        ActionAssertPropertyCount(currentElement.element, currentElement.img.id, currentElement.img.id);
         break;
       case "com.ats.script.actions.ActionAssertProperty":
         //OK
-        ActionAssertProperty(currentElement.element);
+        ActionAssertProperty(currentElement.element, currentElement.img.id, currentElement.img.id);
         break;
       case "com.ats.script.actions.ActionAssertValue":
         //OK
-        ActionAssertValue(currentElement.element);
+        ActionAssertValue(currentElement.element, currentElement.img.id);
         break;
       case "com.ats.script.actions.ActionJavascript":
         //OK
         frameForAction = 2;
-        ActionJavascript(currentElement.element, currentFrameAction);
+        ActionJavascript(currentElement.element, currentFrameAction, currentElement.img.id);
         currentFrameAction++;
         if(currentFrameAction > frameForAction) {
           currentFrameAction = 1;
@@ -821,7 +821,7 @@ export function animate(currentElement, index) {
       case "com.ats.script.actions.ActionMouse":
         //OK
         frameForAction = 2;
-        ActionMouse(currentElement.element, currentFrameAction);
+        ActionMouse(currentElement.element, currentFrameAction, currentElement.img.id);
         currentFrameAction++;
         if(currentFrameAction > frameForAction) {
           currentFrameAction = 1;
@@ -829,7 +829,7 @@ export function animate(currentElement, index) {
         break;
       case "com.ats.script.actions.ActionProperty":
         //OK
-        ActionProperty(currentElement.element);
+        ActionProperty(currentElement.element, currentElement.img.id);
         break;
       case "com.ats.script.actions.ActionWindowState":
         //OK
@@ -852,7 +852,7 @@ export function animate(currentElement, index) {
       case "com.ats.script.actions.ActionMouseDragDrop":
         //OK
         frameForAction = 2;
-        ActionDragDrop(currentElement.element, currentFrameAction, isDrag);
+        ActionDragDrop(currentElement.element, currentFrameAction, isDrag, currentElement.img.id);
         currentFrameAction++;
         if(currentFrameAction > frameForAction) {
           currentFrameAction = 1;
