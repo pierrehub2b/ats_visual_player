@@ -4,15 +4,15 @@ var base = require('./baseAnimation');
 import { timelLineLite } from '../uploader';
 import { AttrPlugin } from "gsap/AttrPlugin";
 
-export function implementAnimation(element, frameCounter, isDrag, imgId) {
+export function implementAnimation(element, frameCounter, isDrag) {
     if(frameCounter == 1) {
-        implementAnimationStart(element, isDrag, imgId);
+        implementAnimationStart(element, isDrag);
     } else {
         implementAnimationEnd(element, isDrag)
     }
 }
 
-export function implementAnimationStart(element, isDrag, imgId) {
+export function implementAnimationStart(element, isDrag) {
     var frame = null;
     if(isDrag) {
         base.setCurrentDragDropTimeline(element.timeLine);
@@ -28,11 +28,11 @@ export function implementAnimationStart(element, isDrag, imgId) {
     box.attr("id", "box" + element.timeLine);
     box.appendTo("#screenBackground");
 
-    var positions = base.calculPositions(element, imgId);
+    var positions = base.calculPositions(element);
 
     timelLineLite.to(frame, 0, {
         onComplete: function() { 
-            positions = base.calculPositions(element, imgId);
+            positions = base.calculPositions(element);
 
             var box = $("#box" + element.timeLine);
             box.css("width", positions.width + "px");
@@ -47,19 +47,19 @@ export function implementAnimationStart(element, isDrag, imgId) {
                 display: "flex",
                 onComplete: function() { 
                     if(isDrag) {
-                        frame.children("img").attr("src", base.pathToAssets + "mouse_select_left.png");
+                        frame.children("img").attr("src", base.pathToAssets52 + "mouse_select_left.png");
                     } else {
-                        frame.children("img").attr("src", base.pathToAssets + "mouse.png");
+                        frame.children("img").attr("src", base.pathToAssets52 + "mouse.png");
                     }
                 }
-            }, imgId);
+            }, divId);
             base.previousMousePosition.x = positions.xMouse;
             base.previousMousePosition.y = positions.yMouse;
         }
     });
 
     base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
-    timelLineLite.addLabel(imgId);
+    timelLineLite.addLabel(divId);
     base.previousMousePosition.x = positions.xMouse;
     base.previousMousePosition.y = positions.yMouse;
 }

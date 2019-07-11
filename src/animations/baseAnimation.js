@@ -1,17 +1,18 @@
 var $ = require('jQuery');
 import { timelLineLite } from '../uploader';
 
-export var pathToAssets = "./assets/icons/32/";
+export var pathToAssets32 = "./assets/icons/32/";
+export var pathToAssets52 = "./assets/icons/52/";
 export var box = '<div class="box"><span id="left-side"></span><span id="top-side"></span><span id="right-side"></span><span id="bottom-side"></span></div>';
 export var clickEffectElement = '<div class="circle"><div class="inner"></div></div>';
 export var frameBackground = '<div class="popupFrame"><img class="imgFrame" /></div>';
 export var frameTitle = '<h3 class="popupTitle"></h3>';
 export var frameContent = '<div class="popupContent"></div>';
-export var mousePointer = "<div class='pointerAction'><img class='animationImg' src='"+pathToAssets+"mouse.png' /></div>";
-export var keyboardPointer = "<div class='pointerAction keyboardImg'><img class='animationImg' src='"+pathToAssets+"keyboard.png' /></div>";
+export var mousePointer = "<div class='pointerAction'><img class='animationImg' src='"+pathToAssets52+"mouse.png' /></div>";
+export var keyboardPointer = "<div class='pointerAction keyboardImg'><img class='animationImg' src='"+pathToAssets32+"keyboard.png' /></div>";
 export var textInputAnimationFrame = "<div class='textInputAnimation'></div>";
-export var arrowUp = "<div class='pointerAction'><img class='animationImg' src='"+pathToAssets+"up.png' /></div>";
-export var arrowDown = ""+pathToAssets+"down.png";
+export var arrowUp = "<div class='pointerAction'><img class='animationImg' src='"+pathToAssets52+"up.png' /></div>";
+export var arrowDown = pathToAssets52+"down.png";
 export var defaultDelay = 4;
 export var currentDragDropTimeline = null;
 
@@ -45,26 +46,33 @@ export function plurialManagement(str, isSingular) {
     return str.replace("(s)", isSingular ? "": "s");
 }
 
-export function calculPositions(element, imgId) {
-    var frame       = document.getElementById(imgId);
+export function calculPositions(element) {
     var ratio       = $("#screenBackground").height() / element.channelBound.height;
-    var screenWidth = $("#screenBackground").width() - 10;
+    if(ratio > 1) {
+        ratio = $("#screenBackground").width() / element.channelBound.width;
+    }
+
     var ratioWidth  = element.element.bound.width * ratio;
     var ratioHeight = element.element.bound.height * ratio;
     var ratioX      = element.element.bound.x * ratio;
     var ratioY      = element.element.bound.y * ratio;
 
-    var offsetLeft = frame.offsetLeft;
-    if(offsetLeft == 0) {
-        var channelWidth = element.channelBound.width * ratio;
-        var leftBand = (screenWidth - channelWidth) / 2;
-        offsetLeft = leftBand;
-    }
-    var x = offsetLeft + ratioX - (ratio * 10);
-    var y = ratioY - (ratio * 10);
+    var offsetLeft = 0;
+    var offsetTop = 0;
 
-    var xMouse = x + (ratioWidth / 2) - 26; //26 = half of img size
-    var yMouse = y;
+    var channelWidth = element.channelBound.width * ratio;
+    var leftBand = ($("#screenBackground").width() - channelWidth) / 2;
+    offsetLeft = leftBand;
+    
+    var channelHeight = element.channelBound.height * ratio;
+    var topBand = ($("#screenBackground").height() - channelHeight) / 2;
+    offsetTop = topBand;
+
+    var x = offsetLeft + ratioX - (ratio * 10);
+    var y = offsetTop + ratioY - (ratio * 10);
+
+    var xMouse = x + (ratioWidth / 2); //26 = half of img size
+    var yMouse = y + (ratioHeight / 2);
 
     if(element.element.vposValue != 0) {
         switch(element.element.vpos) {
@@ -80,7 +88,7 @@ export function calculPositions(element, imgId) {
     if(element.element.hposValue != 0) {
         switch(element.element.hpos) {
             case "left":
-                xMouse = x + (element.element.hposValue * ratio) - 26;
+                xMouse = x + (element.element.hposValue * ratio);
                 break;
             case "right":
                 xMouse = x + ratioWidth - (element.element.hposValue * ratio);

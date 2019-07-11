@@ -5,15 +5,15 @@ var base = require('./baseAnimation');
 var app = require('../app');
 var elemNotFound = require('./elementNotFoundAnimation');
 
-export function implementAnimation(element, frameCounter, imgId) {
+export function implementAnimation(element, frameCounter) {
     if(frameCounter ==1) {
-        implementAnimationStart(element, imgId);
+        implementAnimationStart(element);
     } else {
         implementAnimationEnd(element);
     }
 }
 
-export function implementAnimationStart(element, imgId) {
+export function implementAnimationStart(element) {
     if(element.error < 0) {
         elemNotFound.implementAnimation(element, app.replaceLocal({name:"CLICKMOUSE"}));
         return;
@@ -27,16 +27,17 @@ export function implementAnimationStart(element, imgId) {
 
     var clickAnim = $(base.clickEffectElement);
     frame.attr("id", divId);
+    frame.children("img").attr("src", base.pathToAssets52 + "mouse_select_left.png");
     
     clickAnim.attr("id", "click" + element.timeLine);
     frame.appendTo("#screenBackground");
     clickAnim.appendTo("#screenBackground");
 
-    var positions = base.calculPositions(element, imgId);
+    var positions = base.calculPositions(element);
 
     timelLineLite.to(frame, 0, {
         onComplete: function() { 
-            positions = base.calculPositions(element, imgId);
+            positions = base.calculPositions(element);
             var box = $("#box" + element.timeLine);
             box.css("width", positions.width + "px");
             box.css("height", positions.height + "px");
@@ -44,7 +45,7 @@ export function implementAnimationStart(element, imgId) {
             box.css("top", positions.y + "px");
 
             var click = $("#click" + element.timeLine);
-            click.css("left", positions.x + "px");
+            click.css("left", (positions.x + 13) + "px");
             click.css("top", positions.y + "px");
 
             timelLineLite.fromTo(frame, 1, {top: base.previousMousePosition.y + "px", left: base.previousMousePosition.x + "px"}, {
@@ -52,15 +53,15 @@ export function implementAnimationStart(element, imgId) {
                 top: positions.yMouse + "px",
                 opacity: 1,
                 display: "flex"
-            }, imgId);
+            }, divId);
 
             base.previousMousePosition.x = positions.xMouse;
             base.previousMousePosition.y = positions.yMouse;
         }
     });
     base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
-    timelLineLite.addLabel(imgId);
-    base.clickAnimation(element.timeLine, positions.xMouse,positions.yMouse);
+    timelLineLite.addLabel(divId);
+    base.clickAnimation(element.timeLine, positions.xMouse + 13,positions.yMouse);
 }
 
 export function implementAnimationEnd(element) {

@@ -4,15 +4,15 @@ var base = require('./baseAnimation');
 import TextPlugin from "gsap/TextPlugin";
 import ScrambleText from 'scramble-text';
 
-export function implementAnimation(element, frameCounter, imgId) {
+export function implementAnimation(element, frameCounter) {
     if(frameCounter ==1) {
-        implementAnimationStart(element, imgId);
+        implementAnimationStart(element);
     } else {
         implementAnimationEnd(element);
     }
 }
 
-export function implementAnimationStart(element, imgId) {
+export function implementAnimationStart(element) {
     var divId = "textEvent" + element.timeLine;
     var frame = $(base.keyboardPointer);
     var box = $(base.box);
@@ -28,11 +28,11 @@ export function implementAnimationStart(element, imgId) {
     frame.appendTo("#screenBackground");
     //clickAnim.appendTo("#screenBackground");
 
-    var positions = base.calculPositions(element, imgId);
+    var positions = base.calculPositions(element);
 
     timelLineLite.to(frame, 0, {
         onComplete: function() { 
-            positions = base.calculPositions(element, imgId);
+            positions = base.calculPositions(element);
 
             var box = $("#box" + element.timeLine);
             box.css("width", positions.width + "px");
