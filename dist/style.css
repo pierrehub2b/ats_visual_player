@@ -45,11 +45,10 @@
 .popupContent {
   position: relative;
   opacity: 1;
-  width: 80%;
-  left: 2vw;
+  /* width: 70%; */
+  /* left: 2vw; */
   opacity: 0;
-  margin: auto;
-  align-items: center;
+  margin: auto 20px;
   text-align: left; }
 
 .textInputAnimation {
@@ -65,11 +64,12 @@
 .popupTitle {
   position: relative;
   opacity: 0;
-  width: 6vw;
+  /* width: 182px; */
   opacity: 0;
-  left: 4vw;
-  margin: auto;
-  align-items: center; }
+  /* left: 4vw; */
+  margin: auto 0;
+  align-items: center;
+  margin-left: 4vw; }
 
 .popupContent p {
   margin: auto 1vw; }

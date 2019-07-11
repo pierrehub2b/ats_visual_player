@@ -8,7 +8,7 @@ export var frameBackground = '<div class="popupFrame"><img class="imgFrame" /></
 export var frameTitle = '<h3 class="popupTitle"></h3>';
 export var frameContent = '<div class="popupContent"></div>';
 export var mousePointer = "<div class='pointerAction'><img class='animationImg' src='"+pathToAssets+"mouse.png' /></div>";
-export var keyboardPointer = "<div class='pointerAction'><img class='animationImg' src='"+pathToAssets+"keyboard.png' /></div>";
+export var keyboardPointer = "<div class='pointerAction keyboardImg'><img class='animationImg' src='"+pathToAssets+"keyboard.png' /></div>";
 export var textInputAnimationFrame = "<div class='textInputAnimation'></div>";
 export var arrowUp = "<div class='pointerAction'><img class='animationImg' src='"+pathToAssets+"up.png' /></div>";
 export var arrowDown = ""+pathToAssets+"down.png";
@@ -46,19 +46,25 @@ export function plurialManagement(str, isSingular) {
 }
 
 export function calculPositions(element, imgId) {
-    var frame = document.getElementById(imgId);
+    var frame       = document.getElementById(imgId);
     var ratio       = $("#screenBackground").height() / element.channelBound.height;
-    // var offsetLeft  = ($("#screenBackground").width() - (element.channelBound.height * ratio)) / 2;
+    var screenWidth = $("#screenBackground").width() - 10;
     var ratioWidth  = element.element.bound.width * ratio;
     var ratioHeight = element.element.bound.height * ratio;
     var ratioX      = element.element.bound.x * ratio;
     var ratioY      = element.element.bound.y * ratio;
 
-    var x = frame.offsetLeft + ratioX - (ratio * 10);
+    var offsetLeft = frame.offsetLeft;
+    if(offsetLeft == 0) {
+        var channelWidth = element.channelBound.width * ratio;
+        var leftBand = (screenWidth - channelWidth) / 2;
+        offsetLeft = leftBand;
+    }
+    var x = offsetLeft + ratioX - (ratio * 10);
     var y = ratioY - (ratio * 10);
 
-    var xMouse = x + (ratioWidth / 4);
-    var yMouse = y + (ratioHeight / 4);
+    var xMouse = x + (ratioWidth / 2) - 26; //26 = half of img size
+    var yMouse = y;
 
     if(element.element.vposValue != 0) {
         switch(element.element.vpos) {
@@ -74,7 +80,7 @@ export function calculPositions(element, imgId) {
     if(element.element.hposValue != 0) {
         switch(element.element.hpos) {
             case "left":
-                xMouse = x + (element.element.hposValue * ratio);
+                xMouse = x + (element.element.hposValue * ratio) - 26;
                 break;
             case "right":
                 xMouse = x + ratioWidth - (element.element.hposValue * ratio);
@@ -256,10 +262,11 @@ export function hideBox(id, duration) {
         );
 };
 
-export function clickAnimation(id, x,y, imgId) {
+export function clickAnimation(id, x,y) {
     var click = $("#click" + id);
     click.css("left", x + "px");
     click.css("top", y + "px");
+
     timelLineLite.fromTo(click, 0.2, 
         {
             immediateRender: false,
@@ -270,13 +277,15 @@ export function clickAnimation(id, x,y, imgId) {
         {
             opacity: 0.8,
             width: 25,
-            height: 25
-        }, imgId + "-1"
+            height: 25,
+            delay : 1
+        }
     );
+
     timelLineLite.to(click, 0.2, 
         {
             opacity: 0
-        }, imgId + "-2"
+        }
     );
 }
 
@@ -292,13 +301,13 @@ export function displayPopUp(frame, title, content, delay) {
     timelLineLite.fromTo(content, 0.3, {xPercent: -200}, {
         xPercent: 2,
         opacity: 1,
-        display: "flex"
+        display: "inline-block"
     });
 
     timelLineLite.fromTo(title, 0.3, {xPercent: -200}, {
         xPercent: 4,
         opacity: 1,
-        display: "flex"
+        display: "inline-block"
     });
 }
 
@@ -307,14 +316,14 @@ export function hidePopUp(frame, title, content, delay) {
     timelLineLite.to(title, 0.2, {
         xPercent: -200,
         opacity: 0,
-        display: "flex",
+        display: "inline-block",
         delay: d
     });
 
     timelLineLite.to(content, 0.2, {
         xPercent: -200,
         opacity: 0,
-        display: "flex"
+        display: "inline-block"
     });
 
     timelLineLite.to(frame, 0.2, {

@@ -22,7 +22,10 @@ export function implementAnimation(element, imgId) {
     frameTitle.attr("id", titleId);
     frameContent.attr("id", contentId);
 
-    frame.children("img").attr("src", base.pathToAssets + "occurence.png");
+    frame.children("img").attr("src", base.pathToAssets + "check_value.png");
+    if(element.error < 0) {
+        frame.children("img").attr("src", base.pathToAssets + "error.png");
+    }
     frameTitle.html(app.replaceLocal({name:"ASSERTCOUNT"}));
 
     var crit = element.element.criterias.split(",");

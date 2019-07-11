@@ -27,7 +27,8 @@ export function implementAnimation(element, imgId) {
     frameTitle.attr("id", titleId);
     frameContent.attr("id", contentId);
 
-    frame.children("img").attr("src", base.pathToAssets + "attributes_display.png");
+    //frame.children("img").attr("src", base.pathToAssets + "attributes_display.png");
+    frame.children("img").css("display", "none");
     frameTitle.html(app.replaceLocal({name:"GETPROPERTY"}));
     
     var text = base.format(app.replaceLocal({name:"PROPERTYTEXT"}), true, element.value, element.element.tag, element.data );

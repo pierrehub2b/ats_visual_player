@@ -15,7 +15,8 @@ export function implementAnimation(element) {
     frameTitle.attr("id", titleId);
     frameContent.attr("id", contentId);
 
-    frame.children("img").attr("src", base.pathToAssets + "comment.png");
+    //frame.children("img").attr("src", base.pathToAssets + "comment.png");
+    frame.children("img").css("display", "none");
     frameTitle.html(app.replaceLocal({name:"COMMENT"}));
 
     var text = base.format(app.replaceLocal({name:"COMMENTACTIONTEXT"}), true, element.data);

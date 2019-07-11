@@ -16,6 +16,9 @@ export function implementAnimation(element) {
     frameContent.attr("id", contentId);
 
     frame.children("img").attr("src", base.pathToAssets + "check_value.png");
+    if(element.error < 0) {
+        frame.children("img").attr("src", base.pathToAssets + "error.png");
+    }
     frameTitle.html(app.replaceLocal({name:"ASSERTVALUE"}));
 
     //ASSERTTEXTVALUE=La vérification de la valeur {0} a {1}. La valeur {2} {3} {4}

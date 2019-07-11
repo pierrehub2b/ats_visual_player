@@ -53,16 +53,14 @@ export function implementAnimationStart(element, imgId) {
                 opacity: 1,
                 display: "flex"
             }, imgId);
-            base.clickAnimation(element.timeLine, positions.xMouse,positions.yMouse-1, imgId);
+
+            base.previousMousePosition.x = positions.xMouse;
+            base.previousMousePosition.y = positions.yMouse;
         }
     });
-
     base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
     timelLineLite.addLabel(imgId);
-    timelLineLite.addLabel(imgId + "-1");
-    timelLineLite.addLabel(imgId + "-2");
-    base.previousMousePosition.x = positions.xMouse;
-    base.previousMousePosition.y = positions.yMouse;
+    base.clickAnimation(element.timeLine, positions.xMouse,positions.yMouse);
 }
 
 export function implementAnimationEnd(element) {

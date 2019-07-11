@@ -30,15 +30,16 @@ export function implementAnimationStart(element) {
   
     var localField = "";
     if(element.value == "reduce") {
-        frame.children("img").attr("src", base.pathToAssets + "reduce.png");
+        //frame.children("img").attr("src", base.pathToAssets + "reduce.png");
         localField = app.replaceLocal({name:"REDUCE"});
     } else if(element.value == "maximize") {
-        frame.children("img").attr("src", base.pathToAssets + "restore.png");
+        //frame.children("img").attr("src", base.pathToAssets + "restore.png");
         localField = app.replaceLocal({name:"RESTORE"});
     } else {
-        frame.children("img").attr("src", base.pathToAssets + "close.png");
+        //frame.children("img").attr("src", base.pathToAssets + "close.png");
         localField = app.replaceLocal({name:"CLOSE"});
     }
+    frame.children("img").css("display", "none");
 
     frameTitle.html(app.replaceLocal({name:"WINDOWSTATE"}));
 

@@ -2,6 +2,7 @@ var $ = require('jQuery');
 import { timelLineLite } from '../uploader';
 var base = require('./baseAnimation');
 import TextPlugin from "gsap/TextPlugin";
+import ScrambleText from 'scramble-text';
 
 export function implementAnimation(element, frameCounter, imgId) {
     if(frameCounter ==1) {
@@ -38,16 +39,16 @@ export function implementAnimationStart(element, imgId) {
             box.css("height", positions.height + "px");
             box.css("left", positions.x + "px");
             box.css("top", positions.y + "px");
-            
+
             textInput.css("width", positions.width + "px");
             textInput.css("height", positions.height + "px");
             textInput.css("left", positions.x + "px");
             textInput.css("top", positions.y + "px");
         
-            frame.css("left", (positions.x + (positions.width*0.8)) + "px");
+            frame.css("left", (positions.x + positions.width - positions.height - 5) + "px");
             frame.css("top", positions.y + "px");
-            frame.children("img").css("width", 3 + "px");
-            frame.children("img").css("height", 3 + "px");
+            frame.children("img").css("width", positions.height + "px");
+            frame.children("img").css("height", positions.height + "px");
         }
     });
 
@@ -61,17 +62,30 @@ export function implementAnimationStart(element, imgId) {
     frame.children("img").css("width", 3 + "px");
     frame.children("img").css("height", 3 + "px");
 
+    timelLineLite.to(frame, 0, {
+        onComplete: function() {
+            textInput.html("");
+        }
+    });
+
     base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
     timelLineLite.to(textInput, 0.2, {
         opacity: 1,
-        display: "flex"
+        display: "flex",
+        delay: 0.5
     });
     timelLineLite.to(frame, 0.5, {
         opacity: 1,
         display: "flex"
     });
 
-    timelLineLite.to(textInput, 1, {text:element.value});
+    for (let index = 0; index <= element.value.length; index++) {
+        timelLineLite.to(textInput, 0.05, {
+            onComplete: function() {
+                textInput.html(element.value.substring(0, index));
+            }
+        });
+    }
 }
 
 export function implementAnimationEnd(element) {
@@ -82,7 +96,9 @@ export function implementAnimationEnd(element) {
         display: "none"
     });
     timelLineLite.to(frameInput, 0.5, {
-        opacity: 0
+        opacity: 0,
+        onComplete: function() { 
+        }
     });
     base.hideBox(element.timeLine ,0.2);
 }

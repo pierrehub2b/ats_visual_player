@@ -15,7 +15,8 @@ export function implementAnimation(element) {
     frameTitle.attr("id", titleId);
     frameContent.attr("id", contentId);
 
-    frame.children("img").attr("src", base.pathToAssets + "close.png");
+    //frame.children("img").attr("src", base.pathToAssets + "close.png");
+    frame.children("img").css("display", "none");
     frameTitle.html(app.replaceLocal({name:"CLOSECHANNEL"}));
 
     var text = base.format(app.replaceLocal({name:"CLOSECHANNELTEXT"}), true, element.channelName);

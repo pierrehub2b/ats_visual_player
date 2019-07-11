@@ -49,14 +49,7 @@ export function implementAnimationStart(element, imgId) {
                 left: positions.xMouse + "px",
                 top: positions.yMouse + "px",
                 opacity: 1,
-                display: "flex",
-                onComplete: function() { 
-                    if(isDrag) {
-                        frame.children("img").attr("src", base.pathToAssets + "mouse_select_left.png");
-                    } else {
-                        frame.children("img").attr("src", base.pathToAssets + "mouse.png");
-                    }
-                }
+                display: "flex"
             }, imgId);
             base.previousMousePosition.x = positions.xMouse;
             base.previousMousePosition.y = positions.yMouse;
