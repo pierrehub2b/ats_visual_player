@@ -28,7 +28,6 @@ export function implementAnimationStart(element) {
     frameTitle.attr("id", titleId);
     frameContent.attr("id", contentId);
   
-    //frame.children("img").attr("src", base.pathToAssets + "switch_windows.png");
     frame.children("img").css("display", "none");
     frameTitle.html(app.replaceLocal({name:"WINDOWSTATE"}));
 

@@ -13,15 +13,10 @@ export function implementAnimation(element, frameCounter, isDrag) {
 }
 
 export function implementAnimationStart(element, isDrag) {
-    var frame = null;
+    var frame = $("#pointerEvent");
+    var divId = "pointerEvent" + element.timeLine;
     if(isDrag) {
         base.setCurrentDragDropTimeline(element.timeLine);
-        var divId = "mouseEvent" + element.timeLine;
-        frame = $(base.mousePointer);
-        frame.attr("id", divId);
-        frame.appendTo("#screenBackground");
-    } else {
-        frame = $("#mouseEvent" + base.currentDragDropTimeline);
     }
 
     var box = $(base.box);
@@ -65,8 +60,7 @@ export function implementAnimationStart(element, isDrag) {
 }
 
 export function implementAnimationEnd(element, isDrag) {
-    var divId = "#mouseEvent" + base.currentDragDropTimeline;
-    var frame = $(divId);
+    var frame = $("#pointerEvent");
     base.hideBox(element.timeLine ,0.2);
     if(!isDrag) {
         timelLineLite.to(frame, 1, {

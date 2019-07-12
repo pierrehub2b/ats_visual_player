@@ -19,16 +19,8 @@ export function implementAnimationStart(element) {
     }
 
     var frame = null;
-    var divId = "mouseEvent" + element.timeLine;
-    if(base.currentDragDropTimeline != null) {
-        //drag and drop context
-        frame = $("#mouseEvent" + base.currentDragDropTimeline);
-    } else {
-        frame = $(base.mousePointer);
-        frame.attr("id", divId);
-        frame.appendTo("#screenBackground");
-    }
-
+    var divId = "pointerEvent" + element.timeLine;
+    frame = $("#pointerEvent");
     
     var box = $(base.box);
     box.attr("id", "box" + element.timeLine);
@@ -68,8 +60,7 @@ export function implementAnimationEnd(element) {
     }
     base.hideBox(element.timeLine ,0.2);
     if(base.currentDragDropTimeline == null) {
-        var divId = "#mouseEvent" + element.timeLine;
-        var frame = $(divId);
+        var frame = $("#pointerEvent");
         timelLineLite.to(frame, 0.5, {
             opacity: 0,
             display: "none"

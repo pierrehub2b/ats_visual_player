@@ -15,7 +15,7 @@ export function implementAnimation(element, type) {
     frameTitle.attr("id", titleId);
     frameContent.attr("id", contentId);
 
-    frame.children("img").attr("src", base.pathToAssets + "warning.png");
+    frame.children("img").attr("src", base.pathToAssets32 + "warning.png");
     frameTitle.html(app.replaceLocal({name:"ELEMENTNOTFOUND"}));
 
     var crit = element.element.criterias.split(",");

@@ -15,7 +15,6 @@ export function implementAnimation(element) {
     frameTitle.attr("id", titleId);
     frameContent.attr("id", contentId);
 
-    //frame.children("img").attr("src", base.pathToAssets + "switch.png");
     frame.children("img").css("display", "none");
     frameTitle.html(app.replaceLocal({name:"SWITCHCHANNEL"}));
 

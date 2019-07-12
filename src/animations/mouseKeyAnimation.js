@@ -19,18 +19,16 @@ export function implementAnimationStart(element) {
         return;
     }
     var divId = "pointerEvent" + element.timeLine;
-    var frame = $(base.mousePointer);
+    var frame = $("#pointerEvent");
     
     var box = $(base.box);
     box.attr("id", "box" + element.timeLine);
     box.appendTo("#screenBackground");
 
     var clickAnim = $(base.clickEffectElement);
-    frame.attr("id", divId);
     frame.children("img").attr("src", base.pathToAssets52 + "mouse_select_left.png");
     
     clickAnim.attr("id", "click" + element.timeLine);
-    frame.appendTo("#screenBackground");
     clickAnim.appendTo("#screenBackground");
 
     var positions = base.calculPositions(element);
@@ -68,8 +66,7 @@ export function implementAnimationEnd(element) {
     if(element.error < 0) {
         return;
     }
-    var divId = "#pointerEvent" + element.timeLine;
-    var frame = $(divId);
+    var frame = $("#pointerEvent");
 
     base.hideBox(element.timeLine ,0.2);
     timelLineLite.to(frame, 0.5, {

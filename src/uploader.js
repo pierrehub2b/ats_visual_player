@@ -1,6 +1,6 @@
 import AMF from 'amf-js';
 import 'babel-polyfill';
-import { TimelineMax } from "gsap/TweenMax";
+import { TimelineMax, TimelineLite } from "gsap/TweenMax";
 var $ = require('jQuery');
 import './simpledrag';
 import { replaceLocal, currentLocale, currentReportName, flashReport, clearOtherReadingState, uploadFiles } from './app';
@@ -20,8 +20,8 @@ import { implementAnimation as ActionJavascript } from './animations/javascriptA
 import { implementAnimation as ActionMouse } from './animations/mouseAnimation';
 import { implementAnimation as ActionWindowState } from './animations/windowStateAnimation';
 import { implementAnimation as ActionWindowSwitch } from './animations/windowSwitchAnimation';
-import { implementAnimation as ActionElementNotFound } from './animations/elementNotFoundAnimation';
 import { implementAnimation as ActionDragDrop } from './animations/dragDropAnimation';
+var base = require('./animations/baseAnimation');
 
 //#region objets du DOM
 export var progressSlider = $("#progressSlider");
@@ -62,6 +62,7 @@ export var isDrag = true;
 export var tick = 0;
 export var dateTime = new Date();
 export var timer;
+export var pauseAtNextLabel = false;
 //#endregion
 
 // enum sur les différents types d'objets dans allData
@@ -175,47 +176,50 @@ export function setupScreen() {
   nextBtn.on("click", function(event) {
     event.stopPropagation();
     var progress = timelLineLite.progress();
-    var imgNumber = Math.ceil((((images.length -1) / 100) * (progress * 100)));
-
+    var imgNumber = Math.floor((((images.length -1) / 100) * (progress * 100)));
     var elems = $("img[id$='-f']");
-    var currentImgNumber = 0;
     for (let index = 0; index < elems.length; index++) {
       const i = elems[index];
       var nb = parseInt(i.id.match(/\d+/)[0]);
-
       if(nb > imgNumber) {
-        currentImgNumber = nb;
+        var secondParameter = null;
+        if(index+1 == elems.length) {
+          secondParameter = timelLineLite.duration;
+        } else {
+          secondParameter = elems[index+1].id;
+        }
+        timelLineLite.tweenFromTo(timelLineLite.getLabelTime(i.id), secondParameter, 
+        {onComplete: function() {
+          playBtn.css("display","inline-block");
+          pauseBtn.css("display","none");
+          showPlayerState("pause");
+        }});
         break;
       }
     }
-
-    updateByVal(currentImgNumber/(images.length-1));
-    //showPlayerState("next");
-    playBtn.css("display","inline-block");
-    pauseBtn.css("display","none");
   });
 
   prevBtn.on("click", function(event) {
     event.stopPropagation();
     var progress = timelLineLite.progress();
     var imgNumber = Math.floor((((images.length -1) / 100) * (progress * 100)));
-
     var elems = $("img[id$='-f']");
-    var currentImgNumber = 0;
+    var lastImgId = null;
     for (let index = 0; index < elems.length; index++) {
       const i = elems[index];
       var nb = parseInt(i.id.match(/\d+/)[0]);
       if(nb < imgNumber) {
-        currentImgNumber = nb;
+        lastImgId = i.id;
       } else {
+        timelLineLite.tweenFromTo(timelLineLite.getLabelTime(lastImgId), i.id, 
+        {onComplete: function() {
+          playBtn.css("display","inline-block");
+          pauseBtn.css("display","none");
+          showPlayerState("pause");
+        }});
         break;
       }
-      
     }
-    updateByVal(currentImgNumber/(images.length-1));
-    //showPlayerState("previous");
-    playBtn.css("display","inline-block");
-    pauseBtn.css("display","none");
   });
 
   navSlider.on("mousemove", function(event) {
@@ -478,7 +482,6 @@ export function updateByVal(value){
   timelLineLite.pause();
   playBtn.css("display","inline-block");
   pauseBtn.css("display","none");
- 
 }
 
 export function updaterangePointer() {
@@ -717,6 +720,10 @@ export function resultSetup(result, percent) {
   }
 
   images = allData.filter(_ => _.type === elementType.IMAGE);
+
+  $(base.mousePointer).remove();
+  $(base.mousePointer).appendTo("#screenBackground");
+
   for (let currentImgIndex = 0; currentImgIndex < currentImgs.length; currentImgIndex++) {
     const element = currentImgs[currentImgIndex];
     animate(element, images.length-currentImgs.length+currentImgIndex);
@@ -732,6 +739,11 @@ export function startTimer() {
 }
 
 export function animate(currentElement, index) {
+
+    if(currentFrameAction == 1) {
+      timelLineLite.addLabel(currentElement.img.id);
+    }
+
     if(index == 0) {
       timelLineLite.to(currentElement.img, 0.5, {
         opacity: 1,

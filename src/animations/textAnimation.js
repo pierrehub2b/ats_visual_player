@@ -79,10 +79,14 @@ export function implementAnimationStart(element) {
         display: "flex"
     });
 
-    for (let index = 0; index <= element.value.length; index++) {
+    var inputString = element.value;
+    if(element.value.length > 50) {
+        inputString = element.value.substring(0,45) + " ...";
+    }
+    for (let index = 0; index <= inputString.length; index++) {
         timelLineLite.to(textInput, 0.05, {
             onComplete: function() {
-                textInput.html(element.value.substring(0, index));
+                textInput.html(inputString.substring(0, index));
             }
         });
     }

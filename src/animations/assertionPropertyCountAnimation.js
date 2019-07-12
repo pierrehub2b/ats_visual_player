@@ -22,9 +22,9 @@ export function implementAnimation(element) {
     frameTitle.attr("id", titleId);
     frameContent.attr("id", contentId);
 
-    frame.children("img").attr("src", base.pathToAssets + "check_value.png");
+    frame.children("img").attr("src", base.pathToAssets32 + "check_value.png");
     if(element.error < 0) {
-        frame.children("img").attr("src", base.pathToAssets + "error.png");
+        frame.children("img").attr("src", base.pathToAssets32 + "error.png");
     }
     frameTitle.html(app.replaceLocal({name:"ASSERTCOUNT"}));
 
