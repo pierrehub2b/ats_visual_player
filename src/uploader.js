@@ -193,6 +193,7 @@ export function setupScreen() {
           playBtn.css("display","inline-block");
           pauseBtn.css("display","none");
           showPlayerState("pause");
+          clearInterval(timer);
         }});
         break;
       }
@@ -216,6 +217,7 @@ export function setupScreen() {
           playBtn.css("display","inline-block");
           pauseBtn.css("display","none");
           showPlayerState("pause");
+          clearInterval(timer);
         }});
         break;
       }
