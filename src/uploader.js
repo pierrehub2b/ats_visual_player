@@ -188,11 +188,11 @@ export function setupScreen() {
         } else {
           secondParameter = elems[index+1].id;
         }
+        clearInterval(timer);
+        timer = setInterval(startTimer, 1000);
         timelLineLite.tweenFromTo(timelLineLite.getLabelTime(i.id), secondParameter, 
         {onComplete: function() {
-          playBtn.css("display","inline-block");
-          pauseBtn.css("display","none");
-          showPlayerState("pause");
+          pauseBtn.click();
           clearInterval(timer);
         }});
         break;
@@ -212,11 +212,11 @@ export function setupScreen() {
       if(nb < imgNumber) {
         lastImgId = i.id;
       } else {
+        clearInterval(timer);
+        timer = setInterval(startTimer, 1000);
         timelLineLite.tweenFromTo(timelLineLite.getLabelTime(lastImgId), i.id, 
         {onComplete: function() {
-          playBtn.css("display","inline-block");
-          pauseBtn.css("display","none");
-          showPlayerState("pause");
+          pauseBtn.click();
           clearInterval(timer);
         }});
         break;
