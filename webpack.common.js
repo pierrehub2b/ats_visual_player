@@ -8,10 +8,10 @@ module.exports = {
   },
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, "dist")
+    path: path.resolve(__dirname, "release/html")
   },
   plugins: [
-    new CleanWebpackPlugin(['dist']),
+    new CleanWebpackPlugin(['release/html']),
     new HtmlWebpackPlugin({
       title: 'Agilitest',
       // Load a custom template (lodash by default see the FAQ for details)

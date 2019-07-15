@@ -175,26 +175,23 @@ export function setupScreen() {
 
   nextBtn.on("click", function(event) {
     event.stopPropagation();
-    var progress = timelLineLite.progress();
-    var imgNumber = Math.floor((((images.length -1) / 100) * (progress * 100)));
-    var elems = $("img[id$='-f']");
-    for (let index = 0; index < elems.length; index++) {
-      const i = elems[index];
-      var nb = parseInt(i.id.match(/\d+/)[0]);
-      if(nb > imgNumber) {
-        var secondParameter = null;
-        if(index+1 == elems.length) {
-          secondParameter = timelLineLite.duration;
-        } else {
-          secondParameter = elems[index+1].id;
-        }
+
+    var currentSecond = timelLineLite.duration() * timelLineLite.progress();
+    var labelArray = timelLineLite.getLabelsArray().filter(_ => _.name.indexOf("-f") >= 0);
+
+    for (let index = 0; index < labelArray.length; index++) {
+      const i = labelArray[index];
+      if(i.time > currentSecond) {
         clearInterval(timer);
-        timer = setInterval(startTimer, 1000);
-        timelLineLite.tweenFromTo(timelLineLite.getLabelTime(i.id), secondParameter, 
-        {onComplete: function() {
-          pauseBtn.click();
-          clearInterval(timer);
-        }});
+        timelLineLite.seek(i.name);
+        playBtn.click();
+        if(index + 1 < labelArray.length) {
+          timelLineLite.addPause(labelArray[index+1].name, function() {
+            pauseBtn.click();
+            timelLineLite.removePause(labelArray[index+1].name);
+            clearInterval(timer);
+          });
+        }
         break;
       }
     }
@@ -213,12 +210,15 @@ export function setupScreen() {
         lastImgId = i.id;
       } else {
         clearInterval(timer);
-        timer = setInterval(startTimer, 1000);
-        timelLineLite.tweenFromTo(timelLineLite.getLabelTime(lastImgId), i.id, 
-        {onComplete: function() {
-          pauseBtn.click();
-          clearInterval(timer);
-        }});
+        timelLineLite.seek(lastImgId);
+        playBtn.click();
+        if(index + 1 < elems.length) {
+          timelLineLite.addPause(elems[index].id, function() {
+            pauseBtn.click();
+            timelLineLite.removePause(elems[index].id);
+            clearInterval(timer);
+          });
+        }
         break;
       }
     }
@@ -742,10 +742,6 @@ export function startTimer() {
 
 export function animate(currentElement, index) {
 
-    if(currentFrameAction == 1) {
-      timelLineLite.addLabel(currentElement.img.id);
-    }
-
     if(index == 0) {
       timelLineLite.to(currentElement.img, 0.5, {
         opacity: 1,
@@ -760,6 +756,10 @@ export function animate(currentElement, index) {
       timelLineLite.to(images[index-1].img, 0, {
         display: "none"
       }); 
+    }
+
+    if(currentFrameAction == 1) {
+      timelLineLite.addLabel(currentElement.img.id);
     }
 
     switch(currentElement.element.type) {

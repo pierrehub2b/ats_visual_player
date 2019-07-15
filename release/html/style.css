@@ -208,7 +208,8 @@ body {
   vertical-align: top; }
 
 #navDisplay {
-  margin-left: 20px; }
+  margin-left: 20px;
+  width: 100px; }
 
 #navSlider {
   width: 70%;

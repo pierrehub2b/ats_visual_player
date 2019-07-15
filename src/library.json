@@ -3,7 +3,8 @@
     {
       "name" : "ATSV client locaux",
       "urls" : [
-        "/ATSV/subscripts.dragdrop.DragDrop1.atsv"
+        "/ATSV/subscripts.dragdrop.DragDrop1.atsv",
+        "/ATSV/inputs.Calculatrice.atsv"
       ]
     },
     {
