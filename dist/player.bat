@@ -1,2 +1,3 @@
+tskill nginx
 start nginx.exe
-start http://localhost
+start http://localhost:8081
