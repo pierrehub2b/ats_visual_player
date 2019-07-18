@@ -1,3 +1,4 @@
 tskill nginx
+mkdir temp
 start nginx.exe
-start http://localhost:8081
+start http://localhost
