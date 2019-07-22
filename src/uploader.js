@@ -3,7 +3,7 @@ import 'babel-polyfill';
 import { TimelineMax, TimelineLite } from "gsap/TweenMax";
 var $ = require('jQuery');
 import './simpledrag';
-import { replaceLocal, currentLocale, currentReportName, flashReport, clearOtherReadingState, uploadFiles } from './app';
+import { replaceLocal, currentLocale, currentReportName, flashReport, clearOtherReadingState, uploadFiles, importLibrary } from './app';
 import { implementAnimation as ActionGotoUrl } from './animations/gotuUrlAnimation';
 import { implementAnimation as ActionChannelStart } from './animations/channelStartAnimation';
 import { implementAnimation as ActionChannelSwitch } from './animations/channelSwitchAnimation';

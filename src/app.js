@@ -333,7 +333,7 @@ export function setLibrary(data) {
 
 export async function onReaderLoad(event){
   var obj = JSON.parse(event.target.result);
-  JsonTraitment(obj);
+  setLibrary(obj);
 }
 
 export function clearOtherReadingState() {
