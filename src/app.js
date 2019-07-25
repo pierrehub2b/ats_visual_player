@@ -269,7 +269,9 @@ export function uploadFiles(event) {
   var folder = $("#defaultFolder");
 
   for (let i=0; i<files.length; i++) {
-    if(files[i].type == "application/ats.action-test-script.visual-report") {
+    var subStrings = files[i].name.split(".");
+    var extension = subStrings[subStrings.length-1];
+    if(extension == "atsv") {
       var fileName = files[i].name;
       if(folder.find("p").toArray().filter(p => p.innerText == fileName).length > 0) {
         console.log("Element already exist in list.")
