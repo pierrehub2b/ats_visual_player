@@ -268,7 +268,7 @@ export function uploadFiles(event) {
 
   var folder = $("#defaultFolder");
 
-  var elements = new Array();
+  var elems = new Array();
   for (let i=0; i<files.length; i++) {
     var subStrings = files[i].name.split(".");
     var extension = subStrings[subStrings.length-1];
@@ -290,12 +290,12 @@ export function uploadFiles(event) {
         upload.openfile(files[i], currentReportName);
       });
       folder.children('div').append(item);
-      elements.push(files[i]);
+      elems.push(item);
     }
   };
 
-  if(elements.length == 1) {
-    upload.openfile(elements[0], elements[0].name);
+  if(elems.length == 1) {
+    elems[0].click();
   }
 }
 

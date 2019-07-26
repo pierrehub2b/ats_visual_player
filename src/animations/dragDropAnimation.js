@@ -14,7 +14,6 @@ export function implementAnimation(element, frameCounter, isDrag) {
 
 export function implementAnimationStart(element, isDrag) {
     var frame = $("#pointerEvent");
-    var divId = "pointerEvent" + element.timeLine;
     if(isDrag) {
         base.setCurrentDragDropTimeline(element.timeLine);
     }
@@ -35,26 +34,23 @@ export function implementAnimationStart(element, isDrag) {
             box.css("left", positions.x + "px");
             box.css("top", positions.y + "px");
 
-            timelLineLite.fromTo(frame, 1, {top: base.previousMousePosition.y + "px", left: base.previousMousePosition.x + "px"}, {
-                left: positions.xMouse + "px",
-                top: positions.yMouse + "px",
-                opacity: 1,
-                display: "flex",
-                onComplete: function() { 
-                    if(isDrag) {
-                        frame.children("img").attr("src", base.pathToAssets52 + "mouse_select_left.png");
-                    } else {
-                        frame.children("img").attr("src", base.pathToAssets52 + "mouse.png");
-                    }
-                }
-            }, divId);
-            base.previousMousePosition.x = positions.xMouse;
-            base.previousMousePosition.y = positions.yMouse;
+            frame.css("left", positions.xMouse + "px");
+            frame.css("top", positions.yMouse + "px");
         }
     });
 
     base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
-    timelLineLite.addLabel(divId);
+    timelLineLite.fromTo(frame, 1, {top: base.previousMousePosition.y + "px", left: base.previousMousePosition.x + "px"}, {
+        opacity: 1,
+        display: "flex",
+        onComplete: function() { 
+            if(isDrag) {
+                frame.children("img").attr("src", base.pathToAssets52 + "mouse_select_left.png");
+            } else {
+                frame.children("img").attr("src", base.pathToAssets52 + "mouse.png");
+            }
+        }
+    });
     base.previousMousePosition.x = positions.xMouse;
     base.previousMousePosition.y = positions.yMouse;
 }
