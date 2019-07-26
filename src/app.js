@@ -268,6 +268,7 @@ export function uploadFiles(event) {
 
   var folder = $("#defaultFolder");
 
+  var elements = new Array();
   for (let i=0; i<files.length; i++) {
     if(files[i].type == "application/ats.action-test-script.visual-report") {
       var fileName = files[i].name;
@@ -287,8 +288,13 @@ export function uploadFiles(event) {
         upload.openfile(files[i], currentReportName);
       });
       folder.children('div').append(item);
+      elements.push(files[i]);
     }
   };
+
+  if(elements.length == 1) {
+    upload.openfile(elements[0], elements[0].name);
+  }
 }
 
 export function setLibrary(data) {
