@@ -52,10 +52,26 @@ export function calculPositions(element) {
         ratio = $("#screenBackground").width() / element.channelBound.width;
     }
 
-    var ratioWidth  = element.element.bound.width * ratio;
-    var ratioHeight = element.element.bound.height * ratio;
-    var ratioX      = element.element.bound.x * ratio;
-    var ratioY      = element.element.bound.y * ratio;
+    var boundWidth = 1;
+    var boundHeight = 1;
+    var boundX = 1;
+    var boundY = 1;
+    var vposValue = 0;
+    var hposValue = 0;
+
+    if(element.element) {
+        boundWidth = element.element.bound.width;
+        boundHeight = element.element.bound.height;
+        boundX = element.element.bound.x;
+        boundY = element.element.bound.y;
+        vposValue = element.element.vposValue;
+        hposValue = element.element.hposValue;
+    }
+
+    var ratioWidth  = boundWidth * ratio;
+    var ratioHeight = boundHeight * ratio;
+    var ratioX      = boundX * ratio;
+    var ratioY      = boundY * ratio;
 
     var offsetLeft = 0;
     var offsetTop = 0;
@@ -74,24 +90,24 @@ export function calculPositions(element) {
     var xMouse = x + (ratioWidth / 2); //26 = half of img size
     var yMouse = y + (ratioHeight / 2);
 
-    if(element.element.vposValue != 0) {
+    if(vposValue != 0) {
         switch(element.element.vpos) {
             case "top":
-                yMouse = y + (element.element.vposValue * ratio);
+                yMouse = y + (vposValue * ratio);
                 break;
             case "bottom":
-                yMouse = y + ratioHeight - (element.element.vposValue * ratio);
+                yMouse = y + ratioHeight - (vposValue * ratio);
                 break;
         }
     }
 
-    if(element.element.hposValue != 0) {
+    if(hposValue != 0) {
         switch(element.element.hpos) {
             case "left":
-                xMouse = x + (element.element.hposValue * ratio);
+                xMouse = x + (hposValue * ratio);
                 break;
             case "right":
-                xMouse = x + ratioWidth - (element.element.hposValue * ratio);
+                xMouse = x + ratioWidth - (hposValue * ratio);
                 break;
         }
     }

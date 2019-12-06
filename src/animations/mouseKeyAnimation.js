@@ -31,7 +31,14 @@ export function implementAnimationStart(element) {
     clickAnim.attr("id", "click" + element.timeLine);
     clickAnim.appendTo("#screenBackground");
 
-    var positions = base.calculPositions(element);
+    var positions = {
+        x: 0,
+        y: 0,
+        xMouse: 0,
+        yMouse: 0,
+        width: 0,
+        height: 0
+    }
 
     timelLineLite.to(frame, 0, {
         onComplete: function() { 
@@ -46,8 +53,8 @@ export function implementAnimationStart(element) {
             frame.css("top", positions.yMouse + "px");
 
             var click = $("#click" + element.timeLine);
-            click.css("left", (positions.x + 13) + "px");
-            click.css("top", positions.y + "px");
+            click.css("left", (positions.xMouse + 13) + "px");
+            click.css("top", positions.yMouse + "px");
         }
     });
     base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
