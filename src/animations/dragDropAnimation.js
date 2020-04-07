@@ -1,8 +1,6 @@
 var $ = require('jQuery');
-var app = require('../app');
 var base = require('./baseAnimation');
 import { timelLineLite } from '../uploader';
-import { AttrPlugin } from "gsap/AttrPlugin";
 
 export function implementAnimation(element, frameCounter, isDrag) {
     if(frameCounter == 1) {

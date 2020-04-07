@@ -1,8 +1,6 @@
 var $ = require('jQuery');
 import { timelLineLite } from '../uploader';
 var base = require('./baseAnimation');
-import TextPlugin from "gsap/TextPlugin";
-import ScrambleText from 'scramble-text';
 
 export function implementAnimation(element, frameCounter) {
     if(frameCounter ==1) {
