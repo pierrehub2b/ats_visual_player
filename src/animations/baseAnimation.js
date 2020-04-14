@@ -1,5 +1,6 @@
 var $ = require('jQuery');
 import { timelLineLite } from '../uploader';
+import {TweenLite, Power0} from "gsap";
 
 export var pathToAssets32 = "./assets/icons/32/";
 export var pathToAssets52 = "./assets/icons/52/";

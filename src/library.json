@@ -1,27 +1,20 @@
 {
   "folders": [
     {
-      "name" : "ATSV client locaux",
-      "urls" : [
-        "/ATSV/subscripts.dragdrop.DragDrop1.atsv",
-        "/ATSV/inputs.Calculatrice.atsv"
-      ]
-    },
-    {
       "name" : "Serveur de test",
       "urls" : [
         "/ATSV/allFunctions.atsv",
         "/ATSV/inputs.DataInput.atsv",
         "/ATSV/inputs.HtmlInputs.atsv",
         "/ATSV/mouse.HoverAndDrag.atsv",
-        "/ATSV/check.Demo004paramFrais.atsv",
-        "/ATSV/loop.atsv",
-        "/ATSV/subscripts.allFunctions.atsv",
-        "/ATSV/subscripts.DemoCalculatrice.atsv",
-        "/ATSV/subscripts.elementNotFound.atsv",
-        "/ATSV/fonctionnel.catalogue.tests_catalogues.admin_si.actif.Catalogue_AdminSI_Actif_01Consulter (1).atsv", 
-        "/ATSV/sample.websuite.s00_tranverse.scenario_websuite_ConsExterne_190419.atsv",
         "/ATSV/subscripts.chapitres.atsv"
+       ]
+    },
+    {
+      "name" : "Switch de channel",
+      "urls" : [
+        "/ATSV/atsveneration.mobileToWeb.atsv",
+        "/ATSV/generation_atsv.allscripts.atsv"
        ]
     }
   ]

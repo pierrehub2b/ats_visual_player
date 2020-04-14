@@ -18,7 +18,9 @@ export function implementAnimation(element) {
     frame.children("img").css("display", "none");
     frameTitle.html(app.replaceLocal({name:"STARTCHANNEL"}));
 
-    var text = base.format(app.replaceLocal({name:"STARTCHANNELTEXT"}), true, element.channelName, element.data, element.channelBound.width + " x " + element.channelBound.height);
+    var jsonObj = JSON.parse(element.data);
+
+    var text = base.format(app.replaceLocal({name:"STARTCHANNELTEXT"}), true, element.channelName, jsonObj["app"], element.channelBound.width + " x " + element.channelBound.height);
     frameContent.append('<p>'+text+'</p>')
 
     $("#screenBackground").append(frame);

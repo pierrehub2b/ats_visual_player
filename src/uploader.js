@@ -1,6 +1,6 @@
 import AMF from 'amf-js';
 import 'babel-polyfill';
-import { TimelineMax, TimelineLite } from "gsap/TweenMax";
+import { TimelineMax } from "gsap";
 var $ = require('jQuery');
 import './simpledrag';
 import { replaceLocal, currentLocale, currentReportName, flashReport, clearOtherReadingState, uploadFiles, importLibrary } from './app';
@@ -396,6 +396,7 @@ export function calcSliderPos(e) {
 export function openfile(file, id) {
   timelLineLite = new TimelineMax({ paused: true, repeat: 0, onUpdate:adjustUI});
   screenBackground.html("");
+  
   allData = [];
   images = [];
   spinner.removeClass("loadingDone");
@@ -411,7 +412,6 @@ export function openfile(file, id) {
   tick = 0;
   clearInterval(timer);
   timer = null;
-
   if(file != null && currentReportName == id) {
     loadFile(file);
   } 
@@ -721,11 +721,11 @@ export function resultSetup(result, percent) {
     });
   }
 
-  images = allData.filter(_ => _.type === elementType.IMAGE);
-
   $(base.mousePointer).remove();
   $(base.mousePointer).appendTo("#screenBackground");
 
+
+  images = allData.filter(_ => _.type === elementType.IMAGE);
   for (let currentImgIndex = 0; currentImgIndex < currentImgs.length; currentImgIndex++) {
     const element = currentImgs[currentImgIndex];
     animate(element, images.length-currentImgs.length+currentImgIndex);
