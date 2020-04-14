@@ -78,8 +78,10 @@ export function implementAnimationStart(element) {
     });
 
     var inputString = element.value;
-    if(element.value.length > 50) {
+    if(element.value && element.value.length > 50) {
         inputString = element.value.substring(0,45) + " ...";
+    } else {
+        return;
     }
     for (let index = 0; index <= inputString.length; index++) {
         timelLineLite.to(textInput, 0.05, {
