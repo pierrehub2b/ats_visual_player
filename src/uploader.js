@@ -396,7 +396,7 @@ export function calcSliderPos(e) {
 export function openfile(file, id) {
   timelLineLite = new TimelineMax({ paused: true, repeat: 0, onUpdate:adjustUI});
   screenBackground.html("");
-  
+  $(base.mousePointer).appendTo("#screenBackground");
   allData = [];
   images = [];
   spinner.removeClass("loadingDone");
@@ -720,11 +720,7 @@ export function resultSetup(result, percent) {
       $("#chapter" + commentaire.timeLine).removeClass("hoverChapter");
     });
   }
-
-  $(base.mousePointer).remove();
-  $(base.mousePointer).appendTo("#screenBackground");
-
-
+  
   images = allData.filter(_ => _.type === elementType.IMAGE);
   for (let currentImgIndex = 0; currentImgIndex < currentImgs.length; currentImgIndex++) {
     const element = currentImgs[currentImgIndex];
@@ -741,7 +737,6 @@ export function startTimer() {
 }
 
 export function animate(currentElement, index) {
-
     if(index == 0) {
       timelLineLite.to(currentElement.img, 0.5, {
         opacity: 1,
@@ -761,12 +756,14 @@ export function animate(currentElement, index) {
     if(currentFrameAction == 1) {
       timelLineLite.addLabel(currentElement.img.id);
     }
-
     switch(currentElement.element.type) {
       case "com.ats.script.actions.ActionText":
         //OK
-        frameForAction = 2;
-        ActionText(currentElement.element, currentFrameAction);
+        frameForAction = 3;
+        if(currentFrameAction < 3) {
+          ActionText(currentElement.element, currentFrameAction);
+        }
+        
         currentFrameAction++;
         if(currentFrameAction > frameForAction) {
           currentFrameAction = 1;

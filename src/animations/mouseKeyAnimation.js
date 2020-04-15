@@ -57,7 +57,7 @@ export function implementAnimationStart(element) {
         }
     });
     base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
-    timelLineLite.fromTo(frame , 1, {top: base.previousMousePosition.y + "px", left: base.previousMousePosition.x + "px"}, {
+    timelLineLite.to(frame , 1, /*{top: base.previousMousePosition.y + "px", left: base.previousMousePosition.x + "px"}, */{
         opacity: 1,
         display: "flex"
     });

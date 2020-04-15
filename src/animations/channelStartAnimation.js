@@ -18,9 +18,15 @@ export function implementAnimation(element) {
     frame.children("img").css("display", "none");
     frameTitle.html(app.replaceLocal({name:"STARTCHANNEL"}));
 
-    var jsonObj = JSON.parse(element.data);
+    var appChannel = "";
+    if(isJson(element.data)) {
+        appChannel = JSON.parse(element.data)["app"];
+    } else {
+        appChannel = element.data;
+    }
+    
 
-    var text = base.format(app.replaceLocal({name:"STARTCHANNELTEXT"}), true, element.channelName, jsonObj["app"], element.channelBound.width + " x " + element.channelBound.height);
+    var text = base.format(app.replaceLocal({name:"STARTCHANNELTEXT"}), true, element.channelName, appChannel, element.channelBound.width + " x " + element.channelBound.height);
     frameContent.append('<p>'+text+'</p>')
 
     $("#screenBackground").append(frame);
@@ -29,4 +35,13 @@ export function implementAnimation(element) {
 
     base.displayPopUp(frame, frameTitle, frameContent, 2);
     base.hidePopUp(frame, frameTitle, frameContent);
+}
+
+export function isJson(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
 }

@@ -1,13 +1,11 @@
 var $ = require('jQuery');
 import { timelLineLite } from '../uploader';
 var base = require('./baseAnimation');
-import TextPlugin from "gsap/TextPlugin";
-import ScrambleText from 'scramble-text';
 
 export function implementAnimation(element, frameCounter) {
-    if(frameCounter ==1) {
+    if(frameCounter == 1) {
         implementAnimationStart(element);
-    } else {
+    } else if(frameCounter == 2) {
         implementAnimationEnd(element);
     }
 }
@@ -82,15 +80,16 @@ export function implementAnimationStart(element) {
     var inputString = element.value;
     if(element.value && element.value.length > 50) {
         inputString = element.value.substring(0,45) + " ...";
-    } else {
-        return;
-    }
-    for (let index = 0; index <= inputString.length; index++) {
-        timelLineLite.to(textInput, 0.05, {
-            onComplete: function() {
-                textInput.html(inputString.substring(0, index));
-            }
-        });
+    } 
+
+    if(inputString) {
+        for (let index = 0; index <= inputString.length; index++) {
+            timelLineLite.to(textInput, 0.05, {
+                onComplete: function() {
+                    textInput.html(inputString.substring(0, index));
+                }
+            });
+        }
     }
 }
 

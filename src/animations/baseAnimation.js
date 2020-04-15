@@ -10,7 +10,7 @@ export var frameBackground = '<div class="popupFrame"><img class="imgFrame" /></
 export var frameTitle = '<h3 class="popupTitle"></h3>';
 export var frameContent = '<div class="popupContent"></div>';
 export var mousePointer = "<div id='pointerEvent' class='pointerAction'><img class='animationImg' src='"+pathToAssets52+"mouse.png' /></div>";
-export var keyboardPointer = "<div class='pointerAction keyboardImg'><img class='animationImg' src='"+pathToAssets32+"keyboard.png' /></div>";
+export var keyboardPointer = "<div class='pointerAction keyboardImg'></div>"; //<img class='animationImg' src='"+pathToAssets32+"keyboard.png' />
 export var textInputAnimationFrame = "<div class='textInputAnimation'></div>";
 export var arrowUp = "<div class='pointerAction'><img class='animationImg' src='"+pathToAssets52+"up.png' /></div>";
 export var arrowDown = pathToAssets52+"down.png";
@@ -21,7 +21,7 @@ export function setCurrentDragDropTimeline(val) {
     currentDragDropTimeline = val;
 }
 
-export var previousMousePosition = {x: 0, y: $("#screenBackground").height()};
+export var previousMousePosition = {x: 0, y: 0};
 export var borderSize = 3;
 
 export function format(fmt, withSpan, ...args) {
