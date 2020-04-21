@@ -61,6 +61,10 @@ body {
   color: #FCFCFC;
   text-decoration: none; }
 
+#flashReport #description a {
+  color: #006fc9;
+  text-decoration: underline; }
+
 #stopRequest {
   font-size: 17px;
   color: #FABA00;

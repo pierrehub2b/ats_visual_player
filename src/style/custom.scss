@@ -97,6 +97,11 @@ body {
     text-decoration: none;
   }
 
+#flashReport #description a {
+    color: $agilitestDarkBlue;
+    text-decoration: underline;
+}
+
 #stopRequest {
     font-size: 17px;
     color: #FABA00;

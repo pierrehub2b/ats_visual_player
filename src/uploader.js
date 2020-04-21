@@ -286,6 +286,7 @@ export function toAMFObjects(data) {
 }
 
 export function traitmentDone() {
+  MakeMenuLinksOpenInNewWindow();
   spinner.addClass("loadingDone");
   var v = parseFloat(progressSlider.val()) * 100;
   //rangePointer.html(v.toFixed());
@@ -632,7 +633,7 @@ export function resultSetup(result, percent) {
     "<div>"+ replaceLocal({ name: "SCRIPTAUTHOR"}) +": {author}</div>" +
     "<div>"+ replaceLocal({ name: "SCRIPTSTARTER"}) +": {started}</div>" +
     "<div id='duration'>"+ replaceLocal({ name: "SCRIPTDURATION"}) +": {duration}</div>" +
-    "<div>"+ replaceLocal({ name: "SCRIPTDESCRIPTION"}) +": {description}</div>" +
+    "<div>"+ replaceLocal({ name: "SCRIPTDESCRIPTION"}) +": <span id='description'>{description}</span></div>" +
     "<div>"+ replaceLocal({ name: "SCRIPTPREREQUISTES"}) +": {prerequisite}</div>" +
     "<div>"+ replaceLocal({ name: "SCRIPTGROUPS"}) +": {groups}</div>",frData);
 
@@ -704,10 +705,11 @@ export function resultSetup(result, percent) {
 
   for (let comm = 0; comm < comments.length; comm++) {
     const commentaire = comments[comm];
-    if(commentaire.element.data.length > 75) {
-      commentaire.element.data = commentaire.element.data.substring(0, 70) + " ...";
+    var subStringComment = commentaire.element.data;
+    if(commentaire.element.data.length > 70) {
+      subStringComment = commentaire.element.data.substring(0, 65) + " ...";
     }
-    $('<li class="chapterNode" id="chapter'+ commentaire.timeLine +'">' + stripHtml((comm+1) + '/ ' + commentaire.element.data) + '</li>').appendTo($("#chaptersList"));
+    $('<li class="chapterNode" id="chapter'+ commentaire.timeLine +'">' + stripHtml((comm+1) + '/ ' + subStringComment) + '</li>').appendTo($("#chaptersList"));
     var component = $("#chapter" + commentaire.timeLine);
     component.click(function(event) {
       event.stopPropagation();
@@ -734,6 +736,13 @@ export function startTimer() {
   tick++;
   d.setHours(0,0,tick,0);
   rangePointer.html(getDuration(d) + " / " + getDuration(duration));
+}
+
+export function MakeMenuLinksOpenInNewWindow() {
+  var links = document.getElementsByTagName("a");
+  for (var i = 0, l = links.length; i < l; i++) {
+    links[i].target = "_blank";  
+  }
 }
 
 export function animate(currentElement, index) {
