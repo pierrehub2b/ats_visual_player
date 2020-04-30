@@ -49,7 +49,7 @@
     "font-awesome": "^4.7.0",
     "fs": "0.0.1-security",
     "gsap": "^3.2.6",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "memory-fs": "^0.4.1",
     "node-amf3": "^1.0.1",
     "promise": "^8.0.3",
