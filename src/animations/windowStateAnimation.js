@@ -1,4 +1,4 @@
-var $ = require('jQuery');
+var $ = require('jquery');
 var app = require('../app');
 var base = require('./baseAnimation');
 var elemNotFound = require('./elementNotFoundAnimation');

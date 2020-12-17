@@ -1,4 +1,4 @@
-var $ = require('jQuery');
+var $ = require('jquery');
 import { timelLineLite } from '../uploader';
 import {TweenLite, Power0} from "gsap";
 
