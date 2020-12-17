@@ -765,10 +765,10 @@ export function animate(currentElement, index) {
     if(currentFrameAction == 1) {
       timelLineLite.addLabel(currentElement.img.id);
     }
+
+    frameForAction = currentElement.element.images.length;
     switch(currentElement.element.type) {
       case "com.ats.script.actions.ActionText":
-        //OK
-        frameForAction = 3;
         if(currentFrameAction < 3) {
           ActionText(currentElement.element, currentFrameAction);
         }
@@ -779,8 +779,6 @@ export function animate(currentElement, index) {
         }
         break;
       case "com.ats.script.actions.ActionGotoUrl":
-        //OK
-        frameForAction = 2;
         ActionGotoUrl(currentElement.element, currentFrameAction);
         currentFrameAction++;
         if(currentFrameAction > frameForAction) {
@@ -788,16 +786,12 @@ export function animate(currentElement, index) {
         }
         break;
       case "com.ats.script.actions.ActionChannelStart":
-        //OK
         ActionChannelStart(currentElement.element);
         break;
       case "com.ats.script.actions.ActionChannelClose":
-        //OK
         ActionChannelClose(currentElement.element);
         break;
       case "com.ats.script.actions.ActionMouseKey":
-        //OK
-        frameForAction = 2;
         ActionMouseKey(currentElement.element, currentFrameAction);
         currentFrameAction++;
         if(currentFrameAction > frameForAction) {
@@ -805,8 +799,6 @@ export function animate(currentElement, index) {
         }
         break;
       case "com.ats.script.actions.ActionMouseScroll":
-        //OK
-        frameForAction = 3;
         ActionMouseScroll(currentElement.element, currentFrameAction);
         currentFrameAction++;
         if(currentFrameAction > frameForAction) {
@@ -814,24 +806,18 @@ export function animate(currentElement, index) {
         }
         break;
       case "com.ats.script.actions.ActionComment":
-        //OK
         ActionComment(currentElement.element);
         break;
       case "com.ats.script.actions.ActionAssertCount":
-        //OK
         ActionAssertPropertyCount(currentElement.element);
         break;
       case "com.ats.script.actions.ActionAssertProperty":
-        //OK
         ActionAssertProperty(currentElement.element);
         break;
       case "com.ats.script.actions.ActionAssertValue":
-        //OK
         ActionAssertValue(currentElement.element);
         break;
       case "com.ats.script.actions.ActionJavascript":
-        //OK
-        frameForAction = 2;
         ActionJavascript(currentElement.element, currentFrameAction);
         currentFrameAction++;
         if(currentFrameAction > frameForAction) {
@@ -839,8 +825,6 @@ export function animate(currentElement, index) {
         }
         break;
       case "com.ats.script.actions.ActionMouse":
-        //OK
-        frameForAction = 2;
         ActionMouse(currentElement.element, currentFrameAction);
         currentFrameAction++;
         if(currentFrameAction > frameForAction) {
@@ -848,12 +832,9 @@ export function animate(currentElement, index) {
         }
         break;
       case "com.ats.script.actions.ActionProperty":
-        //OK
         ActionProperty(currentElement.element);
         break;
       case "com.ats.script.actions.ActionWindowState":
-        //OK
-        frameForAction = 2;
         ActionWindowState(currentElement.element, currentFrameAction);
         currentFrameAction++;
         if(currentFrameAction > frameForAction) {
@@ -861,8 +842,6 @@ export function animate(currentElement, index) {
         }
         break;
       case "com.ats.script.actions.ActionWindowSwitch":
-        //OK
-        frameForAction = 2;
         ActionWindowSwitch(currentElement.element, currentFrameAction);
         currentFrameAction++;
         if(currentFrameAction > frameForAction) {
@@ -870,8 +849,6 @@ export function animate(currentElement, index) {
         }
         break;
       case "com.ats.script.actions.ActionMouseDragDrop":
-        //OK
-        frameForAction = 2;
         ActionDragDrop(currentElement.element, currentFrameAction, isDrag);
         currentFrameAction++;
         if(currentFrameAction > frameForAction) {
