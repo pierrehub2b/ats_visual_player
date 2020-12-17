@@ -7,7 +7,7 @@ import './style/custom.scss';
 import './style/styleAnimation.scss';
 import { setupScreen, create_UUID } from './uploader';
 import AMF from 'amf-js';
-var $ = require('jquery');
+var $ = require('jQuery');
 var upload = require('./uploader');
 
 export var addLibrary = $("#addLibrary");

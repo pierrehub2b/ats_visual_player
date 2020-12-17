@@ -1,7 +1,7 @@
 import AMF from 'amf-js';
 import 'babel-polyfill';
 import { TimelineMax } from "gsap";
-var $ = require('jquery');
+var $ = require('jQuery');
 import './simpledrag';
 import { replaceLocal, currentLocale, currentReportName, flashReport, clearOtherReadingState, uploadFiles, importLibrary } from './app';
 import { implementAnimation as ActionGotoUrl } from './animations/gotuUrlAnimation';

@@ -1,4 +1,4 @@
-var $ = require('jquery');
+var $ = require('jQuery');
 import { timelLineLite } from '../uploader';
 var base = require('./baseAnimation');
 
