@@ -10,9 +10,9 @@ When it's deserialize, when recompiles data for creating an HTML video player th
 # Start a development server
 "npm run develop" lunch a local development server that can be accessible by a local url.
 Usually "http//localhost:8081"
-**Note:** that command delete the "local" dist file so **don't commit without lunch a "npm run build"**
+**Note:** that command delete the "local" dist file so **don't commit without launch a "npm run build"**
 
 # Build for production
 "npm run build" generate a local "dist" file that bundle all js and scss files
-Thats files are those that will be deployed to clients and be lunch in "offline" mode
-**Note:** that command **MUST BE** lunch before a commit/push to the repository !
+Thats files are those that will be deployed to clients and be launched in "offline" mode
+**Note:** that command **MUST BE** launched before a commit/push to the repository !
