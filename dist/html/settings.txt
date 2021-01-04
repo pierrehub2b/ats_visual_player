@@ -1,4 +1,0 @@
-IMGWATERMARK=/assets/agilitest_logo.png
-URLWATERMARK=https://github.com/pierrehub2b/actiontestscript
-IMGBACKGROUND=/assets/agilitest_logo.png
-ATSVLIBRARY=/library.json
