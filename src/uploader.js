@@ -508,11 +508,11 @@ export function updaterangePointer() {
 
   progressSlider.css('background-image',
         '-webkit-gradient(linear, left top, right top, ' +
-        'color-stop(' + percent + '%, #FABA00), ' +
+        'color-stop(' + percent + '%, #404040), ' +
         'color-stop(' + percent + '%, #9BA0A5)' +
         ')');
 
-  progressSlider.css('background-image','-moz-linear-gradient(left center, #FABA00 0%, #FABA00 ' + percent + '%, #9BA0A5 ' + percent + '%, #9BA0A5 100%)');
+  progressSlider.css('background-image','-moz-linear-gradient(left center, #404040 0%, #404040 ' + percent + '%, #9BA0A5 ' + percent + '%, #9BA0A5 100%)');
 }
 //#endregion
 

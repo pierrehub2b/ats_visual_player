@@ -43,7 +43,7 @@ module.exports = merge(common, {
     appCSS, customCSS,
     new CopyWebpackPlugin([
       { from: 'src/assets', to: 'assets' },
-      { from: 'src/settings.txt', to: '' },
+      { from: 'src/settings.txt', to: 'settings.txt' },
       { from: 'src/locales', to: 'locales' },
     ]),
     new ZipFilesPlugin({

@@ -2,7 +2,7 @@ body {
   font-family: Arial, Helvetica, sans-serif; }
 
 #loadingPercent {
-  color: #FABA00;
+  color: #afb3b0;
   font-size: 15px; }
 
 #screenBackground {
@@ -67,7 +67,7 @@ body {
 
 #stopRequest {
   font-size: 17px;
-  color: #FABA00;
+  color: #afb3b0;
   position: relative;
   top: 5px;
   /* right: 0; */
@@ -81,7 +81,7 @@ body {
   color: #FCFCFC; }
 
 #rangePointer {
-  color: #FABA00; }
+  color: #FCFCFC; }
 
 .nav {
   background-color: #11171B; }
@@ -90,24 +90,24 @@ body {
   background-color: #11171B; }
 
 .chapterProgressBar {
-  border-left: 4px solid #FABA00; }
+  border-left: 4px solid #afb3b0; }
 
 input[type=range]::-webkit-slider-thumb {
-  background-color: #FABA00; }
+  background-color: #006fc9; }
 
 input[type=range]::-moz-range-thumb {
-  background-color: #FABA00; }
+  background-color: #006fc9; }
 
 .loadingCircle {
   border: 1px solid #FCFCFC;
-  border-left-color: #FABA00; }
+  border-left-color: #afb3b0; }
 
 .loadingDone {
-  border-color: #FABA00; }
+  border-color: #afb3b0; }
 
 .loadingCheckmark:after {
-  border-right: 3px solid #FABA00;
-  border-top: 3px solid #FABA00; }
+  border-right: 3px solid #afb3b0;
+  border-top: 3px solid #afb3b0; }
 
 #uploader {
   font-size: 15px; }
@@ -132,12 +132,12 @@ input[type=range]::-moz-range-thumb {
   color: #FCFCFC; }
 
 .hoverChapter {
-  color: #FABA00;
+  color: #afb3b0;
   font-weight: bold; }
 
 .panes-separator {
   width: 10px;
-  background: #FABA00; }
+  background: #afb3b0; }
 
 .bolder, .textBolder {
   font-weight: bold; }
@@ -147,7 +147,7 @@ input[type=range]::-moz-range-thumb {
   color: #11171B; }
 
 .popupTitle {
-  color: #FABA00; }
+  color: #11171B; }
 
 #left-side, #bottom-side, #top-side, #right-side {
   background: #6271B3; }

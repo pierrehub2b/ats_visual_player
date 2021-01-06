@@ -1,4 +1,4 @@
 IMGWATERMARK=/assets/ats_logo.png
 URLWATERMARK=https://github.com/pierrehub2b/actiontestscript
 IMGBACKGROUND=/assets/ats_logo.png
-ATSVLIBRARY=/library.json
+ATSVLIBRARY=
