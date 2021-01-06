@@ -38,12 +38,15 @@ module.exports = merge(common, {
   },
   target:'node',
   plugins: [
-    new CopyPlugin([
-      { from: 'src/assets', to: 'assets' },
-      { from: 'src/library.json', to: '' },
-      { from: 'src/settings.txt', to: '' },
-      { from: 'src/locales', to: 'locales' },
-      { from: 'src/ATSV', to: 'ATSV' }
-    ])
-  ],
+    new CopyPlugin(
+      {
+        patterns: [
+          { from: 'src/assets', to: 'assets' },
+          { from: 'src/library.json', to: '' },
+          { from: 'src/settings.txt', to: '' },
+          { from: 'src/locales', to: 'locales' },
+          { from: 'src/ATSV', to: 'ATSV' }
+        ]
+      })
+  ]
 })

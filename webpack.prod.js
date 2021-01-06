@@ -41,11 +41,14 @@ module.exports = merge(common, {
   },
   plugins: [
     appCSS, customCSS,
-    new CopyWebpackPlugin([
-      { from: 'src/assets', to: 'assets' },
-      { from: 'src/settings.txt', to: 'settings.txt' },
-      { from: 'src/locales', to: 'locales' },
-    ]),
+    new CopyWebpackPlugin(
+      {
+        patterns: [
+          { from: 'src/assets', to: 'assets' },
+        { from: 'src/settings.txt', to: 'settings.txt' },
+        { from: 'src/locales', to: 'locales' },
+        ]
+      }),
     new ZipFilesPlugin({
       entries: [
         { src: path.join(__dirname, './dist'), dist: 'release' }
