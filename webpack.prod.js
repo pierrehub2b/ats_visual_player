@@ -1,12 +1,12 @@
 const merge = require('webpack-merge')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 const common = require('./webpack.common.js')
+const ZipFilesPlugin = require('webpack-zip-files-plugin');
 var path = require("path");
-const RobotstxtPlugin = require("robotstxt-webpack-plugin");
 
 const appCSS = new ExtractTextPlugin('style.css');
 const customCSS = new ExtractTextPlugin('custom.css');
-const options = {}; // see options below
 
 module.exports = merge(common, {
   mode: 'production',
@@ -39,5 +39,19 @@ module.exports = merge(common, {
       }
     ]
   },
-  plugins: [appCSS, customCSS,new RobotstxtPlugin(options)]
+  plugins: [
+    appCSS, customCSS,
+    new CopyWebpackPlugin([
+      { from: 'src/assets', to: 'assets' },
+      { from: 'src/settings.txt', to: '' },
+      { from: 'src/locales', to: 'locales' },
+    ]),
+    new ZipFilesPlugin({
+      entries: [
+        { src: path.join(__dirname, './dist'), dist: 'release' }
+      ],
+      output: path.join(__dirname, './release'),
+      format: 'zip',
+    })
+  ]
 })

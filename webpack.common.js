@@ -13,7 +13,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(['dist/html']),
     new HtmlWebpackPlugin({
-      title: 'Agilitest',
+      title: 'ATS Player',
       // Load a custom template (lodash by default see the FAQ for details)
       template: 'src/index.html'
     })

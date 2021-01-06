@@ -1,7 +1,7 @@
 import AMF from 'amf-js';
 import 'babel-polyfill';
-import { TimelineMax } from "gsap";
-var $ = require('jQuery');
+import { gsap, TimelineMax } from "gsap";
+import { TimelineLite, CSSPlugin } from 'gsap/all';
 import './simpledrag';
 import { replaceLocal, currentLocale, currentReportName, flashReport, clearOtherReadingState, uploadFiles, importLibrary } from './app';
 import { implementAnimation as ActionGotoUrl } from './animations/gotuUrlAnimation';
@@ -21,7 +21,11 @@ import { implementAnimation as ActionMouse } from './animations/mouseAnimation';
 import { implementAnimation as ActionWindowState } from './animations/windowStateAnimation';
 import { implementAnimation as ActionWindowSwitch } from './animations/windowSwitchAnimation';
 import { implementAnimation as ActionDragDrop } from './animations/dragDropAnimation';
+
 var base = require('./animations/baseAnimation');
+// Force CSSPlugin to not get dropped during build
+const plugins = [ CSSPlugin ];
+var $ = require('jQuery');
 
 //#region objets du DOM
 export var progressSlider = $("#progressSlider");
@@ -762,11 +766,11 @@ export function animate(currentElement, index) {
       }); 
     }
 
+    frameForAction = currentElement.element.images.length;
+
     if(currentFrameAction == 1) {
       timelLineLite.addLabel(currentElement.img.id);
     }
-
-    frameForAction = currentElement.element.images.length;
     switch(currentElement.element.type) {
       case "com.ats.script.actions.ActionText":
         if(currentFrameAction < 3) {

@@ -1,4 +1,4 @@
-IMGWATERMARK=/assets/agilitest_logo.png
+IMGWATERMARK=/assets/ats_logo.png
 URLWATERMARK=https://github.com/pierrehub2b/actiontestscript
-IMGBACKGROUND=/assets/agilitest_logo.png
+IMGBACKGROUND=/assets/ats_logo.png
 ATSVLIBRARY=/library.json

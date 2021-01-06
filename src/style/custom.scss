@@ -1,9 +1,9 @@
-$agilitestOrange: #FABA00;
-$agilitestBlack: #11171B;
-$agilitestWhite: #FCFCFC;
-$agilitestGrey: #404040;
-$agilitestBlue: #6271B3;
-$agilitestDarkBlue: #006fc9;
+$atsLightGrey: #afb3b0;
+$atsBlack: #11171B;
+$atsWhite: #FCFCFC;
+$atsGrey: #404040;
+$atsBlue: #6271B3;
+$atsDarkBlue: #006fc9;
 $fontSize: 15px;
 
 body {
@@ -11,7 +11,7 @@ body {
 }
 
 #loadingPercent {
-    color: $agilitestOrange;
+    color: $atsLightGrey;
     font-size: $fontSize;
 }
 
@@ -31,7 +31,7 @@ body {
 }
 
 .playerState {
-    color: $agilitestWhite;
+    color: $atsWhite;
     transition: 0.5s !important;
     opacity: 1;
     margin: auto;
@@ -41,7 +41,7 @@ body {
     text-align: center;
     padding: 30px;
     border-radius: 50%;
-    background-color: $agilitestBlack !important;
+    background-color: $atsBlack !important;
     /* bottom: 0; */
     height: 50px !important;
 }
@@ -88,23 +88,23 @@ body {
 
 .animationVariable {
     font-weight: bold;
-    color: $agilitestDarkBlue;
+    color: $atsDarkBlue;
     font-style: italic;
 }
 
 #flashReport a:link,#flashReport a:visited,#flashReport a:hover,#flashReport a:active, #flashReport  {
-    color: $agilitestWhite;
+    color: $atsWhite;
     text-decoration: none;
   }
 
 #flashReport #description a {
-    color: $agilitestDarkBlue;
+    color: $atsDarkBlue;
     text-decoration: underline;
 }
 
 #stopRequest {
     font-size: 17px;
-    color: #FABA00;
+    color: $atsLightGrey;
     position: relative;
     top: 5px;
     /* right: 0; */
@@ -113,51 +113,51 @@ body {
   
 
 #imgToolTip {
-    background-color: $agilitestWhite;
-    border: $agilitestBlack 1px solid;
+    background-color: $atsWhite;
+    border: $atsBlack 1px solid;
 }
 
 #playButton, #pauseButton, #nextButton, #previousButton, #infoLabel {
-    color: $agilitestWhite;
+    color: $atsWhite;
 }
 
 #rangePointer {
-    color: $agilitestOrange;
+    color: $atsLightGrey;
 }
 
 .nav {
-    background-color: $agilitestBlack;
+    background-color: $atsBlack;
 }
 
 #player {
-    background-color: $agilitestBlack;
+    background-color: $atsBlack;
 }
 
 .chapterProgressBar {
-    border-left: 4px solid $agilitestOrange;
+    border-left: 4px solid $atsLightGrey;
 }
 
 input[type=range]::-webkit-slider-thumb {
-    background-color: $agilitestOrange;
+    background-color: $atsLightGrey;
 }
 
 input[type=range]::-moz-range-thumb {
-    background-color: $agilitestOrange;
+    background-color: $atsLightGrey;
 }
 
 .loadingCircle {
-    border: 1px solid $agilitestWhite;
-    border-left-color: $agilitestOrange;
+    border: 1px solid $atsWhite;
+    border-left-color: $atsLightGrey;
 }
 
 .loadingDone {
-    border-color: $agilitestOrange;
+    border-color: $atsLightGrey;
 }
 
 .loadingCheckmark {    
     &:after {
-        border-right: 3px solid $agilitestOrange;
-        border-top: 3px solid $agilitestOrange;
+        border-right: 3px solid $atsLightGrey;
+        border-top: 3px solid $atsLightGrey;
     }
 }
 
@@ -167,12 +167,12 @@ input[type=range]::-moz-range-thumb {
 
 .left-pane {
     width: 25%;
-    background: $agilitestWhite;
-    color: $agilitestBlack;
+    background: $atsWhite;
+    color: $atsBlack;
   }
 
 #loadingLabel {
-    color: $agilitestBlack;
+    color: $atsBlack;
 }
 
 .hide {
@@ -180,25 +180,25 @@ input[type=range]::-moz-range-thumb {
 }
 
 #scriptName {
-    color: $agilitestWhite;
+    color: $atsWhite;
     font-size: 16px;
     margin: 5px;
 }
 
 .openingButton {
-    color: $agilitestWhite;
+    color: $atsWhite;
 }
 
 
 .hoverChapter {
-    color: $agilitestOrange;
+    color: $atsLightGrey;
     font-weight: bold;
 }
 
 
 .panes-separator {
     width: 10px;
-    background: $agilitestOrange;
+    background: $atsLightGrey;
   }
 
   .bolder, .textBolder {
@@ -206,24 +206,24 @@ input[type=range]::-moz-range-thumb {
   }
 
   .popupFrame {
-      background-color: $agilitestWhite;
-      color: $agilitestBlack;
+      background-color: $atsWhite;
+      color: $atsBlack;
   }
 
   .popupTitle {
-      color: $agilitestOrange;
+      color: $atsLightGrey;
   }
 
   #left-side,#bottom-side,#top-side,#right-side   {
-    background: $agilitestBlue;
+    background: $atsBlue;
   }
 
   .textInputAnimation {
-    border: 2px solid $agilitestBlue;
+    border: 2px solid $atsBlue;
   }
 
   .circle, .inner {
-    background-color : $agilitestBlue;
+    background-color : $atsBlue;
   }
 
 .red {
