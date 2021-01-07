@@ -1,6 +1,6 @@
-var $ = require('jQuery');
-var app = require('../app');
-var base = require('./baseAnimation');
+import { replaceLocal } from './../app';
+import { frameBackground, frameTitle, box, frameContent , format, calculPositions, createBox, displayPopUp, hidePopUp, hideBox } from './baseAnimation';
+import $ from 'jquery';
 import { timelLineLite } from '../uploader';
 
 export function implementAnimation(element, frameCounter) {
@@ -16,49 +16,49 @@ export function implementAnimationStart(element) {
     var titleId = "javascriptTitle" + element.timeLine;
     var contentId = "javascriptContent" + element.timeLine;
 
-    var box = $(base.box);
-    box.attr("id", "box" + element.timeLine);
-    box.appendTo("#screenBackground");
+    var currentFrame = $(frameBackground);
+    var currentTitle = $(frameTitle);
+    var currentContent = $(frameContent);
 
-    var positions = base.calculPositions(element);
-    
-    var frame = $(base.frameBackground);
-    var frameTitle = $(base.frameTitle);
-    var frameContent = $(base.frameContent);
+    var currentBox = $(box);
+    currentBox.attr("id", "box" + element.timeLine);
+    currentBox.appendTo("#screenBackground");
 
-    frame.attr("id", frameId);
-    frameTitle.attr("id", titleId);
-    frameContent.attr("id", contentId);
+    var positions = calculPositions(element);
 
-    frame.children("img").css("display", "none");
-    frameTitle.html(app.replaceLocal({name:"JAVASCRIPTANIMATION"}));
+    currentFrame.attr("id", frameId);
+    currentTitle.attr("id", titleId);
+    currentContent.attr("id", contentId);
 
-    var text = base.format(app.replaceLocal({name:"JAVASCRIPTACTIONTEXT"}), true, element.element.tag, element.value);
-    frameContent.append('<p>'+text+'</p>')
+    currentFrame.children("img").css("display", "none");
+    currentTitle.html(replaceLocal({name:"JAVASCRIPTANIMATION"}));
 
-    $("#screenBackground").append(frame);
-    frame.append(frameTitle);
-    frame.append(frameContent);
+    var text = format(replaceLocal({name:"JAVASCRIPTACTIONTEXT"}), true, element.element.tag, element.value);
+    currentContent.append('<p>'+text+'</p>')
 
-    timelLineLite.to(frame, 0, {
+    $("#screenBackground").append(currentFrame);
+    currentFrame.append(currentTitle);
+    currentFrame.append(currentContent);
+
+    timelLineLite.to(currentFrame, 0, {
         onComplete: function() { 
-            positions = base.calculPositions(element);
-            var box = $("#box" + element.timeLine);
-            box.css("width", positions.width + "px");
-            box.css("height", positions.height + "px");
-            box.css("left", positions.x + "px");
-            box.css("top", positions.y + "px");
+            positions = calculPositions(element);
+            var currentBox = $("#box" + element.timeLine);
+            currentBox.css("width", positions.width + "px");
+            currentBox.css("height", positions.height + "px");
+            currentBox.css("left", positions.x + "px");
+            currentBox.css("top", positions.y + "px");
         }
     });
 
-    base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
-    base.displayPopUp(frame, frameTitle, frameContent, 2);
+    createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
+    displayPopUp(currentFrame, currentTitle, currentContent, 2);
 }
 
 export function implementAnimationEnd(element) {
     var frame = $("#javascriptFrame" + element.timeLine);
     var frameTitle = $("#javascriptTitle" + element.timeLine);
     var frameContent = $("#javascriptContent" + element.timeLine);
-    base.hidePopUp(frame, frameTitle, frameContent, 4);
-    base.hideBox(element.timeLine, 0.2);
+    hidePopUp(frame, frameTitle, frameContent, 4);
+    hideBox(element.timeLine, 0.2);
 }

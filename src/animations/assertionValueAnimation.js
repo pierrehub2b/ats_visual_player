@@ -1,47 +1,47 @@
-var $ = require('jQuery');
-var app = require('../app');
-var base = require('./baseAnimation');
+import { replaceLocal } from './../app';
+import { frameBackground, frameTitle, frameContent, pathToAssets32 , format, displayPopUp, hidePopUp } from './baseAnimation';
+import $ from 'jquery';
 
 export function implementAnimation(element) {
     var frameId = "assertValueFrame" + element.timeLine;
     var titleId = "assertValueTitle" + element.timeLine;
     var contentId = "assertValueContent" + element.timeLine;
-    
-    var frame = $(base.frameBackground);
-    var frameTitle = $(base.frameTitle);
-    var frameContent = $(base.frameContent);
 
-    frame.attr("id", frameId);
-    frameTitle.attr("id", titleId);
-    frameContent.attr("id", contentId);
+    var currentFrame = $(frameBackground);
+    var currentTitle = $(frameTitle);
+    var currentContent = $(frameContent);
 
-    frame.children("img").attr("src", base.pathToAssets32 + "check_value.png");
+    currentFrame.attr("id", frameId);
+    currentTitle.attr("id", titleId);
+    currentContent.attr("id", contentId);
+
+    currentFrame.children("img").attr("src", pathToAssets32 + "check_value.png");
     if(element.error < 0) {
-        frame.children("img").attr("src", base.pathToAssets32 + "error.png");
+        currentFrame.children("img").attr("src", pathToAssets32 + "error.png");
     }
-    frameTitle.html(app.replaceLocal({name:"ASSERTVALUE"}));
+    currentTitle.html(replaceLocal({name:"ASSERTVALUE"}));
 
     //ASSERTTEXTVALUE=La vérification de la valeur {0} a {1}. La valeur {2} {3} {4}
     var isRegex = false;  
     if(element.data.indexOf("regex") >= 0) {
         isRegex = true;
     }
-    var text = base.format(
-        app.replaceLocal({name:"ASSERTTEXTVALUE"}), 
+    var text = format(
+        replaceLocal({name:"ASSERTTEXTVALUE"}), 
         true, 
         element.value,
-        (element.error < 0 ? "<span class='red'>" + app.replaceLocal({name:"ASSERTFAIL"}) : "<span class='green'>" + app.replaceLocal({name:"ASSERTSUCCESS"})) + "</span>",
-        "<span class='removeFormat'>" + (element.error < 0 ? app.replaceLocal({name:"ASSERTNOTVALID"}) : app.replaceLocal({name:"ASSERTVALID"})) + "</span>",
-        "<span class='removeFormat'>" + (isRegex ? app.replaceLocal({name:"REGULAREXPRESSION"}) : app.replaceLocal({name:"SEARCHEXPRESSION"})) + "</span>",
+        (element.error < 0 ? "<span class='red'>" + replaceLocal({name:"ASSERTFAIL"}) : "<span class='green'>" + replaceLocal({name:"ASSERTSUCCESS"})) + "</span>",
+        "<span class='removeFormat'>" + (element.error < 0 ? replaceLocal({name:"ASSERTNOTVALID"}) : replaceLocal({name:"ASSERTVALID"})) + "</span>",
+        "<span class='removeFormat'>" + (isRegex ? replaceLocal({name:"REGULAREXPRESSION"}) : replaceLocal({name:"SEARCHEXPRESSION"})) + "</span>",
         isRegex ? element.data.split("->")[1]: element.value
     );
 
-    frameContent.append("<p>" + text + "</p>")
+    currentContent.append("<p>" + text + "</p>")
 
-    $("#screenBackground").append(frame);
-    frame.append(frameTitle);
-    frame.append(frameContent);
+    $("#screenBackground").append(currentFrame);
+    currentFrame.append(currentTitle);
+    currentFrame.append(currentContent);
 
-    base.displayPopUp(frame, frameTitle, frameContent, 2);
-    base.hidePopUp(frame, frameTitle, frameContent, 4);
+    displayPopUp(currentFrame, currentTitle, currentContent, 2);
+    hidePopUp(currentFrame, currentTitle, currentContent, 4);
 }

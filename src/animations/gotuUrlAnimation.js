@@ -1,6 +1,6 @@
-var $ = require('jQuery');
-var app = require('../app');
-var base = require('./baseAnimation');
+import { replaceLocal } from './../app';
+import { frameBackground, frameTitle, frameContent, format, displayPopUp, hidePopUp } from './baseAnimation';
+import $ from 'jquery';
 
 export function implementAnimation(element, frameCounter) {
     if(frameCounter == 1) {
@@ -14,31 +14,31 @@ export function implementAnimationStart(element) {
     var frameId = "goToUrlFrame" + element.timeLine;
     var titleId = "goToUrlTitle" + element.timeLine;
     var contentId = "goToUrlContent" + element.timeLine;
-    
-    var frame = $(base.frameBackground);
-    var frameTitle = $(base.frameTitle);
-    var frameContent = $(base.frameContent);
 
-    frame.attr("id", frameId);
-    frameTitle.attr("id", titleId);
-    frameContent.attr("id", contentId);
+    var currentFrame = $(frameBackground);
+    var currentTitle = $(frameTitle);
+    var currentContent = $(frameContent);
 
-    frame.children("img").css("display", "none");
-    frameTitle.html(app.replaceLocal({name:"GOTOURL"}));
+    currentFrame.attr("id", frameId);
+    currentTitle.attr("id", titleId);
+    currentContent.attr("id", contentId);
 
-    var text = base.format(app.replaceLocal({name:"GOTOURLTEXT"}), true, element.value);
-    frameContent.append("<p>" + text + "</p>");
+    currentFrame.children("img").css("display", "none");
+    currentTitle.html(replaceLocal({name:"GOTOURL"}));
 
-    $("#screenBackground").append(frame);
-    frame.append(frameTitle);
-    frame.append(frameContent);
+    var text = format(replaceLocal({name:"GOTOURLTEXT"}), true, element.value);
+    currentContent.append("<p>" + text + "</p>");
 
-    base.displayPopUp(frame, frameTitle, frameContent, 2);
+    $("#screenBackground").append(currentFrame);
+    currentFrame.append(currentTitle);
+    currentFrame.append(currentContent);
+
+    displayPopUp(currentFrame, currentTitle, currentContent, 2);
 }
 
 export function implementAnimationEnd(element) {
-    var frame = $("#goToUrlFrame" + element.timeLine);
+    var frameBackground = $("#goToUrlFrame" + element.timeLine);
     var frameTitle = $("#goToUrlTitle" + element.timeLine);
     var frameContent = $("#goToUrlContent" + element.timeLine);
-    base.hidePopUp(frame, frameTitle, frameContent);
+    hidePopUp(frameBackground, frameTitle, frameContent);
 }

@@ -1,9 +1,10 @@
 import AMF from 'amf-js';
 import 'babel-polyfill';
-import { gsap, TimelineMax } from "gsap";
-import { TimelineLite, CSSPlugin } from 'gsap/all';
+import {  TimelineMax } from "gsap";
+import { CSSPlugin } from 'gsap/all';
 import './simpledrag';
-import { replaceLocal, currentLocale, currentReportName, flashReport, clearOtherReadingState, uploadFiles, importLibrary } from './app';
+import $ from 'jquery';
+import { replaceLocal, currentLocale, currentReportName, flashReport, clearOtherReadingState, uploadFiles, importLibrary, chapterTitle, chaptersList } from './app';
 import { implementAnimation as ActionGotoUrl } from './animations/gotuUrlAnimation';
 import { implementAnimation as ActionChannelStart } from './animations/channelStartAnimation';
 import { implementAnimation as ActionChannelSwitch } from './animations/channelSwitchAnimation';
@@ -21,52 +22,50 @@ import { implementAnimation as ActionMouse } from './animations/mouseAnimation';
 import { implementAnimation as ActionWindowState } from './animations/windowStateAnimation';
 import { implementAnimation as ActionWindowSwitch } from './animations/windowSwitchAnimation';
 import { implementAnimation as ActionDragDrop } from './animations/dragDropAnimation';
+import { mousePointer } from './animations/baseAnimation';
 
-var base = require('./animations/baseAnimation');
 // Force CSSPlugin to not get dropped during build
 const plugins = [ CSSPlugin ];
-var $ = require('jQuery');
 
 //#region objets du DOM
-export var progressSlider = $("#progressSlider");
-export var navSlider = $("#navSlider");
-export var screenBackground = $("#screenBackground");
-export var imgToolTip = $("#imgToolTip");
-export var rangePointer = $("#rangePointer");
-export var playBtn = $("#playButton");
-export var pauseBtn = $("#pauseButton");
-export var nextBtn = $("#nextButton");
-export var prevBtn = $("#previousButton");
-export var output = $("#output");
-export var spinner = $("#spinner");
-export var loadingCheckmark = $("#loadingCheckmark");
-export var player = $("#player");
-export var chapterTitle = $("#chapterTitle");
-export var menu = $("#menu");
-export var loadingPercent = $("#loadingPercent");
-export var scriptName = $("#scriptName");
-export var navBar = $(".nav");
-export var addLibraryInput = $("#addLibraryInput");
-export var addFilesInput = $("#addFilesInput");
+var progressSlider = $("#progressSlider");
+var navSlider = $("#navSlider");
+var screenBackground = $("#screenBackground");
+var imgToolTip = $("#imgToolTip");
+var rangePointer = $("#rangePointer");
+var playBtn = $("#playButton");
+var pauseBtn = $("#pauseButton");
+var nextBtn = $("#nextButton");
+var prevBtn = $("#previousButton");
+var output = $("#output");
+var spinner = $("#spinner");
+var loadingCheckmark = $("#loadingCheckmark");
+var player = $("#player");
+var menu = $("#menu");
+var loadingPercent = $("#loadingPercent");
+var scriptName = $("#scriptName");
+var navBar = $(".nav");
+var addLibraryInput = $("#addLibraryInput");
+var addFilesInput = $("#addFilesInput");
 //#endregion
 
 //#region variables globales
-export var allData = [];
-export var images = [];
-export var deferred = $.Deferred();
-export var duration = new Date();
-export var results = [];
+var allData = [];
+var images = [];
+var deferred = $.Deferred();
+var duration = new Date();
+var results = [];
 export var timelLineLite;
-export var currentUID; 
-export var atsvUrl = "https://github.com/pierrehub2b/actiontestscript";
-export var chapterExpanded = true;
-export var frameForAction = 1;
-export var currentFrameAction = 1;
-export var isDrag = true;
-export var tick = 0;
-export var dateTime = new Date();
-export var timer;
-export var pauseAtNextLabel = false;
+var currentUID; 
+var atsvUrl = "https://github.com/pierrehub2b/actiontestscript";
+var chapterExpanded = true;
+var frameForAction = 1;
+var currentFrameAction = 1;
+var isDrag = true;
+var tick = 0;
+var dateTime = new Date();
+var timer;
+var pauseAtNextLabel = false;
 //#endregion
 
 // enum sur les différents types d'objets dans allData
@@ -86,7 +85,7 @@ export function create_UUID() {
   return firstPart + secondPart;
 }
 
-export function showPlayerState(control) {
+function showPlayerState(control) {
   var playerState = $(".playerState");
   var overlay = playerState.parent();
   switch(control) {
@@ -282,14 +281,14 @@ export function setupScreen() {
     }, null, 'horizontal');
 }
 
-export function toAMFObjects(data) {
+function toAMFObjects(data) {
   var encodedData = new AMF.Deserializer(data.buffer);
   currentUID = create_UUID();
   encodedData.uuid = currentUID;
   repeat(encodedData, false);
 }
 
-export function traitmentDone() {
+function traitmentDone() {
   MakeMenuLinksOpenInNewWindow();
   spinner.addClass("loadingDone");
   var v = parseFloat(progressSlider.val()) * 100;
@@ -322,7 +321,7 @@ export function traitmentDone() {
   $("#duration").html(replaceLocal({name: "SCRIPTDURATION"}) + ": " + getDuration(duration));
 }
 
-export function getDuration(date) {
+function getDuration(date) {
   var str = (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) + 
   ":" + (date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds());
   return str;
@@ -358,13 +357,13 @@ export function repeat(encodedData, newClick) {
   
   setTimeout(function() {
     repeat(encodedData, false);
-  });
+  }, 0);
   
   //deferred.notify(results, Math.round(encodedData.pos/encodedData.buf.byteLength * 100)); 
   
 }
 
-export function updateTooltipImg(event) {
+function updateTooltipImg(event) {
   imgToolTip.html("");
   var currentMouseXPos = (event.clientX - screenBackground.offset().left) - 70;
   if(images.length > 0) {
@@ -393,7 +392,7 @@ export function updateTooltipImg(event) {
   }
 }
 
-export function calcSliderPos(e) {
+function calcSliderPos(e) {
   return images.length * e.offsetX / navSlider.width();
   //return (e.clientX - navSlider.offset().left) / navSlider.width();
 }
@@ -401,7 +400,7 @@ export function calcSliderPos(e) {
 export function openfile(file, id) {
   timelLineLite = new TimelineMax({ paused: true, repeat: 0, onUpdate:adjustUI});
   screenBackground.html("");
-  $(base.mousePointer).appendTo("#screenBackground");
+  $(mousePointer).appendTo("#screenBackground");
   allData = [];
   images = [];
   spinner.removeClass("loadingDone");
@@ -422,7 +421,7 @@ export function openfile(file, id) {
   } 
 }
 
-export function loadFile(file) {
+function loadFile(file) {
   //var file = input.prop('files')[0];
   if(file != undefined) {
     var reader = new FileReader();
@@ -435,7 +434,7 @@ export function loadFile(file) {
   }
 }
 
-export function encode (input) {
+function encode (input) {
     var keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
     var output = "";
     var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
@@ -463,13 +462,13 @@ export function encode (input) {
 }
 
 //#region maj de l'UI en fonction de l'avancée du slider
-export function adjustUI() {
+function adjustUI() {
   tick = timelLineLite.duration() * progressSlider.val();
   progressSlider.val(timelLineLite.progress());
   updaterangePointer();
 }
 
-export function update(){
+function update(){
   timelLineLite.progress(parseFloat(progressSlider.val()));
   tick = timelLineLite.duration() * progressSlider.val();
   startTimer();
@@ -480,7 +479,7 @@ export function update(){
   pauseBtn.css("display","none");
 }
 
-export function updateByVal(value){
+function updateByVal(value){
   timelLineLite.progress(value);
   tick = timelLineLite.duration() * value;
   startTimer();
@@ -491,7 +490,7 @@ export function updateByVal(value){
   pauseBtn.css("display","none");
 }
 
-export function updaterangePointer() {
+function updaterangePointer() {
   if(progressSlider.val() == 0) {
     //flashReport.fadeTo(500, 1);
     $(".watermark").css("display", "none");
@@ -516,7 +515,7 @@ export function updaterangePointer() {
 }
 //#endregion
 
-export function updateLoadingPointer(percent) {
+function updateLoadingPointer(percent) {
   progressSlider.css('background-image',
   '-webkit-gradient(linear, left top, right top, ' +
   'color-stop(' + percent + '%, #9BA0A5), ' +
@@ -527,7 +526,7 @@ export function updateLoadingPointer(percent) {
 }
 
 // equivalent du string format en c#
-export function format(str, col) {
+function format(str, col) {
   col = typeof col === 'object' ? col : Array.prototype.slice.call(arguments, 1);
 
   return str.replace(/\{\{|\}\}|\{(\w+)\}/g, function (m, n) {
@@ -537,7 +536,7 @@ export function format(str, col) {
   });
 };
 
-export function stripHtml(html){
+function stripHtml(html){
   // Create a new div element
   var temporalDivElement = document.createElement("div");
   // Set the HTML content with the providen
@@ -546,23 +545,23 @@ export function stripHtml(html){
   return temporalDivElement.textContent || temporalDivElement.innerText || "";
 }
 
-export function openNav() {
+function openNav() {
   $("#left-pane").css("width","20%");
   $("#left-pane").css("display","block");
   $("#player").css("width","80%");
 }
 
-export function closeNav() {
+function closeNav() {
   $("#left-pane").css("width","0%");
   $("#left-pane").css("display","none");
   $("#player").css("width","100%");
 }
 
-export function getChapterPosition(timeline) {
+function getChapterPosition(timeline) {
   return parseFloat((((100 / images.length) * images.filter(_ => _.timeLine <= timeline).length)/100).toFixed(2));
 }
 
-export function showBottomPanel() {
+function showBottomPanel() {
   navBar.css("opacity","0.8");
   setTimeout(() => {
     flashReport.css("opacity","1");
@@ -574,7 +573,7 @@ export function showBottomPanel() {
   }, 5000));  
 }
 
-export function resultSetup(result, percent) {
+function resultSetup(result, percent) {
   //#region traitment
   var actions = result.filter(_ => _.type ? _.type.indexOf("com.ats") > -1 : false);
   var flashReportObject = result.filter(_ => _.type == "startVisualReport")[0];
@@ -698,7 +697,7 @@ export function resultSetup(result, percent) {
   chapterExpanded = true;
   chapterTitle.on("click", function(event) {
     event.stopPropagation();
-    $('#chaptersList').slideToggle(200);
+    chaptersList.slideToggle(200);
     chapterExpanded = !chapterExpanded;
     if(chapterExpanded) {
       $("#chapterTitleCaret").attr("src", "assets/icons/32/caret_up.png");
@@ -713,7 +712,7 @@ export function resultSetup(result, percent) {
     if(commentaire.element.data.length > 70) {
       subStringComment = commentaire.element.data.substring(0, 65) + " ...";
     }
-    $('<li class="chapterNode" id="chapter'+ commentaire.timeLine +'">' + stripHtml((comm+1) + '/ ' + subStringComment) + '</li>').appendTo($("#chaptersList"));
+    $('<li class="chapterNode" id="chapter'+ commentaire.timeLine +'">' + stripHtml((comm+1) + '/ ' + subStringComment) + '</li>').appendTo(chaptersList);
     var component = $("#chapter" + commentaire.timeLine);
     component.click(function(event) {
       event.stopPropagation();
@@ -735,21 +734,21 @@ export function resultSetup(result, percent) {
   //#endregion   
 }
 
-export function startTimer() {
+function startTimer() {
   var d = new Date();
   tick++;
   d.setHours(0,0,tick,0);
   rangePointer.html(getDuration(d) + " / " + getDuration(duration));
 }
 
-export function MakeMenuLinksOpenInNewWindow() {
+function MakeMenuLinksOpenInNewWindow() {
   var links = document.getElementsByTagName("a");
   for (var i = 0, l = links.length; i < l; i++) {
     links[i].target = "_blank";  
   }
 }
 
-export function animate(currentElement, index) {
+function animate(currentElement, index) {
     if(index == 0) {
       timelLineLite.to(currentElement.img, 0.5, {
         opacity: 1,

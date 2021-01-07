@@ -1,7 +1,7 @@
-var $ = require('jQuery');
-var app = require('../app');
-var base = require('./baseAnimation');
-var elemNotFound = require('./elementNotFoundAnimation');
+import { replaceLocal } from './../app';
+import { frameBackground, frameTitle, frameContent, format, displayPopUp, hidePopUp } from './baseAnimation';
+import $ from 'jquery';
+import { implementNotFoundAnimation } from './elementNotFoundAnimation';
 
 export function implementAnimation(element, frameCounter) {
     if(frameCounter ==1) {
@@ -13,41 +13,41 @@ export function implementAnimation(element, frameCounter) {
 
 export function implementAnimationStart(element) {
     if(element.error < 0) {
-        elemNotFound.implementAnimation(element, app.replaceLocal({name:"STATECHANGE"}));
+        implementNotFoundAnimation(element, replaceLocal({name:"STATECHANGE"}));
         return;
     }
     var frameId = "stateWindowFrame" + element.timeLine;
     var titleId = "stateWindowTitle" + element.timeLine;
     var contentId = "stateWindowContent" + element.timeLine;
-    
-    var frame = $(base.frameBackground);
-    var frameTitle = $(base.frameTitle);
-    var frameContent = $(base.frameContent);
 
-    frame.attr("id", frameId);
-    frameTitle.attr("id", titleId);
-    frameContent.attr("id", contentId);
+    var currentFrame = $(frameBackground);
+    var currentTitle = $(frameTitle);
+    var currentContent = $(frameContent);
+
+    currentFrame.attr("id", frameId);
+    currentTitle.attr("id", titleId);
+    currentContent.attr("id", contentId);
   
     var localField = "";
     if(element.value == "reduce") {
-        localField = app.replaceLocal({name:"REDUCE"});
+        localField = replaceLocal({name:"REDUCE"});
     } else if(element.value == "maximize") {
-        localField = app.replaceLocal({name:"RESTORE"});
+        localField = replaceLocal({name:"RESTORE"});
     } else {
-        localField = app.replaceLocal({name:"CLOSE"});
+        localField = replaceLocal({name:"CLOSE"});
     }
-    frame.children("img").css("display", "none");
+    currentFrame.children("img").css("display", "none");
 
-    frameTitle.html(app.replaceLocal({name:"WINDOWSTATE"}));
+    currentTitle.html(replaceLocal({name:"WINDOWSTATE"}));
 
-    var text = base.format(app.replaceLocal({name:"WINDOWSTATETEXT"}), true, localField);
-    frameContent.append('<p>'+text+'</p>')
+    var text = format(replaceLocal({name:"WINDOWSTATETEXT"}), true, localField);
+    currentContent.append('<p>'+text+'</p>')
 
-    $("#screenBackground").append(frame);
-    frame.append(frameTitle);
-    frame.append(frameContent);
+    $("#screenBackground").append(currentFrame);
+    currentFrame.append(currentTitle);
+    currentFrame.append(currentContent);
 
-    base.displayPopUp(frame, frameTitle, frameContent, 2);
+    displayPopUp(currentFrame, currentTitle, currentContent, 2);
 }
 
 export function implementAnimationEnd(element) {
@@ -57,5 +57,5 @@ export function implementAnimationEnd(element) {
     var frame = $("#stateWindowFrame" + element.timeLine);
     var frameTitle = $("#stateWindowTitle" + element.timeLine);
     var frameContent = $("#stateWindowContent" + element.timeLine);
-    base.hidePopUp(frame, frameTitle, frameContent);
+    hidePopUp(frame, frameTitle, frameContent);
 }

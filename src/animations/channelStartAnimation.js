@@ -1,22 +1,22 @@
-var $ = require('jQuery');
-var app = require('../app');
-var base = require('./baseAnimation');
+import { replaceLocal } from './../app';
+import { frameBackground, frameTitle, frameContent, format, displayPopUp, hidePopUp } from './baseAnimation';
+import $ from 'jquery';
 
 export function implementAnimation(element) {
     var frameId = "channelStartFrame" + element.timeLine;
     var titleId = "channelStartTitle" + element.timeLine;
     var contentId = "channelStartContent" + element.timeLine;
-    
-    var frame = $(base.frameBackground);
-    var frameTitle = $(base.frameTitle);
-    var frameContent = $(base.frameContent);
 
-    frame.attr("id", frameId);
-    frameTitle.attr("id", titleId);
-    frameContent.attr("id", contentId);
+    var currentFrame = $(frameBackground);
+    var currentTitle = $(frameTitle);
+    var currentContent = $(frameContent);
 
-    frame.children("img").css("display", "none");
-    frameTitle.html(app.replaceLocal({name:"STARTCHANNEL"}));
+    currentFrame.attr("id", frameId);
+    currentTitle.attr("id", titleId);
+    currentContent.attr("id", contentId);
+
+    currentFrame.children("img").css("display", "none");
+    currentTitle.html(replaceLocal({name:"STARTCHANNEL"}));
 
     var appChannel = "";
     if(isJson(element.data)) {
@@ -26,15 +26,15 @@ export function implementAnimation(element) {
     }
     
 
-    var text = base.format(app.replaceLocal({name:"STARTCHANNELTEXT"}), true, element.channelName, appChannel, element.channelBound.width + " x " + element.channelBound.height);
-    frameContent.append('<p>'+text+'</p>')
+    var text = format(replaceLocal({name:"STARTCHANNELTEXT"}), true, element.channelName, appChannel, element.channelBound.width + " x " + element.channelBound.height);
+    currentContent.append('<p>'+text+'</p>')
 
-    $("#screenBackground").append(frame);
-    frame.append(frameTitle);
-    frame.append(frameContent);
+    $("#screenBackground").append(currentFrame);
+    currentFrame.append(currentTitle);
+    currentFrame.append(currentContent);
 
-    base.displayPopUp(frame, frameTitle, frameContent, 2);
-    base.hidePopUp(frame, frameTitle, frameContent);
+    displayPopUp(currentFrame, currentTitle, currentContent, 2);
+    hidePopUp(currentFrame, currentTitle, currentContent);
 }
 
 export function isJson(str) {

@@ -1,31 +1,31 @@
-var $ = require('jQuery');
-var app = require('../app');
-var base = require('./baseAnimation');
+import { replaceLocal } from './../app';
+import { frameBackground, frameTitle, frameContent, format, displayPopUp, hidePopUp } from './baseAnimation';
+import $ from 'jquery';
 
-export function implementAnimation(element, type) {
+export function implementNotFoundAnimation(element, type) {
     var frameId = "elementNotFoundFrame" + element.timeLine;
     var titleId = "elementNotFoundTitle" + element.timeLine;
     var contentId = "elementNotFoundContent" + element.timeLine;
-    
-    var frame = $(base.frameBackground);
-    var frameTitle = $(base.frameTitle);
-    var frameContent = $(base.frameContent);
 
-    frame.attr("id", frameId);
-    frameTitle.attr("id", titleId);
-    frameContent.attr("id", contentId);
+    var currentFrame = $(frameBackground);
+    var currentTitle = $(frameTitle);
+    var currentContent = $(frameContent);
 
-    frame.children("img").attr("src", base.pathToAssets32 + "warning.png");
-    frameTitle.html(app.replaceLocal({name:"ELEMENTNOTFOUND"}));
+    currentFrame.attr("id", frameId);
+    currentTitle.attr("id", titleId);
+    currentContent.attr("id", contentId);
+
+    currentFrame.children("img").attr("src", pathToAssets32 + "warning.png");
+    currentTitle.html(replaceLocal({name:"ELEMENTNOTFOUND"}));
 
     var crit = element.element.criterias.split(",");
-    var text = base.format(app.replaceLocal({name:"ELEMENTNOTFOUNDTEXT"}), true, type, crit[0], crit[1]); 
-    frameContent.append("<p>" + text + "</p>");
+    var text = format(replaceLocal({name:"ELEMENTNOTFOUNDTEXT"}), true, type, crit[0], crit[1]); 
+    currentContent.append("<p>" + text + "</p>");
 
-    $("#screenBackground").append(frame);
-    frame.append(frameTitle);
-    frame.append(frameContent);
+    $("#screenBackground").append(currentFrame);
+    currentFrame.append(currentTitle);
+    currentFrame.append(currentContent);
 
-    base.displayPopUp(frame, frameTitle, frameContent, 2);
-    base.hidePopUp(frame, frameTitle, frameContent);
+    displayPopUp(currentFrame, currentTitle, currentContent, 2);
+    hidePopUp(currentFrame, currentTitle, currentContent);
 }

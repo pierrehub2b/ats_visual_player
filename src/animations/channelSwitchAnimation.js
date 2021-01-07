@@ -1,30 +1,30 @@
-var $ = require('jQuery');
-var app = require('../app');
-var base = require('./baseAnimation');
+import { replaceLocal } from './../app';
+import { frameBackground, frameTitle, frameContent, format, displayPopUp, hidePopUp } from './baseAnimation';
+import $ from 'jquery';
 
 export function implementAnimation(element) {
     var frameId = "channelSwitchFrame" + element.timeLine;
     var titleId = "channelSwitchFrame" + element.timeLine;
     var contentId = "channelSwitchFrame" + element.timeLine;
-    
-    var frame = $(base.frameBackground);
-    var frameTitle = $(base.frameTitle);
-    var frameContent = $(base.frameContent);
 
-    frame.attr("id", frameId);
-    frameTitle.attr("id", titleId);
-    frameContent.attr("id", contentId);
+    var currentFrame = $(frameBackground);
+    var currentTitle = $(frameTitle);
+    var currentContent = $(frameContent);
 
-    frame.children("img").css("display", "none");
-    frameTitle.html(app.replaceLocal({name:"SWITCHCHANNEL"}));
+    currentFrame.attr("id", frameId);
+    currentTitle.attr("id", titleId);
+    currentContent.attr("id", contentId);
 
-    var text = base.format(app.replaceLocal({name:"SWITCHCHANNELTEXT"}), true, element.channelName);
-    frameContent.append('<p>'+text+'</p>')
+    currentFrame.children("img").css("display", "none");
+    currentTitle.html(replaceLocal({name:"SWITCHCHANNEL"}));
 
-    $("#screenBackground").append(frame);
-    frame.append(frameTitle);
-    frame.append(frameContent);
+    var text = format(replaceLocal({name:"SWITCHCHANNELTEXT"}), true, element.channelName);
+    currentContent.append('<p>'+text+'</p>')
 
-    base.displayPopUp(frame, frameTitle, frameContent, 2);
-    base.hidePopUp(frame, frameTitle, frameContent);
+    $("#screenBackground").append(currentFrame);
+    currentFrame.append(currentTitle);
+    currentFrame.append(currentContent);
+
+    displayPopUp(currentFrame, currentTitle, currentContent, 2);
+    hidePopUp(currentFrame, currentTitle, currentContent);
 }

@@ -1,6 +1,6 @@
-var $ = require('jQuery');
+import { keyboardPointer, box, textInputAnimationFrame, calculPositions, createBox, hideBox } from './baseAnimation';
+import $ from 'jquery';
 import { timelLineLite } from '../uploader';
-var base = require('./baseAnimation');
 
 export function implementAnimation(element, frameCounter) {
     if(frameCounter == 1) {
@@ -12,67 +12,69 @@ export function implementAnimation(element, frameCounter) {
 
 export function implementAnimationStart(element) {
     var divId = "textEvent" + element.timeLine;
-    var frame = $(base.keyboardPointer);
-    var box = $(base.box);
-    var textInput = $(base.textInputAnimationFrame);
-    //var clickAnim = $(base.clickEffectElement);
-    frame.attr("id", divId);
-    box.attr("id", "box" + element.timeLine);
-    textInput.attr("id", "input" + element.timeLine);
+    var currentBox = $(box);
+    var currentPointer = $(keyboardPointer);
+    var currentTextAnimation = $(textInputAnimationFrame);
+
+
+    //var clickAnim = $(clickEffectElement);
+    currentPointer.attr("id", divId);
+    currentBox.attr("id", "box" + element.timeLine);
+    currentTextAnimation.attr("id", "input" + element.timeLine);
     //clickAnim.attr("id", "click" + element.timeLine);
 
-    textInput.appendTo("#screenBackground");
-    box.appendTo("#screenBackground");
-    frame.appendTo("#screenBackground");
+    currentTextAnimation.appendTo("#screenBackground");
+    currentBox.appendTo("#screenBackground");
+    currentPointer.appendTo("#screenBackground");
     //clickAnim.appendTo("#screenBackground");
 
-    var positions = base.calculPositions(element);
+    var positions = calculPositions(element);
 
-    timelLineLite.to(frame, 0, {
+    timelLineLite.to(currentPointer, 0, {
         onComplete: function() { 
-            positions = base.calculPositions(element);
+            positions = calculPositions(element);
 
-            var box = $("#box" + element.timeLine);
-            box.css("width", positions.width + "px");
-            box.css("height", positions.height + "px");
-            box.css("left", positions.x + "px");
-            box.css("top", positions.y + "px");
+            var currentBox = $("#box" + element.timeLine);
+            currentBox.css("width", positions.width + "px");
+            currentBox.css("height", positions.height + "px");
+            currentBox.css("left", positions.x + "px");
+            currentBox.css("top", positions.y + "px");
 
-            textInput.css("width", positions.width + "px");
-            textInput.css("height", positions.height + "px");
-            textInput.css("left", positions.x + "px");
-            textInput.css("top", positions.y + "px");
+            currentTextAnimation.css("width", positions.width + "px");
+            currentTextAnimation.css("height", positions.height + "px");
+            currentTextAnimation.css("left", positions.x + "px");
+            currentTextAnimation.css("top", positions.y + "px");
         
-            frame.css("left", (positions.x + positions.width - positions.height - 5) + "px");
-            frame.css("top", positions.y + "px");
-            frame.children("img").css("width", positions.height + "px");
-            frame.children("img").css("height", positions.height + "px");
+            currentPointer.css("left", (positions.x + positions.width - positions.height - 5) + "px");
+            currentPointer.css("top", positions.y + "px");
+            currentPointer.children("img").css("width", positions.height + "px");
+            currentPointer.children("img").css("height", positions.height + "px");
         }
     });
 
-    textInput.css("width", positions.width + "px");
-    textInput.css("height", positions.height + "px");
-    textInput.css("left", positions.x + "px");
-    textInput.css("top", positions.y + "px");
+    currentTextAnimation.css("width", positions.width + "px");
+    currentTextAnimation.css("height", positions.height + "px");
+    currentTextAnimation.css("left", positions.x + "px");
+    currentTextAnimation.css("top", positions.y + "px");
 
-    frame.css("left", (positions.x + (positions.width*0.8)) + "px");
-    frame.css("top", positions.y + "px");
-    frame.children("img").css("width", 3 + "px");
-    frame.children("img").css("height", 3 + "px");
+    currentPointer.css("left", (positions.x + (positions.width*0.8)) + "px");
+    currentPointer.css("top", positions.y + "px");
+    currentPointer.children("img").css("width", 3 + "px");
+    currentPointer.children("img").css("height", 3 + "px");
 
-    timelLineLite.to(frame, 0, {
+    timelLineLite.to(currentPointer, 0, {
         onComplete: function() {
-            textInput.html("");
+            currentTextAnimation.html("");
         }
     });
 
-    base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
-    timelLineLite.to(textInput, 0.2, {
+    createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
+    timelLineLite.to(currentTextAnimation, 0.2, {
         opacity: 1,
         display: "flex",
         delay: 0.5
     });
-    timelLineLite.to(frame, 0.5, {
+    timelLineLite.to($(keyboardPointer), 0.5, {
         opacity: 1,
         display: "flex"
     });
@@ -84,9 +86,9 @@ export function implementAnimationStart(element) {
 
     if(inputString) {
         for (let index = 0; index <= inputString.length; index++) {
-            timelLineLite.to(textInput, 0.05, {
+            timelLineLite.to(currentTextAnimation, 0.05, {
                 onComplete: function() {
-                    textInput.html(inputString.substring(0, index));
+                    currentTextAnimation.html(inputString.substring(0, index));
                 }
             });
         }
@@ -105,5 +107,5 @@ export function implementAnimationEnd(element) {
         onComplete: function() { 
         }
     });
-    base.hideBox(element.timeLine ,0.2);
+    hideBox(element.timeLine ,0.2);
 }

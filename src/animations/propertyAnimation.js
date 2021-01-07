@@ -1,55 +1,55 @@
-var $ = require('jQuery');
+import { replaceLocal } from './../app';
+import { format, frameBackground, frameContent, frameTitle, box, calculPositions, createBox, displayPopUp, hideBox, hidePopUp } from './baseAnimation';
+import $ from 'jquery';
+import { implementNotFoundAnimation } from './elementNotFoundAnimation';
 import { timelLineLite } from '../uploader';
-var app = require('../app');
-var base = require('./baseAnimation');
-var elemNotFound = require('./elementNotFoundAnimation');
 
 export function implementAnimation(element) {
     if(element.error < 0) {
-        elemNotFound.implementAnimation(element, app.replaceLocal({name:"GETPROPERTY"}));
+        implementNotFoundAnimation(element, replaceLocal({name:"GETPROPERTY"}));
         return;
     }
     var frameId = "propertyFrame" + element.timeLine;
     var titleId = "propertyTitle" + element.timeLine;
     var contentId = "propertyContent" + element.timeLine;
 
-    var box = $(base.box);
-    box.attr("id", "box" + element.timeLine);
-    box.appendTo("#screenBackground");
+    var currentFrame = $(frameBackground);
+    var currentTitle = $(frameTitle);
+    var currentContent = $(frameContent);
 
-    var positions = base.calculPositions(element);
+    var currentBox = $(box);
+    currentBox.attr("id", "box" + element.timeLine);
+    currentBox.appendTo("#screenBackground");
+
+    var positions = calculPositions(element);
+
+    currentFrame.attr("id", frameId);
+    currentTitle.attr("id", titleId);
+    currentContent.attr("id", contentId);
+
+    currentFrame.children("img").css("display", "none");
+    currentTitle.html(replaceLocal({name:"GETPROPERTY"}));
     
-    var frame = $(base.frameBackground);
-    var frameTitle = $(base.frameTitle);
-    var frameContent = $(base.frameContent);
+    var text = format(replaceLocal({name:"PROPERTYTEXT"}), true, element.value, element.element.tag, element.data );
+    currentContent.append('<p>'+text+'</p>')
 
-    frame.attr("id", frameId);
-    frameTitle.attr("id", titleId);
-    frameContent.attr("id", contentId);
+    $("#screenBackground").append(currentFrame);
+    currentFrame.append(currentTitle);
+    currentFrame.append(currentContent);
 
-    frame.children("img").css("display", "none");
-    frameTitle.html(app.replaceLocal({name:"GETPROPERTY"}));
-    
-    var text = base.format(app.replaceLocal({name:"PROPERTYTEXT"}), true, element.value, element.element.tag, element.data );
-    frameContent.append('<p>'+text+'</p>')
-
-    $("#screenBackground").append(frame);
-    frame.append(frameTitle);
-    frame.append(frameContent);
-
-    timelLineLite.to(frame, 0, {
+    timelLineLite.to(currentFrame, 0, {
         onComplete: function() { 
-            positions = base.calculPositions(element);
-            var box = $("#box" + element.timeLine);
-            box.css("width", positions.width + "px");
-            box.css("height", positions.height + "px");
-            box.css("left", positions.x + "px");
-            box.css("top", positions.y + "px");
+            positions = calculPositions(element);
+            var currentBox = $("#box" + element.timeLine);
+            currentBox.css("width", positions.width + "px");
+            currentBox.css("height", positions.height + "px");
+            currentBox.css("left", positions.x + "px");
+            currentBox.css("top", positions.y + "px");
         }
     });
 
-    base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
-    base.displayPopUp(frame, frameTitle, frameContent, 2);
-    base.hidePopUp(frame, frameTitle, frameContent, 4);
-    base.hideBox(element.timeLine, 0.2);
+    createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
+    displayPopUp(currentFrame, currentTitle, currentContent, 2);
+    hidePopUp(currentFrame, currentTitle, currentContent, 4);
+    hideBox(element.timeLine, 0.2);
 }

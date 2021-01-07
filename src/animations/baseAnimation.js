@@ -1,28 +1,28 @@
-var $ = require('jQuery');
+import $ from 'jquery';
 import { timelLineLite } from '../uploader';
-import {TweenLite, Power0} from "gsap";
+import { Power0 } from "gsap";
 
-export var pathToAssets32 = "./assets/icons/32/";
-export var pathToAssets52 = "./assets/icons/52/";
+export var mousePointer = "<div id='pointerEvent' class='pointerAction'><img class='animationImg' src='./assets/icons/52/mouse.png' /></div>";
 export var box = '<div class="box"><span id="left-side"></span><span id="top-side"></span><span id="right-side"></span><span id="bottom-side"></span></div>';
 export var clickEffectElement = '<div class="circle"><div class="inner"></div></div>';
 export var frameBackground = '<div class="popupFrame"><img class="imgFrame" /></div>';
 export var frameTitle = '<h3 class="popupTitle"></h3>';
 export var frameContent = '<div class="popupContent"></div>';
-export var mousePointer = "<div id='pointerEvent' class='pointerAction'><img class='animationImg' src='"+pathToAssets52+"mouse.png' /></div>";
+export var pathToAssets32 = "./assets/icons/32/";
+export var pathToAssets52 = "./assets/icons/52/";
 export var keyboardPointer = "<div class='pointerAction keyboardImg'></div>"; //<img class='animationImg' src='"+pathToAssets32+"keyboard.png' />
 export var textInputAnimationFrame = "<div class='textInputAnimation'></div>";
 export var arrowUp = "<div class='pointerAction'><img class='animationImg' src='"+pathToAssets52+"up.png' /></div>";
 export var arrowDown = pathToAssets52+"down.png";
-export var defaultDelay = 4;
+export var previousMousePosition = {x: 0, y: 0}; 
 export var currentDragDropTimeline = null;
+
+var defaultDelay = 4;
+var borderSize = 3;
 
 export function setCurrentDragDropTimeline(val) {
     currentDragDropTimeline = val;
 }
-
-export var previousMousePosition = {x: 0, y: 0};
-export var borderSize = 3;
 
 export function format(fmt, withSpan, ...args) {
     if (!fmt.match(/^(?:(?:(?:[^{}]|(?:\{\{)|(?:\}\}))+)|(?:\{[0-9]+\}))+$/)) {
@@ -114,55 +114,6 @@ export function calculPositions(element) {
     }
 
     return {x: x, y:y, xMouse: xMouse, yMouse:yMouse, width: ratioWidth, height: ratioHeight};
-
-
-    // var screenHeight = $("#screenBackground").height()
-    // var screenWidth = $("#screenBackground").width() - 10;
-    // var ratio = screenHeight / element.channelBound.height;
-    // var ratioW = screenWidth / element.channelBound.width;
-
-    // var channelWidthBound = element.channelBound.width * ratio;
-    // var xBound = element.element.bound.x * ratio;
-    // var widthBound = element.element.bound.width * ratio;
-
-    // var xRelativeToCenter = (((channelWidthBound/2) - xBound) / screenWidth) * (ratioW * 100);
-    
-    // var yMouse = (((element.element.bound.y * ratio) + ((element.element.bound.height / 2) * ratio)) / screenHeight) * 100;
-    // var xMouse = xRelativeToCenter - (((widthBound/2) / screenWidth) * 100);
-
-    // // Mouse calculation depends of vpos and hpos 
-    // if(element.element.vposValue != 0) {
-    //     switch(element.element.vpos) {
-    //         case "top":
-    //             yMouse = ((((element.element.bound.y + element.element.vposValue) * ratio)) / screenHeight) * 100;
-    //             break;
-    //         case "bottom":
-    //             yMouse = ((((element.element.bound.y + element.element.bound.height - element.element.vposValue) * ratio)) / screenHeight) * 100;
-    //             break;
-    //     }
-    // }
-
-    // if(element.element.hposValue != 0) {
-    //     switch(element.element.hpos) {
-    //         case "left":
-    //             xMouse = xRelativeToCenter - (((element.element.hposValue * ratio) / screenWidth) * 100);
-    //             break;
-    //         case "right":
-    //             xMouse = xRelativeToCenter - ((widthBound - (element.element.hposValue * ratio)) / screenWidth) * 100;
-    //             break;
-    //     }
-    // }
-
-    // var x = xRelativeToCenter;
-    // var y = (((element.element.bound.y * ratio) / screenHeight) * 100);
-
-    // var elementWidth = ((element.element.bound.width * ratio) / screenHeight) * 100;
-    // var elementHeight = ((element.element.bound.height * ratio) / screenHeight) * 100;
-
-    // x = x < 0 ? 0 : x;
-    // y = y < 0 ? 0 : y;
-    // xMouse = xMouse < 0 ? 0 : xMouse;
-    // yMouse = yMouse < 0 ? 0 : yMouse;
 }
 
 export function createBox(id, x,y, width, height, duration) { 

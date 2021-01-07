@@ -1,6 +1,6 @@
-var $ = require('jQuery');
+import { arrowUp, arrowDown } from './baseAnimation';
+import $ from 'jquery';
 import { timelLineLite } from '../uploader';
-var base = require('./baseAnimation');
 
 export function implementAnimation(element, frameCounter) {
     if(frameCounter ==1) {
@@ -14,12 +14,12 @@ export function implementAnimation(element, frameCounter) {
 
 export function implementAnimationStart(element) {
     var divId = "scrollEvent" + element.timeLine;
-    var frame = $(base.arrowUp);
+    var frame = $(arrowUp);
     frame.attr("id", divId);
     frame.appendTo("#screenBackground");
 
     if(element.element.vpos == 'bottom' || element.value > 0) {
-        frame.children("img").attr("src", base.arrowDown);
+        frame.children("img").attr("src", arrowDown);
     }
 
     timelLineLite.fromTo(frame, 0.5, {

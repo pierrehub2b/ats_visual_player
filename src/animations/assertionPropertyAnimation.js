@@ -1,6 +1,6 @@
-var $ = require('jQuery');
-var app = require('../app');
-var base = require('./baseAnimation');
+import { replaceLocal } from './../app';
+import { frameBackground, frameTitle, box, frameContent, pathToAssets32 , format, calculPositions, createBox, displayPopUp, hidePopUp, hideBox } from './baseAnimation';
+import $ from 'jquery';
 import { timelLineLite } from '../uploader';
 
 export function implementAnimation(element) {
@@ -8,25 +8,25 @@ export function implementAnimation(element) {
     var titleId = "propertyAssertionTitle" + element.timeLine;
     var contentId = "propertyAssertionContent" + element.timeLine;
 
-    var box = $(base.box);
-    box.attr("id", "box" + element.timeLine);
-    box.appendTo("#screenBackground");
+    var currentBox = $(box);
+    currentBox.attr("id", "box" + element.timeLine);
+    currentBox.appendTo("#screenBackground");
 
-    var positions = base.calculPositions(element);
-    
-    var frame = $(base.frameBackground);
-    var frameTitle = $(base.frameTitle);
-    var frameContent = $(base.frameContent);
+    var currentFrame = $(frameBackground);
+    var currentTitle = $(frameTitle);
+    var currentContent = $(frameContent);
 
-    frame.attr("id", frameId);
-    frameTitle.attr("id", titleId);
-    frameContent.attr("id", contentId);
+    var positions = calculPositions(element);
 
-    frame.children("img").attr("src", base.pathToAssets32 + "check_value.png");
+    currentFrame.attr("id", frameId);
+    currentTitle.attr("id", titleId);
+    currentContent.attr("id", contentId);
+
+    currentFrame.children("img").attr("src", pathToAssets32 + "check_value.png");
     if(element.error < 0) {
-        frame.children("img").attr("src", base.pathToAssets32 + "error.png");
+        currentFrame.children("img").attr("src", pathToAssets32 + "error.png");
     }
-    frameTitle.html(app.replaceLocal({name:"ASSERTPROPERTY"}));
+    currentTitle.html(replaceLocal({name:"ASSERTPROPERTY"}));
 
     var isRegex = false;  
     if(element.value.indexOf("match") >= 0) {
@@ -38,47 +38,47 @@ export function implementAnimation(element) {
     if(isRegex) {
         attr = element.value.split(" match ");
         if(element.error < 0) {
-            outputStatus += app.replaceLocal({name:"ASSERTNOTVALID"}) + " ";
-            outputStatus += app.replaceLocal({name:"REGULAREXPRESSION"}) + " <span class='animationVariable'>" + attr[1] + "</span>";
+            outputStatus += replaceLocal({name:"ASSERTNOTVALID"}) + " ";
+            outputStatus += replaceLocal({name:"REGULAREXPRESSION"}) + " <span class='animationVariable'>" + attr[1] + "</span>";
         } else {
-            outputStatus += app.replaceLocal({name:"ASSERTVALID"}) + " " + app.replaceLocal({name:"REGULAREXPRESSION"});
+            outputStatus += replaceLocal({name:"ASSERTVALID"}) + " " + replaceLocal({name:"REGULAREXPRESSION"});
         }
     } else {
         if(element.error < 0) {
-            outputStatus += app.replaceLocal({name:"ISNOTEQUALS"}) + " à <span class='animationVariable'>" + attr[1] + "</span>";
+            outputStatus += replaceLocal({name:"ISNOTEQUALS"}) + " à <span class='animationVariable'>" + attr[1] + "</span>";
         } else {
-            outputStatus += app.replaceLocal({name:"ISEQUALS"}) + " à <span class='animationVariable'>" + attr[1] + "</span>";
+            outputStatus += replaceLocal({name:"ISEQUALS"}) + " à <span class='animationVariable'>" + attr[1] + "</span>";
         }
     }
 //La comparaison de la propriété {0} sur le tag {1} a {2}:<br /> la valeur {} {3}
-    var text = base.format(
-        app.replaceLocal({name:"ASSERTPROPERTYTEXT"}), 
+    var text = format(
+        replaceLocal({name:"ASSERTPROPERTYTEXT"}), 
         true,
         attr[0],
         element.element.tag,
-        (element.error < 0 ? "<span class='red'> " + app.replaceLocal({name:"ASSERTFAIL"}) : "<span class='green'> " + app.replaceLocal({name:"ASSERTSUCCESS"})) + "</span>", 
+        (element.error < 0 ? "<span class='red'> " + replaceLocal({name:"ASSERTFAIL"}) : "<span class='green'> " + replaceLocal({name:"ASSERTSUCCESS"})) + "</span>", 
         "<span class='removeFormat'>" + outputStatus + "</span>"
     );
 
-    frameContent.append("<p>" + text + "</p>")
+    currentContent.append("<p>" + text + "</p>")
 
-    $("#screenBackground").append(frame);
-    frame.append(frameTitle);
-    frame.append(frameContent);
+    $("#screenBackground").append(currentFrame);
+    currentFrame.append(currentTitle);
+    currentFrame.append(currentContent);
 
-    timelLineLite.to(frame, 0, {
+    timelLineLite.to(currentFrame, 0, {
         onComplete: function() { 
-            positions = base.calculPositions(element);
-            var box = $("#box" + element.timeLine);
-            box.css("width", positions.width + "px");
-            box.css("height", positions.height + "px");
-            box.css("left", positions.x + "px");
-            box.css("top", positions.y + "px");
+            positions = calculPositions(element);
+            var currentBox = $("#box" + element.timeLine);
+            currentBox.css("width", positions.width + "px");
+            currentBox.css("height", positions.height + "px");
+            currentBox.css("left", positions.x + "px");
+            currentBox.css("top", positions.y + "px");
         }
     });
 
-    base.createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
-    base.displayPopUp(frame, frameTitle, frameContent, 2);
-    base.hidePopUp(frame, frameTitle, frameContent, 4);
-    base.hideBox(element.timeLine, 0.2);
+    createBox(element.timeLine, positions.x,positions.y,positions.width, positions.height,0.2);
+    displayPopUp(currentFrame, currentTitle, currentContent, 2);
+    hidePopUp(currentFrame, currentTitle, currentContent, 4);
+    hideBox(element.timeLine, 0.2);
 }

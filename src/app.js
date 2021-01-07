@@ -5,36 +5,36 @@ if (module.hot) {
 import './style/app.scss';
 import './style/custom.scss';
 import './style/styleAnimation.scss';
-import { setupScreen, create_UUID } from './uploader';
-var upload = require('./uploader');
+import { setupScreen, create_UUID, openfile, repeat } from './uploader';
 import AMF from 'amf-js';
-var $ = require('jQuery');
+import $ from 'jquery';
 
-
-export var addLibrary = $("#addLibrary");
-export var addFiles = $("#addFiles");
-export var addLibraryInput = $("#addLibraryInput");
-export var addFilesInput = $("#addFilesInput");
-export var listATSV = $("#listATSV");
-export var libraryTitle = $("#libraryTitle");
-export var chapterTitle = $("#chapterTitle");
-export var chaptersList = $("#chaptersList");
+// exported var
 export var flashReport = $("#flashReport");
 export var currentReportName = null;
-
-export var libraryExpanded = true;
-export var localeValues = null;
 export var currentLocale = "en";
-export var waitingCoefficient = 1;
-export var jsonLibraryUrl = '/library.json';
-export var header = { 
+export var chapterTitle = $("#chapterTitle");
+export var chaptersList = $("#chaptersList");
+
+// local var
+var addLibrary = $("#addLibrary");
+var addFiles = $("#addFiles");
+var addLibraryInput = $("#addLibraryInput");
+var addFilesInput = $("#addFilesInput");
+var listATSV = $("#listATSV");
+var libraryTitle = $("#libraryTitle");
+
+var libraryExpanded = true;
+var localeValues = null;
+var jsonLibraryUrl = '/library.json';
+var header = { 
   "accept": "application/json",
    "Access-Control-Allow-Origin":"*"
 };
-
 var loc = window.location.pathname;
 var serverDir = loc.substring(0, loc.lastIndexOf('/'));
 
+// exported function
 export async function setupSettings() {
   await $.ajax({
     type: "GET",
@@ -82,14 +82,6 @@ export async function getLocalization() {
     headers: header,
     success: function(data) {
       currentLocale = data.defaultLocale;
-      switch(currentLocale) {
-        case 'fr':
-          waitingCoefficient = 0.5;
-          break;
-        case 'en':
-          waitingCoefficient = 0.5;
-          break;
-      }
       return getLocalizationValues(currentLocale);
     }
   }); 
@@ -139,19 +131,6 @@ export function importLibrary(event) {
   reader.readAsText(file);
 }
 
-export function readLocalJSON() {
-  $.ajax({
-    type: "GET",
-    url: serverDir + jsonLibraryUrl,
-    data: {},
-    crossDomain:true,
-    headers: header,
-    success: function(data) {
-      setLibrary(data);
-    }
-  });
-}
-
 export async function setLocalizationValues() {
   var data = currentLocalValues;
   var values = [];
@@ -180,78 +159,6 @@ export async function setupLocalization() {
       continue;
     }
     replaceLocal(token);
-  }
-}
-//#endregion
-
-//#region setup click events
-libraryTitle.on("click", function(event) {
-  event.stopPropagation();
-  listATSV.children('ul').slideToggle(200);
-  $('#filterATSVFiles').slideToggle(200);
-  libraryExpanded = !libraryExpanded;
-  if(libraryExpanded) {
-    $("#libraryTitleCaret").attr("src", "assets/icons/32/caret_up.png")
-  } else {
-    $("#libraryTitleCaret").attr("src", "assets/icons/32/caret_down.png")
-  }
-});
-
-addLibrary.click(function (event) {
-  event.stopPropagation();
-  addLibraryInput.click();
-});
-
-addFiles.click(function (event) {
-  event.stopPropagation();
-  addFilesInput.click();
-});
-
-$("#infoLabel").on("click", function() {
-  if(flashReport.css("opacity") == "0") {
-    flashReport.fadeTo(500, 1);
-  } else {
-    flashReport.fadeTo(500, 0);
-  }
-});
-
-$("#filterATSVFiles").keyup(filterList);
-//#endregion
-
-export function filterList(event){
-  var val = event.target.value;
-  var allATSV = $(".atsvList");
-  if(val.length > 0) {
-    for (let index = 0; index < allATSV.length; index++) {
-      const element = allATSV[index];
-      var content = element.firstChild.innerText;
-      if(content.toUpperCase().indexOf(val.toUpperCase()) >= 0) {
-        element.style.display = "list-item";
-        element.previousElementSibling.style.display = "inline-block";
-      } else {
-        element.style.display = "none";
-        element.previousElementSibling.style.display = "none";
-      }
-    }
-  } else {
-    for (let index = 0; index < allATSV.length; index++) {
-      const element = allATSV[index];
-      element.style.display = "list-item";
-      element.previousElementSibling.style.display = "inline-block";
-    }
-  }
-}
-
-export function collapseFolder(event) {
-  event.stopPropagation();
-  var elem = $("#" + event.target.parentNode.id);
-  elem.children('div').slideToggle(200);
-  elem.children('#chapterContainer').slideToggle(200);
-  var iElem = elem.children('.appIcon');
-  if(iElem.attr("src").indexOf("open") >= 0) {
-    iElem.attr("src","assets/icons/32/folder_close.png");
-  } else {
-    iElem.attr("src","assets/icons/32/folder_open.png");
   }
 }
 
@@ -288,7 +195,7 @@ export function uploadFiles(event) {
         currentReportName = item[1].innerText;
         $(".atsvList > p").removeClass("bolder");
         event.target.classList.add("bolder");
-        upload.openfile(files[i], currentReportName);
+        openfile(files[i], currentReportName);
       });
       folder.children('div').append(item);
       elems.push(item);
@@ -300,7 +207,109 @@ export function uploadFiles(event) {
   }
 }
 
-export function setLibrary(data) {
+export async function onReaderLoad(event){
+  var obj = JSON.parse(event.target.result);
+  setLibrary(obj);
+}
+
+export function clearOtherReadingState() {
+  var atsvFiles = $("#listATSV").find(".progressDownload").toArray();
+  for (let a = 0; a < atsvFiles.length; a++) {
+    var currentElement = atsvFiles[a];
+    if($(currentElement).attr("data-label") == replaceLocal({ name: "READING"})) {
+      $(currentElement).attr("data-label", replaceLocal({ name: "LOADED"}));
+      $(currentElement).css("color", "green");
+    }
+  }
+}
+
+// setup click events
+libraryTitle.on("click", function(event) {
+  event.stopPropagation();
+  listATSV.children('ul').slideToggle(200);
+  $('#filterATSVFiles').slideToggle(200);
+  libraryExpanded = !libraryExpanded;
+  if(libraryExpanded) {
+    $("#libraryTitleCaret").attr("src", "assets/icons/32/caret_up.png")
+  } else {
+    $("#libraryTitleCaret").attr("src", "assets/icons/32/caret_down.png")
+  }
+});
+
+addLibrary.click(function (event) {
+  event.stopPropagation();
+  addLibraryInput.click();
+});
+
+addFiles.click(function (event) {
+  event.stopPropagation();
+  addFilesInput.click();
+});
+
+$("#infoLabel").on("click", function() {
+  if(flashReport.css("opacity") == "0") {
+    flashReport.fadeTo(500, 1);
+  } else {
+    flashReport.fadeTo(500, 0);
+  }
+});
+
+$("#filterATSVFiles").keyup(filterList);
+
+// local function
+function readLocalJSON() {
+  $.ajax({
+    type: "GET",
+    url: serverDir + jsonLibraryUrl,
+    data: {},
+    crossDomain:true,
+    headers: header,
+    success: function(data) {
+      if(data.folders) {
+        setLibrary(data);
+      }
+    }
+  });
+}
+
+function filterList(event){
+  var val = event.target.value;
+  var allATSV = $(".atsvList");
+  if(val.length > 0) {
+    for (let index = 0; index < allATSV.length; index++) {
+      const element = allATSV[index];
+      var content = element.firstChild.innerText;
+      if(content.toUpperCase().indexOf(val.toUpperCase()) >= 0) {
+        element.style.display = "list-item";
+        element.previousElementSibling.style.display = "inline-block";
+      } else {
+        element.style.display = "none";
+        element.previousElementSibling.style.display = "none";
+      }
+    }
+  } else {
+    for (let index = 0; index < allATSV.length; index++) {
+      const element = allATSV[index];
+      element.style.display = "list-item";
+      element.previousElementSibling.style.display = "inline-block";
+    }
+  }
+}
+
+function collapseFolder(event) {
+  event.stopPropagation();
+  var elem = $("#" + event.target.parentNode.id);
+  elem.children('div').slideToggle(200);
+  elem.children('#chapterContainer').slideToggle(200);
+  var iElem = elem.children('.appIcon');
+  if(iElem.attr("src").indexOf("open") >= 0) {
+    iElem.attr("src","assets/icons/32/folder_close.png");
+  } else {
+    iElem.attr("src","assets/icons/32/folder_open.png");
+  }
+}
+
+function setLibrary(data) {
   for (let i = 0; i < data.folders.length; i++) {
     const folder = data.folders[i];
     var name = folder.name;
@@ -340,23 +349,7 @@ export function setLibrary(data) {
   }
 }
 
-export async function onReaderLoad(event){
-  var obj = JSON.parse(event.target.result);
-  setLibrary(obj);
-}
-
-export function clearOtherReadingState() {
-  var atsvFiles = $("#listATSV").find(".progressDownload").toArray();
-  for (let a = 0; a < atsvFiles.length; a++) {
-    var currentElement = atsvFiles[a];
-    if($(currentElement).attr("data-label") == replaceLocal({ name: "READING"})) {
-      $(currentElement).attr("data-label", replaceLocal({ name: "LOADED"}));
-      $(currentElement).css("color", "green");
-    }
-  }
-}
-
-export function getUrlParameter( name, url ) {
+function getUrlParameter( name, url ) {
   if (!url) url = location.href;
   name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
   var regexS = "[\\?&]"+name+"=([^&#]*)";
@@ -365,7 +358,7 @@ export function getUrlParameter( name, url ) {
   return results == null ? null : results[1];
 }
 
-export function getFile(url, target) {
+function getFile(url, target) {
   var parent = $(".bolder").parent();
   if(target) {
     parent = $(target).parent();
@@ -410,9 +403,9 @@ export function getFile(url, target) {
           return;
         }
         currentReportName = url;
-        upload.openfile(null,null);
+        openfile(null,null);
         var encodedData = new AMF.Deserializer(data);
-        upload.repeat(encodedData, true);
+        repeat(encodedData, true);
       },
       error: function( req, status, err ) {
         $("#progressDownload" + id).remove();
@@ -429,7 +422,7 @@ export function getFile(url, target) {
   });
 }
 
-export function readTextFile(file)
+function readTextFile(file)
 {
     var rawFile = new XMLHttpRequest();
     rawFile.open("GET", file, false);
@@ -447,6 +440,7 @@ export function readTextFile(file)
     rawFile.send(null);
 }
 
+// launch screen settings and display
 setupScreen();
 setupSettings().then(() => {
   getLocalization().then(_ => {
