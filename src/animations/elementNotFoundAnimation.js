@@ -1,5 +1,5 @@
 import { replaceLocal } from './../app';
-import { frameBackground, frameTitle, frameContent, format, displayPopUp, hidePopUp } from './baseAnimation';
+import { frameBackground, frameTitle, frameContent, format, displayPopUp, hidePopUp, pathToAssets32 } from './baseAnimation';
 import $ from 'jquery';
 
 export function implementNotFoundAnimation(element, type) {

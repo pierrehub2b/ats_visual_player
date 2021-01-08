@@ -345,7 +345,16 @@ export function repeat(encodedData, newClick) {
     traitmentDone();
     return 
   };
-  encodedData.deserialize();
+
+  try {
+    encodedData.deserialize();
+  } catch (error) {
+    traitmentDone();
+    return;
+  }
+
+
+  
   if(encodedData.objectReferences.length > 10) {
     results = encodedData.objectReferences.filter(_ => _ != undefined && _.type);
     encodedData.objectReferences = [];
