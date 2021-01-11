@@ -48,7 +48,7 @@ export function plurialManagement(str, isSingular) {
 }
 
 export function calculPositions(element) {
-    var ratio       = $("#screenBackground").height() / element.channelBound.height;
+    var ratio = $("#screenBackground").height() / element.channelBound.height;
     if(ratio > 1) {
         ratio = $("#screenBackground").width() / element.channelBound.width;
     }
@@ -78,15 +78,15 @@ export function calculPositions(element) {
     var offsetTop = 0;
 
     var channelWidth = element.channelBound.width * ratio;
-    var leftBand = ($("#screenBackground").width() - channelWidth) / 2;
-    offsetLeft = leftBand;
+    var leftBand = ($("#screenBackground").width()  - channelWidth) / 2;
+    offsetLeft = leftBand + ($("#panes-separator").width() * ratio);
     
     var channelHeight = element.channelBound.height * ratio;
     var topBand = ($("#screenBackground").height() - channelHeight) / 2;
     offsetTop = topBand;
 
-    var x = offsetLeft + ratioX - (ratio * 10);
-    var y = offsetTop + ratioY - (ratio * 10);
+    var x = offsetLeft + (boundX * ratio);
+    var y = offsetTop + (boundY * ratio);
 
     var xMouse = x + (ratioWidth / 2); //26 = half of img size
     var yMouse = y + (ratioHeight / 2);
