@@ -22,6 +22,8 @@ import { implementAnimation as ActionMouse } from './animations/mouseAnimation';
 import { implementAnimation as ActionWindowState } from './animations/windowStateAnimation';
 import { implementAnimation as ActionWindowSwitch } from './animations/windowSwitchAnimation';
 import { implementAnimation as ActionDragDrop } from './animations/dragDropAnimation';
+import { implementAnimation as ActionButton } from './animations/systemButtonAnimation';
+import { implementAnimation as ActionSetProperty } from './animations/systemButtonSetProperty';
 import { mousePointer } from './animations/baseAnimation';
 
 // Force CSSPlugin to not get dropped during build
@@ -870,6 +872,12 @@ function animate(currentElement, index) {
         break;
       case "com.ats.script.actions.ActionChannelSwitch":
           ActionChannelSwitch(currentElement.element);
+        break;
+      case "com.ats.script.actions.ActionButton":
+        ActionButton(currentElement.element);
+        break;
+      case "com.ats.script.actions.ActionPropertySet":
+        ActionSetProperty(currentElement.element);
         break;
     }
 }

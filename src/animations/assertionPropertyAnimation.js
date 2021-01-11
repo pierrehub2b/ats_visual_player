@@ -39,15 +39,15 @@ export function implementAnimation(element) {
         attr = element.value.split(" match ");
         if(element.error < 0) {
             outputStatus += replaceLocal({name:"ASSERTNOTVALID"}) + " ";
-            outputStatus += replaceLocal({name:"REGULAREXPRESSION"}) + " <span class='animationVariable'>" + attr[1] + "</span>";
+            outputStatus += replaceLocal({name:"REGULAREXPRESSION"}) + " <span class='animationVariable'>" + attr[attr.length-1] + "</span>";
         } else {
             outputStatus += replaceLocal({name:"ASSERTVALID"}) + " " + replaceLocal({name:"REGULAREXPRESSION"});
         }
     } else {
         if(element.error < 0) {
-            outputStatus += replaceLocal({name:"ISNOTEQUALS"}) + " à <span class='animationVariable'>" + attr[1] + "</span>";
+            outputStatus += replaceLocal({name:"ISNOTEQUALS"}) + " à <span class='animationVariable'>" + attr[attr.length-1] + "</span>";
         } else {
-            outputStatus += replaceLocal({name:"ISEQUALS"}) + " à <span class='animationVariable'>" + attr[1] + "</span>";
+            outputStatus += replaceLocal({name:"ISEQUALS"}) + " à <span class='animationVariable'>" + attr[attr.length-1] + "</span>";
         }
     }
 //La comparaison de la propriété {0} sur le tag {1} a {2}:<br /> la valeur {} {3}

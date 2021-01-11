@@ -1,4 +1,6 @@
 ACTION=Action
+ACTIONBUTTON=System button
+ACTIONBUTTONTEXT=Action on the système button {0}
 ASSERTCOUNT=Occurence check
 ASSERTCOUNTFOUNDED=the presence of
 ASSERTCOUNTNOTFOUNDED=the absence of
@@ -73,6 +75,8 @@ SCRIPTPREREQUISTES=Prerequistes
 SCRIPTSTARTER=Starting
 SEARCHEXPRESSION=searched expression
 SEARCHPLACEHOLDER=Search...
+SETPROPERTY=Set property
+SETPROPERTYTEXT=Define the proprerty {0} to the value {1}
 STARTCHANNEL=Channel start
 STARTCHANNELTEXT=The channel {0} has been started:<br />the application {1} has been launched with a size of {2} pixels
 STATECHANGE=change og the window state

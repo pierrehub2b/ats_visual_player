@@ -1,4 +1,6 @@
 ACTION=Action
+ACTIONBUTTON=Bouton système
+ACTIONBUTTONTEXT=Action sur le bouton système {0}
 ASSERTCOUNT=Validation d'occurence
 ASSERTCOUNTFOUNDED=la présence de
 ASSERTCOUNTNOTFOUNDED=l'absence d'élément
@@ -74,6 +76,8 @@ SCRIPTPREREQUISTES=Prérequis
 SCRIPTSTARTER=Démarrage
 SEARCHEXPRESSION=l'expression recherchée
 SEARCHPLACEHOLDER=Rechercher...
+SETPROPERTY=Changer la propriété
+SETPROPERTYTEXT=Définir la propriété {0} à la valeur {1}
 STARTCHANNEL=Nouveau canal
 STARTCHANNELTEXT=Le canal {0} a été démarré:<br />l'application {1} est lancée avec une taille de {2} pixels
 STATECHANGE=changement d'état de fenêtre
