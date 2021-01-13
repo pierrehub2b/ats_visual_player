@@ -23,7 +23,8 @@
   position: absolute;
   display: flex;
   overflow: auto;
-  z-index: 10; }
+  z-index: 10;
+  will-change: transform, opacity; }
 
 .popupFrame {
   width: 100%;

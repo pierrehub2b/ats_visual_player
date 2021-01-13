@@ -17,7 +17,7 @@ export var arrowDown = pathToAssets52+"down.png";
 export var previousMousePosition = {x: 0, y: 0}; 
 export var currentDragDropTimeline = null;
 
-var defaultDelay = 4;
+var defaultDelay = 2;
 var borderSize = 3;
 
 export function setCurrentDragDropTimeline(val) {
@@ -71,8 +71,6 @@ export function calculPositions(element) {
 
     var ratioWidth  = boundWidth * ratio;
     var ratioHeight = boundHeight * ratio;
-    var ratioX      = boundX * ratio;
-    var ratioY      = boundY * ratio;
 
     var offsetLeft = 0;
     var offsetTop = 0;
@@ -135,7 +133,7 @@ export function createBox(id, x,y, width, height, duration) {
             immediateRender: false,
             autoRound: false,
             ease: Power0.easeNone,
-            delay: 1
+            delay: 0.5
         }, 
         {
             width: '100%'
@@ -200,7 +198,7 @@ export function hideBox(id, duration) {
             width: borderSize,
             autoRound: false,
             ease: Power0.easeNone,
-            delay: 1
+            delay: 0.5
         }
     );
 
@@ -254,7 +252,7 @@ export function clickAnimation(id, x,y) {
             opacity: 0.8,
             width: 25,
             height: 25,
-            delay : 1
+            delay : 0.5
         }
     );
 

@@ -5,7 +5,7 @@ import { timelLineLite } from '../uploader';
 export function implementAnimation(element, frameCounter) {
     if(frameCounter ==1) {
         implementAnimationStart(element);
-    } else if(frameCounter == 2){
+    } else if(frameCounter == 2 && element.images.length == 3){
         implementAnimationIntermediaire(element);
     } else {
         implementAnimationEnd(element);

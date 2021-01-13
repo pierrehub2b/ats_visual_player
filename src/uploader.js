@@ -740,9 +740,22 @@ function resultSetup(result, percent) {
   images = allData.filter(_ => _.type === elementType.IMAGE);
   for (let currentImgIndex = 0; currentImgIndex < currentImgs.length; currentImgIndex++) {
     const element = currentImgs[currentImgIndex];
+
+    element.timeLine = generateUID();
+
     animate(element, images.length-currentImgs.length+currentImgIndex);
   }
   //#endregion   
+}
+
+function generateUID() {
+  // I generate the UID from two parts here 
+  // to ensure the random number provide enough bits.
+  var firstPart = (Math.random() * 46656) | 0;
+  var secondPart = (Math.random() * 46656) | 0;
+  firstPart = ("000" + firstPart.toString(36)).slice(-3);
+  secondPart = ("000" + secondPart.toString(36)).slice(-3);
+  return firstPart + secondPart;
 }
 
 function startTimer() {
@@ -769,7 +782,7 @@ function animate(currentElement, index) {
       timelLineLite.to(currentElement.img, 0.5, {
         opacity: 1,
         display: "inline-block",
-        delay: 2
+        delay: 0.5
       });
       timelLineLite.to(images[index-1].img, 0, {
         display: "none"
