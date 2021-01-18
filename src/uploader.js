@@ -24,10 +24,12 @@ import { implementAnimation as ActionWindowSwitch } from './animations/windowSwi
 import { implementAnimation as ActionDragDrop } from './animations/dragDropAnimation';
 import { implementAnimation as ActionButton } from './animations/systemButtonAnimation';
 import { implementAnimation as ActionSetProperty } from './animations/systemButtonSetProperty';
+import { implementAnimation as ActionDialogBox } from './animations/dialogBoxAnimation';
 import { mousePointer } from './animations/baseAnimation';
 
 // Force CSSPlugin to not get dropped during build
 const plugins = [ CSSPlugin ];
+export const ALERTBOX = "AlertBox";
 
 //#region objets du DOM
 var progressSlider = $("#progressSlider");
@@ -796,8 +798,12 @@ function animate(currentElement, index) {
     }
     switch(currentElement.element.type) {
       case "com.ats.script.actions.ActionText":
-        if(currentFrameAction < 3) {
-          ActionText(currentElement.element, currentFrameAction);
+        if(currentElement.element.element.tag == ALERTBOX) {
+          ActionDialogBox(currentElement.element, currentFrameAction, true);
+        } else {
+          if(currentFrameAction < 3) {
+            ActionText(currentElement.element, currentFrameAction);
+          }
         }
         
         currentFrameAction++;
@@ -819,12 +825,20 @@ function animate(currentElement, index) {
         ActionChannelClose(currentElement.element);
         break;
       case "com.ats.script.actions.ActionMouseKey":
-        ActionMouseKey(currentElement.element, currentFrameAction);
+        if(currentElement.element.element.tag == ALERTBOX) {
+          ActionDialogBox(currentElement.element, currentFrameAction, false);
+        } else {
+          ActionMouseKey(currentElement.element, currentFrameAction);
+        }
+
         currentFrameAction++;
         if(currentFrameAction > frameForAction) {
           currentFrameAction = 1;
         }
+
         break;
+
+        
       case "com.ats.script.actions.ActionMouseScroll":
         ActionMouseScroll(currentElement.element, currentFrameAction);
         currentFrameAction++;

@@ -1,7 +1,7 @@
 import { replaceLocal } from './../app';
 import { frameBackground, plurialManagement, frameTitle, frameContent, pathToAssets32 , box, format, calculPositions, createBox, displayPopUp, hidePopUp, hideBox } from './baseAnimation';
 import $ from 'jquery';
-import { timelLineLite } from '../uploader';
+import { timelLineLite, ALERTBOX } from '../uploader';
 
 export function implementAnimation(element) {
     var frameId = "propertyCountAssertionFrame" + element.timeLine;
@@ -28,7 +28,10 @@ export function implementAnimation(element) {
     }
     currentTitle.html(replaceLocal({name:"ASSERTCOUNT"}));
 
-    var crit = element.element.criterias.split(",");
+    var crit = [element.element.tag];
+    if(element.element.criterias) {
+        crit = element.element.criterias.split(",");
+    }
     var operator = element.data.split(" ");
     var opText = "";
     switch(operator[0]) {
