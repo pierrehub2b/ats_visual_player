@@ -45,8 +45,9 @@ module.exports = merge(common, {
       {
         patterns: [
           { from: 'src/assets', to: 'assets' },
-        { from: 'src/settings.txt', to: 'settings.txt' },
-        { from: 'src/locales', to: 'locales' },
+          { from: 'src/settings.txt', to: 'settings.txt' },
+          { from: 'src/library.json', to: 'library.json' },
+          { from: 'src/locales', to: 'locales' }
         ]
       }),
     new ZipFilesPlugin({
