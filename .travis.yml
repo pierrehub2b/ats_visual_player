@@ -1,20 +1,20 @@
 language: node_js
 node_js:
-- 10.15.
+- 10.15.3
 branches:
   only:
-  - master
+  - release
 script:
 - echo "npm test temporarily disabled"
 - npm run build
 before_deploy:
-- export VERSION_NUMBER="1.0.1"
-- git tag $VERSION_NUMBER
+  - export VERSION_NUMBER="1.0.1"
+  - git tag $VERSION_NUMBER
 deploy:
   - provider: releases
     api_key:
-      secure: nJgf4UYrMWvnny0IiWTgrJpIvBv1ef+Bg+WGfXGV0YrrY/kvsao3aR+qgBaM8XEDY7XGXlEPZflgU4mnQu7Y7vQkfZ9QNkrP1iyJhGxEut0820DogP1I+CdmMXAGO+WSoN6ZYIztkuT96bO/ytPLbFCxo2EnWD3uZyiKfRhvDHckVqb2rWg2VfnLEvuvi0Y0qYM9jElAITJUspc/h4V0r8R6vAXHrPyhntz6GmT/2YRFr10lBmSBrp8+5tDmv8NPhnl3bRV3oYjfWCZQUqVZTpH3y8WDvssORLEuxvRv/MvEi+DCA3m1wHgg7QOkSXp0yqXxNNGDACGViuyz1hyxwNgjSeYKYm8WCNjAe36JjB/riSytcQSgIeq5AvG2zYMZwpunNw4nCYR48LvmbFrHIAQxigDEQFy/Pp3fFhtILXzEEQcvjXCN9RjbGTlEqVxKoxVSpuypbtbQjuGTALG2UDR+hrNTWux2YzYxnXAlqp1SkQoV5+tztYBCMqBAcpZuXfsKoyot436HmJ83rzXeFJMikTUnkdfmig+aFTmeBlRB3ebYSv/c4hNyeobyunuGjmXE/xQHLjFr+DOxYVGnGEW5A9l2bM+XjjetXfG1KmkG33+Sytd6DizvXRKPDhXN0RiswQ8ZPfy1B2xksSaAwJE3BmzzV6x1vBhjoP1AagU=
+      secure: c0mcDFpivr5txAT8kMbuH+sg49BeKklrIwzHlgSnNT4O6ext+DT56q1k+pH1AgTXhJAWVNqOvOqDgLs60cdMgKq82SerIri4+4TLFlvNI7TwOtJkndRJ07+5y5ofdlNANFF3rQg4rZQyqb1FzFli/REi39jft1XbP090aReAEsc6pSfkBYwSNMmhxntD9SJwg906frUGk74S1AdFPvxcT4yXHJvG5RqxqxL941M+UDDU8ICff4Q0fvPxGWoZ1h4Tkll/r7IPfflQKuZbIN9CLykHroenEPh0GA+nNS7Xqq/LLRUJ7wJb2zYwjSg1gx70RpwTlF2wcOF2wzVmFG4O5RX7h0M4sPSqZTSMapD/MyBj1aE9pmfJSa8BwTHfHXEZlO23CJuVtJBt1Nh02cgge6+dztpkXl4ooBI9TA0uFVlJt9Fcp1arc6Jg6j/siJ48eTBumj7yPL0V+7AM9MhbAmRR9+xFYNUzdKDU2HJy6305EDVgleu8OxML1ajN3pbHC+3Xl6e2rlRSa/1CnoxN5hDZwtJ2i1GQVWODD5hwi1eCcP5HtXp6ilBTzYuOGtHUU1j0jKjg0wHGOBMttR3/HCGP+W/TzEIs2K7Q/t16oAUAeF2Nfj0EkiMvgQ2F7Ghmsqn4gSL3aKOXF7X5lRLJlKW07oIjdwHSNBBWweZ9Upg=
     file: release.zip
     on:
-      branch: master
+      branch: release
     skip_cleanup: true
