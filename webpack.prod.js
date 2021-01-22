@@ -4,6 +4,7 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 const common = require('./webpack.common.js')
 const ZipFilesPlugin = require('webpack-zip-files-plugin');
 var path = require("path");
+const VersionFile = require('webpack-version-file');
 
 const appCSS = new ExtractTextPlugin('style.css');
 const customCSS = new ExtractTextPlugin('custom.css');
@@ -40,14 +41,18 @@ module.exports = merge(common, {
     ]
   },
   plugins: [
-    appCSS, customCSS,
+    appCSS, customCSS, 
+    new VersionFile({
+      output: './src/version.txt'
+    }),
     new CopyWebpackPlugin(
       {
         patterns: [
           { from: 'src/assets', to: 'assets' },
           { from: 'src/settings.txt', to: 'settings.txt' },
           { from: 'src/library.json', to: 'library.json' },
-          { from: 'src/locales', to: 'locales' }
+          { from: 'src/locales', to: 'locales' },
+          { from: 'src/version.txt', to: 'version.txt' }
         ]
       }),
     new ZipFilesPlugin({
