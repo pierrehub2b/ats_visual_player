@@ -1,7 +1,6 @@
 import { replaceLocal } from '../app';
 import { frameBackground, frameTitle, box, frameContent, pathToAssets32 , format, calculPositions, createBox, displayPopUp, hidePopUp, hideBox } from './baseAnimation';
 import $ from 'jquery';
-import { timelLineLite } from '../uploader';
 
 export function implementAnimation(element) {
     var frameId = "sysButtonPropertyFrame" + element.timeLine;

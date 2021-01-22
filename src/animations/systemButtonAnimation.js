@@ -1,8 +1,6 @@
 import { replaceLocal } from './../app';
 import { format, frameBackground, frameContent, frameTitle, box, calculPositions, createBox, displayPopUp, hideBox, hidePopUp } from './baseAnimation';
 import $ from 'jquery';
-import { implementNotFoundAnimation } from './elementNotFoundAnimation';
-import { timelLineLite } from '../uploader';
 
 export function implementAnimation(element) {
     var frameId = "buttonActionFrame" + element.timeLine;
