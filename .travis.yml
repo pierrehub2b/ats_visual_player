@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-- 10.15.
+- 10.15.3
 branches:
   only:
   - release
@@ -8,8 +8,8 @@ script:
 - echo "npm test temporarily disabled"
 - npm run build
 before_deploy:
-- export VERSION_NUMBER="1.0.1"
-- git tag $VERSION_NUMBER
+  - export VERSION_NUMBER="1.0.1"
+  - git tag $VERSION_NUMBER
 deploy:
   - provider: releases
     api_key:
