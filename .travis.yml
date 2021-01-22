@@ -5,7 +5,7 @@ branches:
   only:
   - release
 script:
-- echo "npm test temporarily disabled"
+- echo "npm test temporarily disabled !"
 - npm run build
 before_deploy:
 - export VERSION_NUMBER="1.0.1"
