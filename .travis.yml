@@ -13,7 +13,7 @@ before_deploy:
 deploy:
   - provider: releases
     api_key:
-      secure: c22c051119482b4fb366ea1047269313a6293717
+      secure: 00d9cdad8f777e15300344260ec81a4db20c2b4b
     file: release.zip
     on:
       branch: master
