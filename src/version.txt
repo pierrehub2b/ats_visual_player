@@ -1,2 +1,2 @@
 atsplayer@1.0.0
-Build date: Fri Jan 22 2021 10:25:26 GMT+0100 (GMT+01:00)
+Build date: Tue Jan 26 2021 15:27:17 GMT+0100 (GMT+01:00)
