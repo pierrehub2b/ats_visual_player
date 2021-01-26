@@ -11,10 +11,11 @@ before_deploy:
 - export VERSION_NUMBER="1.0.1"
 - git tag $VERSION_NUMBER
 deploy:
-  - provider: releases
-    api_key:
-      secure: 00d9cdad8f777e15300344260ec81a4db20c2b4b
-    file: release.zip
-    on:
-      branch: master
-    skip_cleanup: true
+- provider: releases
+  file: release.zip
+  on:
+    branch: master
+  skip_cleanup: true
+env:
+  global:
+    secure: "TJRoovf9N8sXUezuzdR+9sgYqQ7CeA4+tn6wKoriagENMKMxrR06Lk69mcSMiEEdh+aeMdS6z7NYF/TSEgY7PWhL7DT28HQYix/G39Jo0VKHMhFVm30WVfhyHGct92smNqd0WdFWzyjtp+WHNa2dG8DhVWtiVi4kLovPMA9T8QWJfRN3qogakP4q1kDrKIDSJOVs1vjMJ4hd/FciAtxxahZFv2Rthj8I9VUAzsels8UAdADABAabYmHnT3AJa6T4gsr2XHsZXT0mGaK0X/89U98ry2tRW6i/be7zfhclyaGNebsZAxCYAnAaiS8K2fe0KOriiyIpTagnP+UzS/89x1nXS9249mVGUw25KHqlUw1JNLMqpHHXurssdP3dbfYFevYMkdyFHMpPaVDtoqB1Mn1/SmtEQpUlx4AEekG5672Q8eebj3R80XYGDwy+QeDc+9FKECDhno9SLz4OfuzvN+mLQzSLlDOuWzK2h8FlIqjtFPqx7gvnQtIs9IIEJWpEa9uPnSCkF/cuiWXKQjEgguN5+p3VyVGND3kYP5IuIf/7CXlxYGCOelcdrmQONJzkAgh9LBLFQI9XrlaPQM6Nl20JpnZxE8N1wx3j3uf/t9V5WcqmBUHJpQy8Gfzgirsc5cD+4Sx6bOosrvVr8www6PdshJdMvc3uYtLFwzd9Gu4="
